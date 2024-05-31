@@ -50,3 +50,9 @@ https://github.com/obgnail/typora_plugin
 2. 打开文件夹 A，将源码的 plugin 文件夹粘贴进该文件夹下。
 3. 打开文件 `A/window.html`。搜索文件内容 `<script src="./app/window/frame.js" defer="defer"></script>`，并在后面加入 `<script src="./plugin/index.js" defer="defer"></script>`。保存。（不同版本的 Typora 查找的内容可能不同，其实就是查找导入 frame.js 的 script 标签）
 4. 重启 Typora。
+5. 侧边栏“文件”分页内，右键空白，勾选“文档树”
+
+# 以上资源地址备份
+
+链接：https://pan.baidu.com/s/1EcQsKHYF6Y-gvToy1dzWFQ?pwd=jmkr 
+提取码：jmkr 
