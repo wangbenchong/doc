@@ -28,7 +28,7 @@ resources\page-dist\license.html
 
 查找
 
-```
+```html
 </body></html>
 ```
 
@@ -38,7 +38,7 @@ resources\page-dist\license.html
 </body><script>window.onload=function(){setTimeout(()=>{window.close();},5);}</script></html>
 ```
 
-高版本可以考虑timeout设成10
+高版本可以考虑timeout设成15
 
 3.
 
@@ -47,13 +47,13 @@ resources\locales\zh-Hans.lproj\Panel.json
 查找
 
 ```javascript
-“UNREGISTERED”:"未激活",
+"UNREGISTERED":"未激活",
 ```
 
 替换为
 
 ```javascript
-“UNREGISTERED”:" ",
+"UNREGISTERED":" ",
 ```
 
 4.
@@ -75,10 +75,10 @@ https://github.com/obgnail/typora_plugin
 3. 打开文件 `A/window.html`。搜索文件内容 
 
    ```html
-   <script src="./app/window/frame.js" defer="defer"></script>
+   <script src="./appsrc/window/frame.js" defer="defer"></script>
    ```
 
-   ``，并在后面加入 `
+   并在后面加入 
 
    ```html
    <script src="./plugin/index.js" defer="defer"></script>
@@ -92,3 +92,7 @@ https://github.com/obgnail/typora_plugin
 
 链接：https://pan.baidu.com/s/1EcQsKHYF6Y-gvToy1dzWFQ?pwd=jmkr 
 提取码：jmkr 
+
+附官方更新日志：
+
+[Typora — stable release channel (typoraio.cn)](https://typoraio.cn/releases/stable.html#Other Improvements)
