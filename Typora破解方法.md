@@ -95,4 +95,4 @@ https://github.com/obgnail/typora_plugin
 
 附官方更新日志：
 
-[Typora — stable release channel (typoraio.cn)](https://typoraio.cn/releases/stable.html#Other Improvements)
+[Typora — stable release channel (typoraio.cn)](https://typoraio.cn/releases/stable.html)
