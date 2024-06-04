@@ -66,3 +66,11 @@ Overrides//重载
 # RenderFeature
 
 要写很多C#，高可定制/操控
+
+代码写法参考：
+
+[超小白向URP Scriptable Render Feature写法！——理论篇 - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv17521507/)
+
+[超小白向URP Scriptable Render Feature写法——实现老式CRT电视效果！ - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv17531935)
+
+[unity在URP中实现自定义Volume_unity volume-CSDN博客](https://blog.csdn.net/xdedzl/article/details/114746972)
