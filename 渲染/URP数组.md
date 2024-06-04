@@ -11,7 +11,10 @@ float _FloatArray[10];//Float array << Shader.SetGlobalFloat
 void ArrayExample_float(out float OutF)
 {
   float add = 0;
-  [unroll]//如果循环的大小是固定的（不基于变量）并且循环不会提前退出，则“展开”循环的性能更高
+  [unroll]
+  //“展开”之意，相当于重复写代码，过多会导致内存占用、代码膨胀。但效率会比不写高一些。
+  //如果已知循环次数（不基于变量）并且次数也不多的话，同时再满足循环不会提前退出，则“展开”循环的性能更高
+  //亦可写作[unroll(10)], 更推荐这种指明次数的，否则shader自行判断的话可能会根据性能等原因减少次数
   for(int i=0;i<10;i++)
   {
       add += _FloatArray[i];
@@ -29,7 +32,7 @@ HLSLINCLUDE
     CBUFFER_END
     //声明在这里
     //C#:Shader.SetGlobalFloatArray("_FloatArray", new []{1f,1f,1f,1f})
-    float _FloatArray[4];//长度上限1024，若需更大要使用缓冲区对象
+    float _FloatArray[4];//长度上限1024，若需更大要使用缓冲区StructuredBuffer<>对象,C#
 	//C#:Shader.SetGlobalVectorArray("_VectorArray", new []{new Vector4(1f,1f,1f,1f),new Vector4(0f,0f,0f,0f)})
     float4 _VectorArray[2];
 ENDHLSL
@@ -78,6 +81,7 @@ C#调用
 ```c#
 public Texture2D[] ordinaryTextures;//图片的可读写要打勾
 public int currentLayer;//若改成float可考虑做成多图过渡混合
+//最终用这个传给shader
 private Texture2DArray texture2DArray;
 private void CreateTextureArray()
 {
