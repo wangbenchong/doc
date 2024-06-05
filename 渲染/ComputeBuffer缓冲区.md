@@ -4,6 +4,8 @@ SM4.5/Compute Shader
 
 Shader Model不低于4.5，硬件版本要求相对新
 
+功能：代替数组，长度不受限
+
 Shader代码：
 
 ```c
@@ -39,6 +41,7 @@ public class BufferTest : MonoBehaviour
     {
         Test test = new Test
         {
+            //如果需要生成随机Vector3，可以用Random.insideUnitSphere,即返回半径为 1 的球体内的随机点
             A = new Vector3(0, 0.5f, 0.5f),
             B = 0.1f
         };
