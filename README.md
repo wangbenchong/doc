@@ -26,3 +26,14 @@
 ```
 
 比如大分类：Unity，数学，渲染
+
+gitee网页：https://gitee.com/wangbenchong/doc
+
+gitee仓库地址：https://gitee.com/wangbenchong/doc.git
+
+----------两者不定期手动镜像，谁快用谁---------------
+
+github网页：https://github.com/wangbenchong/doc
+
+github仓库地址：https://github.com/wangbenchong/doc.git
+
