@@ -1,7 +1,7 @@
-# 模板shader脚本文件名为URPShaderUnlit.shader
+# 模板shader脚本文件名为URPUnlitTemp.shader
 
 ```c
-Shader "Ymck.top/URPFramework/#NAME#"
+Shader "URPFramework/#NAME#"
 {
     Properties{
 		_BaseMap("Base Map" , 2D) = "white" {}
@@ -161,7 +161,7 @@ using System.Text.RegularExpressions;
  
 public class CreateURPShader
 {
-    public const string shaderTemplateUnlitPath = "Assets/CustomShaderGUI/Editor/Template/URPShaderUnlit.shader";
+    public const string shaderTemplateUnlitPath = "Assets/CustomShaderGUI/Editor/Template/URPUnlitTemp.shader";
 
 
     [MenuItem("Assets/Create/Shader/URP Shader Unlit")]
@@ -169,7 +169,7 @@ public class CreateURPShader
     {
         ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
         ScriptableObject.CreateInstance<URPShadertAsset>(),
-        GetSelectedPathOrFallback() + "/URPShaderUnlit.shader",
+        GetSelectedPathOrFallback() + "/Unlit.shader",
         null,
        shaderTemplateUnlitPath);
     }
