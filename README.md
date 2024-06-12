@@ -31,6 +31,8 @@ gitee网页：https://gitee.com/wangbenchong/doc
 
 gitee仓库地址：https://gitee.com/wangbenchong/doc.git
 
+svn仓库：svn://git.oschina.net/wangbenchong/doc
+
 ----------两者不定期手动镜像，谁快用谁---------------
 
 github网页：https://github.com/wangbenchong/doc
