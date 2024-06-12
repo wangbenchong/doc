@@ -13,7 +13,7 @@
 
 ```c
 //将B定义为A
-#define A B//这里B可以是任何内容，常数、变量、函数、或者这些的集合体，支持代码多行，只要换行加上\
+#define A B//这里B可以是任何内容，常数、变量、函数、空格乃至这些的集合体但是#if这种不行，支持代码多行，只要换行加上\
 ```
 
 这里着重说一下情况2，这个B的灵活性真的相当高。尤其是A为函数的时候，这个B可以随意的折腾A里面的参数，甚至可以把A里面的参数和其他内容相拼接（用##）：
@@ -29,7 +29,11 @@
     half4 _ShapeLightInvertedFilter##index;
 ```
 
+# #define的作用范围
 
+- 在不同Pass内的#define互不影响
+- 在不同SubShader内的#define互不影响
+- #define不可以写在函数体内
 
 # #define花式用法：批量化定义同名函数
 
@@ -91,7 +95,7 @@ half4  ClampToFloat16Max(half4  value) { return min(value, half4(HALF_MAX, HALF_
 例如：
 
 ```c
-#if defined(FEATURE_A)  
+#if defined(FEATURE_A)//其他写法有 #ifdef、取反则是#ifndef、#if !defined()， 连接符还有 ||等
     // 这部分代码仅在FEATURE_A被定义时编译和执行  
 #endif
 ```
@@ -103,9 +107,9 @@ half4  ClampToFloat16Max(half4  value) { return min(value, half4(HALF_MAX, HALF_
 例如：
 
 ```c
-#define FEATURE_B 1  
+#define FEATURE_B 1
   
-#if FEATURE_B  
+#if FEATURE_B //等同于写成#if FEATURE_B == 1, 如果写成#if 0 相当于注释， 而写成#if 1则相当于没写
     // 这部分代码仅在FEATURE_B的值为非零时编译和执行  
 #endif
 ```
@@ -119,7 +123,26 @@ half4  ClampToFloat16Max(half4  value) { return min(value, half4(HALF_MAX, HALF_
 
 在实际编程中，根据具体需求选择使用哪种方式。如果你只想检查某个功能是否被启用（而不关心其具体配置），你可能会使用`#if defined(A)`。如果你需要根据配置的具体值来决定是否编译某段代码，你应该使用`#if A`。
 
+**注意：**
 
+像`#pragma shader_feature A`这种写法，如果Property里没有对应`[Toggle(A)]`变量在控制，那么默认就是没定义（倒也没做undef，只是没定义而已）；如果Toggle控制成打勾了，就相当于`#define A 1`。也就是说，凡是写#pragma shader_feature但是没做Toggle的，除非运行时C#调用material.EnableKeyword，否则不会走声明逻辑。
+
+**`#pragma shader_feature` 和 `#pragma multi_compile`的区别：**
+
+其实并没有太大区别，都能用C#代码`material.EnableKeyword`动态切换。而且在只考虑两个关键词A和B的情况下，`#pragma shader_feature` 和 `#pragma multi_compile` 都会生成相同的三种变体（无关键词、仅A、仅B），如果还考虑A和B同时开启的情况，那么还会多出一个变体。但它们的关键区别在于如何处理这些变体以及它们对运行时性能的影响。
+
+`#pragma shader_feature` 和 `#pragma multi_compile` 的主要区别在于：
+
+1. 编译时行为
+   - `#pragma shader_feature`：Unity会为所有启用的`shader_feature`关键词组合生成Shader变体。这意味着，如果你有两个`shader_feature`定义的关键词A和B，并且你的场景中有物体使用了这些关键词的不同组合，Unity将只为这些实际用到的组合生成变体。未使用的组合不会被编译。
+   - `#pragma multi_compile`：无论是否所有变体都会被实际使用，Unity都会为所有可能的关键词组合生成Shader变体。这可能导致更多的Shader变体被编译，从而增加编译时间和磁盘空间占用。
+2. 运行时行为
+   - 两者都允许在运行时通过`Material.EnableKeyword`和`Material.DisableKeyword`来启用或禁用关键词，从而影响Shader的渲染行为。但是，由于`multi_compile`生成了所有可能的变体，因此它在运行时切换关键词时通常具有更好的性能，因为所有变体都已经被预先编译并加载到内存中。而`shader_feature`在运行时可能需要动态地重新编译未使用的变体，这可能会导致性能下降。
+3. 适用场景
+   - `#pragma shader_feature` 更适合那些你知道只会使用特定关键词组合的场景。由于它只为实际使用的组合生成变体，因此可以节省编译时间和磁盘空间。
+   - `#pragma multi_compile` 更适合那些需要在运行时动态切换不同渲染效果的场景。由于它生成了所有可能的变体，因此可以确保在运行时快速切换而无需重新编译。
+
+总结来说，虽然`#pragma shader_feature`和`#pragma multi_compile`在只考虑两个关键词时生成的变体数量可能相同，但它们在编译时和运行时的行为以及适用场景上有所不同。`multi_compile`更适合需要在运行时动态切换的场景，因为它可以确保所有变体都已经被预先编译并加载到内存中，从而提供更好的性能。
 
 # 空宏可以是“包含守卫”
 
@@ -149,3 +172,9 @@ half4  ClampToFloat16Max(half4  value) { return min(value, half4(HALF_MAX, HALF_
 - 如果`MYSHADER_HLSL`已经被定义（即文件已经被包含过一次），那么`#ifndef`后的代码会被跳过，从而防止了多重包含。
 
 这种技术可以确保每个HLSL文件只被包含一次，无论它被其他文件包含了多少次。这是一种常见的编程实践，用于管理复杂的项目依赖和构建过程。
+
+# 关于#undef
+
+该指令可取消宏定义，用法：`#undef A`
+
+尽管标准的HLSL语言规范可能不支持`#undef`指令，但在Unity的着色器系统中，由于Unity的着色器编译器和预处理器提供了额外的功能，你可以看到这样的指令被使用。

@@ -84,7 +84,6 @@ Shader "URPFramework/#NAME#"
             HLSLPROGRAM
 			//-------材质相关&每个Pass都要---------
             #pragma shader_feature _ALPHATEST_ON
-			#pragma shader_feature _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A//(可选)ALBDO通道的Alpha作为平滑度
 			#pragma multi_compile_instancing// GPU Instancing
 			//----------阴影相关（仅这个Pass）--------
 			#pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW//支持局部光（点光源和聚光灯）
@@ -107,7 +106,6 @@ Shader "URPFramework/#NAME#"
             HLSLPROGRAM
 			//-------材质相关&每个Pass都要---------
             #pragma shader_feature _ALPHATEST_ON
-			#pragma shader_feature _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A//(可选)ALBDO通道的Alpha作为平滑度
 			#pragma multi_compile_instancing// GPU Instancing
 			//--------------------------------------
 
@@ -130,7 +128,6 @@ Shader "URPFramework/#NAME#"
 			#pragma shader_feature_local _NORMAL_MAP
 			//-------材质相关&每个Pass都要---------
             #pragma shader_feature _ALPHATEST_ON
-			#pragma shader_feature _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A//(可选)ALBDO通道的Alpha作为平滑度
 			#pragma multi_compile_instancing// GPU Instancing
 			//--------------------------------------
 
