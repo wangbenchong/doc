@@ -717,8 +717,6 @@ float InfluenceFadeNormalWeight(float3 normal, float3 centerToPos)
 
 ```c
 //全部都是定义
-#ifndef UNITY_MACROS_INCLUDED
-#define UNITY_MACROS_INCLUDED
 // Some shader compiler don't support to do multiple ## for concatenation inside the same macro, it require an indirection.
 // This is the purpose of this macro
 #define MERGE_NAME(X, Y) X##Y
@@ -1097,8 +1095,6 @@ float ComputeLuminanceAdaptation(float previousLuminance, float currentLuminance
 ### Random
 
 ```c
-#ifndef UNITY_RANDOM_INCLUDED
-#define UNITY_RANDOM_INCLUDED
 float Hash(uint s)
 #if !defined(SHADER_API_GLES)
 uint JenkinsHash(uint x)
@@ -1138,7 +1134,6 @@ RefractionModelResult RefractionModelBox(real3 V, float3 positionWS, real3 norma
 ### SDF2D
 
 ```c
-#define UNITY_SDF2D_INCLUDED
 float CircleSDF(float2 position, float radius)
 float RectangleSDF(float2 position, float2 bound)
 float EllipseSDF(float2 position, float2 r)
@@ -1149,7 +1144,6 @@ float EllipseSDF(float2 position, float2 r)
 ### SpaceFillingCurves
 
 ```c
-#define UNITY_SPACE_FILLING_CURVES_INCLUDED
 uint Part1By1(uint x)
 uint Part1By2(uint x)
 uint Compact1By1(uint x)
@@ -1550,7 +1544,6 @@ int VirtualTexturingSample(
 ### VolumeRendering
 
 ```c
-#define UNITY_VOLUME_RENDERING_INCLUDED
 real TransmittanceFromOpticalDepth(real opticalDepth)
 real3 TransmittanceFromOpticalDepth(real3 opticalDepth)
 real OpacityFromOpticalDepth(real opticalDepth)
@@ -14992,6 +14985,7 @@ dir /B *.hlsl
 for %f in (*.hlsl) do @echo ### %~nxf
 #或者
 for %f in (*.shader) do @echo ### %~nxf
+#如果把nxf换成nf就是不含扩展名
 ```
 
 ## 如何统计代码中的函数
@@ -15006,3 +15000,30 @@ for %f in (*.shader) do @echo ### %~nxf
 
 最后，再手动整理到这篇文档中。
 
+## 如何把源码整理为Obsidian的关系图谱
+
+这个批处理脚本可以把当前目录文件复制一份加后缀的空文件到子目录A下，然后把生成的文件按原目录结构放到Obsidian工程里
+
+```c
+@echo off  
+setlocal enabledelayedexpansion  
+  
+REM 遍历当前目录下的所有文件  
+for %%f in (*) do (  
+    REM 获取文件名（包括扩展名）和新的文件名  
+    set "filename=%%~nxf"  
+    set "newfilename=!filename!.md"  
+      
+    REM 在子目录A中创建新的空文件  
+    if not exist "A" mkdir "A"  
+    type nul > "A\!newfilename!"  
+)  
+  
+endlocal
+```
+
+已整理好的Obsidian工程放到了gitee仓库：
+
+https://gitee.com/wangbenchong/urpshader-relation-graph.git
+
+网页：[Wangbenchong/URPShaderRelationGraph (gitee.com)](https://gitee.com/wangbenchong/urpshader-relation-graph)
