@@ -1,3 +1,72 @@
+# 如何制作这份文档
+
+## 如何列出文件名
+
+建一个urp工程，到Library目录里把跟内置shader相关的两个文件夹拷出来。
+
+cmd指令打印当前目录下所有hlsl文件名的两种方式（我选择了后者，即统一加“### ”前缀）
+
+```bat
+dir /B *.hlsl
+```
+
+```bat
+for %f in (*.hlsl) do @echo ### %~nxf
+#或者
+for %f in (*.shader) do @echo ### %~nxf
+#如果把nxf换成nf就是不含扩展名
+```
+
+## 如何统计代码中的函数
+
+在notepad++中，通过以下几步 正则/通配符 替换完成代码精简：
+
+- 设为“正则表达式”模式
+- 在“查找目标”框中输入正则表达式，例如`(?s)\{.*?\}`。这里的`(?s)`是一个模式修饰符，它告诉正则表达式引擎让`.`匹配任何字符，包括换行符。在“替换为”框中输入空字符串，以删除匹配到的内容。
+- 查找内容：`^\s*//.*$`（匹配以零个或多个空白字符开头，后跟`//`，然后是任意字符直到行尾的行）。在“替换为”框中输入空字符串，以删除匹配到的内容。
+- 设为“扩展（\n, \r...）”模式
+- 在“查找目标”框中 \n\n, 在”替换为"中输入 \n, 连续执行两次替换
+
+最后，再手动整理到这篇文档中。
+
+## 如何把源码整理为Obsidian的关系图谱
+
+### 何为Obsidian
+
+Obsidian类似于Typora，可以查看和编辑markdown，单纯从markdown实用角度不如Typora，而且它强制要求md文档的换行符采用Unix标准即\n,这导致和Typora不适宜维护同一个工程或md文件。不过它有很亮眼的一个特色是，可以绘制关系图谱，并且同时支持PC端和手机端。所以至少可以把绘制关系图谱的工程留给Obsidian来打开。官网如下：
+
+[Obsidian - Sharpen your thinking](https://obsidian.md/)
+
+### 工程搭建过程
+
+这个批处理脚本可以把当前目录文件复制一份加后缀的空文件到子目录A下，然后把生成的文件按原目录结构放到Obsidian工程里
+
+```c
+@echo off  
+setlocal enabledelayedexpansion  
+  
+REM 遍历当前目录下的所有文件  
+for %%f in (*) do (  
+    REM 获取文件名（包括扩展名）和新的文件名  
+    set "filename=%%~nxf"  
+    set "newfilename=!filename!.md"  
+      
+    REM 在子目录A中创建新的空文件  
+    if not exist "A" mkdir "A"  
+    type nul > "A\!newfilename!"  
+)  
+  
+endlocal
+```
+
+已整理好的Obsidian工程放到了gitee仓库：
+
+https://gitee.com/wangbenchong/urpshader-relation-graph.git
+
+网页：[Wangbenchong/URPShaderRelationGraph (gitee.com)](https://gitee.com/wangbenchong/urpshader-relation-graph)
+
+
+
 # Core
 
 ## 根目录
@@ -14968,62 +15037,3 @@ Fallback Off
 
 
 
-
-# 如何制作这份文档
-
-## 如何列出文件名
-
-建一个urp工程，到Library目录里把跟内置shader相关的两个文件夹拷出来。
-
-cmd指令打印当前目录下所有hlsl文件名的两种方式（我选择了后者，即统一加“### ”前缀）
-
-```bat
-dir /B *.hlsl
-```
-
-```bat
-for %f in (*.hlsl) do @echo ### %~nxf
-#或者
-for %f in (*.shader) do @echo ### %~nxf
-#如果把nxf换成nf就是不含扩展名
-```
-
-## 如何统计代码中的函数
-
-在notepad++中，通过以下几步 正则/通配符 替换完成代码精简：
-
-- 设为“正则表达式”模式
-- 在“查找目标”框中输入正则表达式，例如`(?s)\{.*?\}`。这里的`(?s)`是一个模式修饰符，它告诉正则表达式引擎让`.`匹配任何字符，包括换行符。在“替换为”框中输入空字符串，以删除匹配到的内容。
-- 查找内容：`^\s*//.*$`（匹配以零个或多个空白字符开头，后跟`//`，然后是任意字符直到行尾的行）。在“替换为”框中输入空字符串，以删除匹配到的内容。
-- 设为“扩展（\n, \r...）”模式
-- 在“查找目标”框中 \n\n, 在”替换为"中输入 \n, 连续执行两次替换
-
-最后，再手动整理到这篇文档中。
-
-## 如何把源码整理为Obsidian的关系图谱
-
-这个批处理脚本可以把当前目录文件复制一份加后缀的空文件到子目录A下，然后把生成的文件按原目录结构放到Obsidian工程里
-
-```c
-@echo off  
-setlocal enabledelayedexpansion  
-  
-REM 遍历当前目录下的所有文件  
-for %%f in (*) do (  
-    REM 获取文件名（包括扩展名）和新的文件名  
-    set "filename=%%~nxf"  
-    set "newfilename=!filename!.md"  
-      
-    REM 在子目录A中创建新的空文件  
-    if not exist "A" mkdir "A"  
-    type nul > "A\!newfilename!"  
-)  
-  
-endlocal
-```
-
-已整理好的Obsidian工程放到了gitee仓库：
-
-https://gitee.com/wangbenchong/urpshader-relation-graph.git
-
-网页：[Wangbenchong/URPShaderRelationGraph (gitee.com)](https://gitee.com/wangbenchong/urpshader-relation-graph)

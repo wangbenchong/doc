@@ -123,11 +123,47 @@ half4  ClampToFloat16Max(half4  value) { return min(value, half4(HALF_MAX, HALF_
 
 在实际编程中，根据具体需求选择使用哪种方式。如果你只想检查某个功能是否被启用（而不关心其具体配置），你可能会使用`#if defined(A)`。如果你需要根据配置的具体值来决定是否编译某段代码，你应该使用`#if A`。
 
-**注意：**
+# #pragma用法
 
-像`#pragma shader_feature A`这种写法，如果Property里没有对应`[Toggle(A)]`变量在控制，那么默认就是没定义（倒也没做undef，只是没定义而已）；如果Toggle控制成打勾了，就相当于`#define A 1`。也就是说，凡是写#pragma shader_feature但是没做Toggle的，除非运行时C#调用material.EnableKeyword，否则不会走声明逻辑。
+## 内置 or 自定义？双标！
 
-**`#pragma shader_feature` 和 `#pragma multi_compile`的区别：**
+- 在unity shader中为什么只写一句`#pragma multi_compile _ _ADDITIONAL_LIGHTS`就可以打开`_ADDITIONAL_LIGHTS`宏，但是`#pragma multi_compile _ _WBC`还要在C#调用EnableKeyword函数后才会打开  `_WBC`  宏呢？
+
+  答：在Unity的Shader编程中，`#pragma multi_compile` 是一个预处理指令，它用于编译Shader的多个变体，以便在运行时根据需要在这些变体之间进行选择。然而，`#pragma multi_compile` 的使用方式和行为可能因不同的参数和上下文而有所不同。
+  
+  对于 `#pragma multi_compile _ _ADDITIONAL_LIGHTS`，Unity的Shader编译器默认知道 `_ADDITIONAL_LIGHTS` 是一个内置的关键字，用于控制是否包含额外的光照计算。当这个预处理指令被包含在Shader中时，Unity的Shader编译器会自动为启用和禁用 `_ADDITIONAL_LIGHTS` 的情况生成两个Shader变体。
+  
+  然而，对于自定义的关键字，如 `_WBC`，情况就不同了。Unity的Shader编译器并不知道 `_WBC` 是什么，除非你明确地告诉它。这就是为什么你需要通过C#脚本来调用 `Shader.EnableKeyword` 方法来启用 `_WBC` 关键字。这告诉Unity的Shader系统在运行时选择那个启用了 `_WBC` 的Shader变体。
+  
+  总结一下：
+  
+  - `_ADDITIONAL_LIGHTS` 是一个Unity Shader系统内置的关键字，用于控制是否包含额外的光照计算。当你使用 `#pragma multi_compile` 包含它时，Unity的Shader编译器会自动生成两个Shader变体（一个启用，一个禁用）。
+  - 对于自定义的关键字（如 `_WBC`），你需要通过C#脚本来调用 `Shader.EnableKeyword` 方法来告诉Unity的Shader系统要启用哪个关键字，并生成相应的Shader变体。
+  
+  注意：在使用 `#pragma multi_compile` 时，你还需要注意它的性能影响。为每个关键字组合生成一个Shader变体可能会显著增加构建时间和Shader的内存占用。因此，你应该谨慎使用它，并确保你真正需要生成所有的变体。在某些情况下，使用 `#pragma shader_feature` 或其他预处理指令可能更为合适。
+
+
+
+
+- 但是如果写了#pragma multi_compile _ _ADDITIONAL_LIGHTS，那么即便在C#调用DisableKeyword也无法关闭_ADDITIONAL_LIGHTS宏，这是为什么？
+
+  答：在Unity的Shader编程中，`#pragma multi_compile` 是一个预处理指令，它用于编译Shader的多个变体，以便在运行时根据需要在这些变体之间进行选择。然而，`#pragma multi_compile` 的使用方式和行为可能因不同的参数和上下文而有所不同。
+
+  对于 `#pragma multi_compile _ _ADDITIONAL_LIGHTS`，Unity的Shader编译器默认知道 `_ADDITIONAL_LIGHTS` 是一个内置的关键字，用于控制是否包含额外的光照计算。当这个预处理指令被包含在Shader中时，Unity的Shader编译器会自动为启用和禁用 `_ADDITIONAL_LIGHTS` 的情况生成两个Shader变体。
+
+  然而，对于自定义的关键字，如 `_WBC`，情况就不同了。Unity的Shader编译器并不知道 `_WBC` 是什么，除非你明确地告诉它。这就是为什么你需要通过C#脚本来调用 `Shader.EnableKeyword` 方法来启用 `_WBC` 关键字。这告诉Unity的Shader系统在运行时选择那个启用了 `_WBC` 的Shader变体。
+
+**总结一下：**
+
+- _ADDITIONAL_LIGHTS 是一个Unity Shader系统内置的关键字，用于控制是否包含额外的光照计算。当你使用 `#pragma multi_compile` 包含它时，Unity的Shader编译器会自动生成两个Shader变体（一个启用，一个禁用）。
+- 对于自定义的关键字（如 `_WBC`），你需要通过C#脚本来调用 `Shader.EnableKeyword` 方法来告诉Unity的Shader系统要启用哪个关键字，并生成相应的Shader变体。
+- 注意：在使用 `#pragma multi_compile` 时，你还需要注意它的性能影响。为每个关键字组合生成一个Shader变体可能会显著增加构建时间和Shader的内存占用。因此，你应该谨慎使用它，并确保你真正需要生成所有的变体。在某些情况下，使用 `#pragma shader_feature` 或其他预处理指令可能更为合适。
+
+## 自定义宏要守规则
+
+像`#pragma shader_feature A`这种写法，如果Property里没有对应   [Toggle(A)]  变量在控制，那么默认就是没定义（倒也没做undef，只是没定义而已）；如果Toggle控制成打勾了，就相当于`#define A 1`。也就是说，凡是写#pragma shader_feature但是没做Toggle的，除非运行时C#调用material.EnableKeyword，否则不会走声明逻辑。
+
+## shader_feature 和 multi_compile的区别
 
 其实并没有太大区别，都能用C#代码`material.EnableKeyword`动态切换。而且在只考虑两个关键词A和B的情况下，`#pragma shader_feature` 和 `#pragma multi_compile` 都会生成相同的三种变体（无关键词、仅A、仅B），如果还考虑A和B同时开启的情况，那么还会多出一个变体。但它们的关键区别在于如何处理这些变体以及它们对运行时性能的影响。
 
