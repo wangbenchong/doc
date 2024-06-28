@@ -1,4 +1,4 @@
-发现hlsl有这么一句
+在SRP源码Core/ShaderLibrary/ UnityDOTSInstancing.hlsl中发现有这么一句
 
 ```c
 ByteAddressBuffer unity_DOTSInstanceData
@@ -10,7 +10,7 @@ ByteAddressBuffer unity_DOTSInstanceData
 
 在Unity的渲染管线中，特别是在使用DOTS（Data-Oriented Technology Stack）或ECS（Entity Component System）架构时，`ByteAddressBuffer` 可以用来存储和访问实例化的数据。例如，当你想要为大量实例（如粒子、草叶、树等）传递自定义数据时，你可能会使用这种类型的缓冲区。
 
-在你给出的代码片段中：
+在这个代码片段中：
 
 ```c
 ByteAddressBuffer unity_DOTSInstanceData;

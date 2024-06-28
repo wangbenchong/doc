@@ -44,6 +44,8 @@ rider自带的AI（从2024版开始有）需要正版付费用户登录，而破
 
 关闭Win11系统下输入法的快捷键：时间和语言>语言和区域>按键---热键  简体/繁体中文输入切换（ctrl+shift+F）
 
+【设置】语言和框架-Unity引擎-取消勾选“在Unity中自动刷新”
+
 # 插件安装路径：
 
 C:\Users\用户名\AppData\Roaming\JetBrains\Rider2024.1\plugins

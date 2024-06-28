@@ -45,7 +45,7 @@
 
 ## 注意Fixed
 
-- HLSL不支持fixed，只在buildin里使用。所以从内置管线升级时，请改用half
+- HLSL不支持fixed，只在builtin里使用。所以从内置管线升级时，请改用half
 - 11位定点数，范围为-2到2。通常用于LDR颜色
 - 是来自CG语法的东西，所有平台现在都只是将其转换为half，即使在CGPROGRAM中也是如此
 
