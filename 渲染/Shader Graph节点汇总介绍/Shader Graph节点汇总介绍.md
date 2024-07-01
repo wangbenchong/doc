@@ -16,7 +16,7 @@ Health warning: you don’t have to read this all at once! Jump back in at your 
 
 Let’s start with a quick run-down of what Shader Graph is and why it exists. Shaders are mini programs that run on the GPU, and they do things like texture mapping, lighting or coloring your objects in fancy ways, but you probably already know that if you clicked on this article. Traditionally, shaders have existed solely in code, but that’s not very approachable or accessible for artists who don’t code. Enter Shader Graph: an alternative to code shaders which uses **nodes** representing different functions which users can plug into each other on a visual and interactive **graph**. I like to think of them as code’s fun cousin.
 
-让我们先快速了解一下 Shader Graph 是什么以及它存在的原因。着色器是在 GPU 上运行的小程序，它们可以以花哨的方式执行纹理映射、照明或为对象着色等操作，但如果您单击本文，您可能已经知道了。传统上，着色器仅存在于代码中，但对于不编码的艺术家来说，这并不是很平易近人或易于访问。进入Shader Graph：代码着色器的替代品，它使用代表不同函数**的节点**，用户可以在可视化和交互**式图形**上相互插入。我喜欢把它们看作是代码的有趣表亲。
+让我们先快速了解一下 Shader Graph 是什么以及它存在的原因。着色器是在 GPU 上运行的小程序，它们可以以花哨的方式执行纹理映射、照明或为对象着色等操作，但如果您单击本文，您可能已经知道了。传统上，着色器仅存在于代码中，但对于不编码的艺术家来说，这并不是很平易近人或易于访问。进入Shader Graph：代码着色器的替代品，它使用代表不同函数的**节点**，用户可以在可视化和交互式**图形**上相互插入。我喜欢把它们看作是代码的有趣表亲。
 
 I won’t cover the nodes that are contained in the **High Definition Render Pipeline** package - I’ll only be covering those contained within the base Shader Graph package. I’ll also cover a bit of prerequisite knowledge before we dive into shaders!
 
@@ -137,7 +137,7 @@ This was called `Albedo` in some versions of Shader Graph. The `Base Color` woul
 
 As we saw, the vertex stage has its own normal block - we can access that normal, make further modifications per-pixel, and return a new normal vector for Unity’s built-in lighting calculations. There are three blocks called `Normal`, which is a bit confusing, but each one just expects a normal vector in a different space - tangent, object or world. Only one can be active at a time - select the one you want in the **Graph Settings** using the **Fragment Normal Space** option.
 
-正如我们所看到的，顶点舞台有自己的法线块 - 我们可以访问该法线，对每个像素进行进一步的修改，并为 Unity 的内置光照计算返回一个新的法向量。有三个块称为 ，这有点令人困惑，但每个块都期望在不同的空间（切线、对象或世界）中有一个法向量。一次只能有一个处于活动状态 - 使用**“片段法线空间**”选项在**“图形设置**”中选择所需的一个。
+正如我们所看到的，顶点舞台有自己的法线块 - 我们可以访问该法线，对每个像素进行进一步的修改，并为 Unity 的内置光照计算返回一个新的法向量。有三个块称为 ，这有点令人困惑，但每个块都期望在不同的空间（切线、对象或世界）中有一个法向量。一次只能有一个处于活动状态 - 使用“**片段法线空间**”选项在“**图形设置**”中选择所需的一个。
 
 ### ₆ Emission (Block)
 
@@ -152,7 +152,7 @@ Emissive light is great for creating bloom around objects. Think neon lights, gl
 
 The `Metallic` block expects a float. When it is 0, the lighting on the objects acts as if it is completely non-metallic, and when it is 1, the object is totally metallic. This only has an effect when using a **Metallic** workflow - choose between this and **Specular** using the **Workflow** option in the **Graph Settings** (your material must be **Lit** for the option to appear).
 
-”金属”块需要一个浮点数。当它为 0 时，物体上的照明就好像它完全是非金属的，当它为 1 时，物体是完全金属的。这仅在使用**金属**工作流程时才有效 - 使用**“图形设置**”中的**“工作流程**”选项在此工作流程和**“镜面反射**”之间进行选择（您的材质必须为**“点亮**”才能显示该选项）。
+”金属”块需要一个浮点数。当它为 0 时，物体上的照明就好像它完全是非金属的，当它为 1 时，物体是完全金属的。这仅在使用**金属**工作流程时才有效 - 使用“**图形设置**”中的“**工作流程**”选项在此工作流程和“**镜面反射**”之间进行选择（您的材质必须为“**点亮**”才能显示该选项）。
 
 ![Metallic (Block).](./img_every_node/metallic-block.png)*The same material, with Metallic set to 0 and 1 respectively.*
 *相同的材质，金属色分别设置为 0 和 1。*
@@ -200,7 +200,7 @@ The smoother an object, the more visible lighting highlights are. When `Smoothne
 
 Alpha clipping is a technique where pixels with an alpha below a specific threshold get culled. We can enable the `Alpha Clip Threshold` block in the **Graph Settings** by ticking the **Alpha Clip** option. This works regardless of whether the **Surface** is set to **Transparent** or **Opaque**, so the `Alpha` block isn’t always completely useless on opaque materials! This is useful for fake-transparency effects where opaque rendering is used, but pixels are culled in a pattern to create the illusion of transparency.
 
-Alpha 剪裁是一种技术，其中 Alpha 低于特定阈值的像素被剔除。我们可以通过勾选 **Alpha Clip** 选项在 **Graph Settings** 中启用该块。无论 **Surface** 是设置为**“透明**”还是**“不透明**”，这都有效，因此该块在不透明材质上并不总是完全无用！这对于使用不透明渲染的假透明效果很有用，但像素会以图案剔除以创建透明错觉。
+Alpha 剪裁是一种技术，其中 Alpha 低于特定阈值的像素被剔除。我们可以通过勾选 **Alpha Clip** 选项在 **Graph Settings** 中启用该块。无论 **Surface** 是设置为“**透明**”还是“**不透明**”，这都有效，因此该块在不透明材质上并不总是完全无用！这对于使用不透明渲染的假透明效果很有用，但像素会以图案剔除以创建透明错觉。
 
 ![Alpha Clip Threshold (Block).](./img_every_node/alpha-clip-block.png)*Look closely - every pixel on the sphere is opaque, but the whole thing seems transparent.*
 *仔细观察 - 球体上的每个像素都是不透明的，但整个东西似乎是透明的。*
@@ -233,7 +233,7 @@ A `Float` (or `Vector 1` as they’re called in earlier versions of Shader Graph
 
 We can also set the **Precision** of the property to **Single** or **Half** precision, or inherit from the graph’s global settings. **Single** precision usually means 32 bits, while **Half** typically uses 16 bits, but this can differ by hardware. Since this setting is available in virtually every node’s settings, I’ll only mention it here once. We can toggle the property to be visible in the Inspector by ticking the **Exposed** checkbox, and we can decide whether this property is declared globally or per-material by tweaking the **Override Property Declaration** option.
 
-我们还可以将属性的 **Precision** 设置为 **Single** 或 **Half** precision，或者继承图形的全局设置。**单**精度通常表示 32 位，而 **Half** 通常使用 16 位，但这可能因硬件而异。由于此设置几乎在每个节点的设置中都可用，因此我在这里只提及一次。我们可以通过勾选**“暴露**”复选框来切换属性在检查器中可见，并且可以通过调整“**覆盖属性声明**”选项来决定此属性是全局声明还是按材料声明。
+我们还可以将属性的 **Precision** 设置为 **Single** 或 **Half** precision，或者继承图形的全局设置。**单**精度通常表示 32 位，而 **Half** 通常使用 16 位，但这可能因硬件而异。由于此设置几乎在每个节点的设置中都可用，因此我在这里只提及一次。我们可以通过勾选“**暴露**”复选框来切换属性在检查器中可见，并且可以通过调整“**覆盖属性声明**”选项来决定此属性是全局声明还是按材料声明。
 
 ### ₁₄ Vector 2 (Property)
 
@@ -257,7 +257,7 @@ And `Vector 4` adds a W component. You could use this to pack arbitrary bits of 
 
 The `Color` property type has a **Mode** toggle between **Default** and **HDR**. If we pick HDR, then we get extra options in the color window - we will cover these more fully when we discuss the `Color` node.
 
-属性类型在**“默认**”和**“HDR**”之间具有**“模式**”切换。如果我们选择 HDR，那么我们会在颜色窗口中获得额外的选项 - 当我们讨论节点时，我们将更全面地介绍这些选项。
+属性类型在“**默认**”和“**HDR**”之间具有“**模式**”切换。如果我们选择 HDR，那么我们会在颜色窗口中获得额外的选项 - 当我们讨论节点时，我们将更全面地介绍这些选项。
 
 ![Color (Property).](./img_every_node/color-property.png)*Colors are the basic building blocks of shaders. You’ll be using them a lot.*
 *颜色是着色器的基本构建块。你会经常使用它们。*
@@ -272,7 +272,7 @@ A `Boolean` property can be either **True** or **False**, which is controlled us
 
 `Gradient`s work similarly here as they do anywhere else in the Unity Editor - we can add or remove handles from the gradient window to set the color (bottom row) or alpha (top row) of the gradient at that point. The **Exposed** checkbox is greyed out, so this property type can’t be exposed to the Inspector.
 
-`Gradient`在这里的工作方式与它们在 Unity 编辑器中的其他任何地方的工作方式类似 - 我们可以在渐变窗口中添加或删除手柄，以在该点设置渐变的颜色（底行）或 alpha（顶行）。**“公开**”复选框显示为灰色，因此此属性类型无法向检查器公开。
+`Gradient`在这里的工作方式与它们在 Unity 编辑器中的其他任何地方的工作方式类似 - 我们可以在渐变窗口中添加或删除手柄，以在该点设置渐变的颜色（底行）或 alpha（顶行）。“**公开**”复选框显示为灰色，因此此属性类型无法向检查器公开。
 
 ![Gradient (Property).](./img_every_node/gradient-property.png)*Gradients are great ways to add a color ramp to your shaders.*
 *渐变是向着色器添加色带的好方法。*
@@ -281,7 +281,7 @@ A `Boolean` property can be either **True** or **False**, which is controlled us
 
 The `Texture 2D` property type lets us declare a Texture 2D asset that we want to use in the graph. The **Mode** drop-down gives us three default color options for when no texture is selected: **White**, **Grey** or **Black**. There’s also a **Bump** option which can be used for completely flat normal maps, which are blue.
 
-属性类型允许我们声明要在图形中使用的纹理 2D 资源。**“模式**”下拉列表为我们提供了三种默认颜色选项，用于未选择纹理时：**白色**、**灰色**或**黑色**。还有一个**凹凸**选项，可用于完全平坦的法线贴图，即蓝色。
+属性类型允许我们声明要在图形中使用的纹理 2D 资源。“**模式**”下拉列表为我们提供了三种默认颜色选项，用于未选择纹理时：**白色**、**灰色**或**黑色**。还有一个**凹凸**选项，可用于完全平坦的法线贴图，即蓝色。
 
 ### ₂₁ Texture 2D Array (Property)
 
@@ -296,7 +296,7 @@ A `Texture 2D Array` is a collection of 2D textures with the same size and forma
 
 A `Texture 3D` is similar to Texture 2D, but we have an added dimension - it’s like a 3D block of color data. Unlike Texture 2D, don’t have access to a **Mode** option.
 
-类似于 Texture 2D，但我们有一个额外的维度 - 它就像一个颜色数据的 3D 块。与 Texture 2D 不同，它无权访问**“模式**”选项。
+类似于 Texture 2D，但我们有一个额外的维度 - 它就像一个颜色数据的 3D 块。与 Texture 2D 不同，它无权访问“**模式**”选项。
 
 ![Texture3D (Property).](./img_every_node/texture3d-property.png)*You can generate Texture3D data in scripting or by slicing a Texture2D.*
 *您可以在脚本中或通过对 Texture2D 进行切片来生成 Texture3D 数据。*
@@ -482,7 +482,7 @@ We have several outputs, which looks intimidating at first glance, but the first
 
 The `Sample Texture 2D Array` node acts much like the `Sample Texture 2D` node, but now we don’t have the **Type** or **Space** options. Instead, we now have an **Index** input to determine which texture in the array to sample - remember from the Properties section how these arrays work.
 
-该节点的行为与节点非常相似，但现在我们没有**“类型**”或**“空间**”选项。取而代之的是，我们现在有一个 **Index** 输入来确定数组中的哪个纹理要采样 - 记住这些数组的工作原理。
+该节点的行为与节点非常相似，但现在我们没有“**类型**”或“**空间**”选项。取而代之的是，我们现在有一个 **Index** 输入来确定数组中的哪个纹理要采样 - 记住这些数组的工作原理。
 
 ![Sample Texture 2D Array.](./img_every_node/sample-texture-2d-array-node.png)*Note the slightly different output on both nodes - they’re using different indices.*
 *请注意，两个节点上的输出略有不同 - 它们使用不同的索引。*
@@ -531,7 +531,7 @@ The `Sample Virtual Texture` node has two inputs by default: the **UV**s with wh
 
 It’s worth noting that this node has extra options in the **Node Settings** window, too. We can change the **Address Mode** to **Wrap** or **Clamp** the texture when we use UVs below 0 or above 1, and we can change the **LOD Mode** here. **Automatic** will use LODs however you’ve set your project up to use them; **LOD Level** adds an **LOD** input and lets us set the mipmap level manually; **LOD Bias** lets us control whether to favour the more or less detailed texture when blending between LOD levels automatically; and **Derivative** adds **Dx** and **Dy** options, although Unity doesn’t document what these do anywhere.
 
-值得注意的是，此节点在**“节点设置**”窗口中也有额外的选项。当我们使用低于 0 或高于 1 的 UV 时，我们可以将**地址模式**更改为**包裹**或**夹**紧纹理，我们可以在此处更改 **LOD 模式**。**自动**将使用 LOD，但您已将项目设置为使用它们;**LOD 级别**添加了**一个 LOD** 输入，并允许我们手动设置 mipmap 级别;**LOD 偏差**让我们可以控制在自动混合 LOD 级别时是否偏爱更多或更少的细节纹理;**Derivative** 添加了 **Dx** 和 **Dy** 选项，尽管 Unity 没有记录它们在任何地方的作用。
+值得注意的是，此节点在“**节点设置**”窗口中也有额外的选项。当我们使用低于 0 或高于 1 的 UV 时，我们可以将**地址模式**更改为**包裹**或**夹**紧纹理，我们可以在此处更改 **LOD 模式**。**自动**将使用 LOD，但您已将项目设置为使用它们;**LOD 级别**添加了**一个 LOD** 输入，并允许我们手动设置 mipmap 级别;**LOD 偏差**让我们可以控制在自动混合 LOD 级别时是否偏爱更多或更少的细节纹理;**Derivative** 添加了 **Dx** 和 **Dy** 选项，尽管 Unity 没有记录它们在任何地方的作用。
 
 We can swap the quality between low and high, and we can choose whether to use **Automatic Streaming**. If we turn off automatic streaming and set the **LOD Mode** to **LOD Level**, we can even use this node in the vertex shader stage. As far as I can tell, this replaced an earlier node called `Sample VT Stack` and is only available on recent versions of Shader Graph. And as mentioned, outside of HDRP, this node provides no extra benefit and acts like a regular `Sample Texture 2D` node.
 
@@ -609,26 +609,26 @@ Similar to the `Scene Color` node, the `Scene Depth` node can be used to access 
 
 This node also contains a **Sampling** option with three settings. **Linear 01** will return a depth value normalized between 0 and 1, where a pixel with value 1 rests on the camera’s near clip plane and 0 is the far clip plane (although this might be reversed in some cases), and an object halfway between both planes is at a depth of 0.5.
 
-此节点还包含具有三个设置的**“采样**”选项。**线性 01** 将返回一个介于 0 和 1 之间归一化的深度值，其中值为 1 的像素位于相机的近剪裁平面上，0 是远剪切平面（尽管在某些情况下可能会相反），并且两个平面之间的对象深度为 0.5。
+此节点还包含具有三个设置的“**采样**”选项。**线性 01** 将返回一个介于 0 和 1 之间归一化的深度值，其中值为 1 的像素位于相机的近剪裁平面上，0 是远剪切平面（尽管在某些情况下可能会相反），并且两个平面之间的对象深度为 0.5。
 
 ![Scene Depth.](./img_every_node/scene-depth.png)*This is the Scene Depth using Linear 01 mode.*
 *这是使用 Linear 01 模式的场景深度。*
 
 The **Raw** option will return the raw depth value without converting to a linear value between 0 and 1, so a pixel halfway between the near and far clip planes may actually have a depth value higher than 0.5. And finally, the **Eye** option gives us the depth converted to eye space, which just means the number of units the pixel is away from the centre of the camera relative to the camera view direction.
 
-**“原始**”选项将返回原始深度值，而不会转换为介于 0 和 1 之间的线性值，因此近剪裁平面和远剪裁平面之间的像素实际上可能具有高于 0.5 的深度值。最后，“**眼睛**”选项为我们提供了转换为眼睛空间的深度，这仅意味着像素相对于相机视图方向远离相机中心的单位数。
+“**原始**”选项将返回原始深度值，而不会转换为介于 0 和 1 之间的线性值，因此近剪裁平面和远剪裁平面之间的像素实际上可能具有高于 0.5 的深度值。最后，“**眼睛**”选项为我们提供了转换为眼睛空间的深度，这仅意味着像素相对于相机视图方向远离相机中心的单位数。
 
 ### ₅₈ Camera
 
 The `Camera` node is only supported by the Universal Render Pipeline. It gives you access to a range of properties related to the camera that’s currently being used for rendering, such as the **Position** in world space, the forward **Direction** vector, and whether the camera is **Orthographic** – if so, 1 is output, otherwise 0 is output. We have access to the **Near Plane** and **Far Plane**, which are two clipping planes, represented as floats, as well as the **Z Buffer Sign**, which returns 1 or -1 depending on whether we are using the standard or reversed depth buffer. You might want to use this node if you are making depth-based effects, for example using the `Scene Depth` node. Finally, the **Width** and **Height** outputs get you the width and height of the screen in world space units, but only if your camera is orthographic.
 
-该节点仅受通用渲染管线支持。它允许您访问与当前用于渲染的摄像机相关的一系列属性，例如世界空间中**的位置**、前进**方向**矢量以及摄像机是否为**正交** - 如果是，则输出 1，否则输出 0。我们可以访问**近平面**和**远平面**，它们是两个削波平面，表示为浮点数，以及 **Z 缓冲区符号**，它返回 1 或 -1，具体取决于我们使用的是标准深度缓冲区还是反向深度缓冲区。如果要制作基于深度的效果（例如，使用节点），则可能需要使用此节点。最后，“**宽度**”和**“高度**”输出以世界空间单位提供屏幕的宽度和高度，但前提是您的相机是正交的。
+该节点仅受通用渲染管线支持。它允许您访问与当前用于渲染的摄像机相关的一系列属性，例如世界空间中**的位置**、前进**方向**矢量以及摄像机是否为**正交** - 如果是，则输出 1，否则输出 0。我们可以访问**近平面**和**远平面**，它们是两个削波平面，表示为浮点数，以及 **Z 缓冲区符号**，它返回 1 或 -1，具体取决于我们使用的是标准深度缓冲区还是反向深度缓冲区。如果要制作基于深度的效果（例如，使用节点），则可能需要使用此节点。最后，“**宽度**”和“**高度**”输出以世界空间单位提供屏幕的宽度和高度，但前提是您的相机是正交的。
 
 ### ₅₉ Fog
 
 The `Fog` node is also not supported by HDRP. It returns information about the fog you’ve defined in the **Lighting** tab’s **Environment Settings**. We need to pass in the **Position** in object space, and we get the **Color** of the fog and its **Density** at that position. We can use the node in the vertex and fragment stages of your shader.
 
-HDRP 也不支持该节点。它返回有关您在**“照明**”选项卡的**“环境设置**”中定义的雾的信息。我们需要传入对象空间中**的位置**，然后我们得到雾的**颜色**及其在该位置的**密度**。我们可以在着色器的顶点和片段阶段使用该节点。
+HDRP 也不支持该节点。它返回有关您在“**照明**”选项卡的“**环境设置**”中定义的雾的信息。我们需要传入对象空间中**的位置**，然后我们得到雾的**颜色**及其在该位置的**密度**。我们可以在着色器的顶点和片段阶段使用该节点。
 
 ### ₆₀ Object
 
@@ -646,7 +646,7 @@ The Lighting nodes give us access to different types of lighting impacting a giv
 
 The `Ambient` node returns three color values, each of which is a different type of ambient light from the scene, but it is only supported by URP. These values depend on the values in the **Environment Lighting** section of the **Lighting** tab. The node’s **Equator** and **Ground** output always return the Environment Lighting **Equator** and **Ground** values, regardless of which **Source** type is picked, even though they only exist when **Gradient** is picked. The node’s **Color/Sky** outputs the **Sky** color when the mode is set to **Gradient**, or **Ambient Color** when the **Source** is set to **Color**.
 
-该节点返回三个颜色值，每个颜色值都是来自场景的不同类型的环境光，但仅受 URP 支持。这些值取决于**“照明**”选项卡的**“环境照明**”部分中的值。节点的**“赤道”（Equator**） 和**“地面**”（Ground） 输出始终返回“环境照明**赤道”（Environment Lighting Equator**） 和**“地面**”（Ground） 值，无论选取哪种**源**类型，即使它们仅在选取**“渐变”（Gradient**） 时存在。当模式设置为**“渐变**”时，节点的**“颜色/天空**”输出**“天空**”颜色，当**“源**”设置为**“颜色**”时，节点的“**环境颜色**”输出。
+该节点返回三个颜色值，每个颜色值都是来自场景的不同类型的环境光，但仅受 URP 支持。这些值取决于“**照明**”选项卡的“**环境照明**”部分中的值。节点的“**赤道”（Equator**） 和“**地面**”（Ground） 输出始终返回“环境照明**赤道”（Environment Lighting Equator**） 和“**地面**”（Ground） 值，无论选取哪种**源**类型，即使它们仅在选取“**渐变”（Gradient**） 时存在。当模式设置为“**渐变**”时，节点的“**颜色/天空**”输出“**天空**”颜色，当“**源**”设置为“**颜色**”时，节点的“**环境颜色**”输出。
 
 ### ₆₂ Reflection Probe
 
@@ -717,7 +717,7 @@ Geometry 几何节点系列提供位置、UV、方向 - 基本上是不同类型
 
 The `Position` node will grab the position of the vertex or fragment, whichever shader stage you’re using. Only one `Vector 3` output exists, and that will be the position, but there is a drop-down that lets us pick which space the position will be. We’ve talked about the **Object**, **View** and **Tangent** spaces previously, and **Absolute World** is the same world space of the vertex or fragment as we’ve described world space before. The **World** option differs by render pipeline and it uses the pipeline’s default world space. In URP, it’s the same as **Absolute World**, but HDRP uses camera-relative rendering by default, so the world space becomes relative to the camera position.
 
-节点将获取顶点或片段的位置，无论您使用哪个着色器阶段。只有一个输出存在，那就是位置，但有一个下拉列表可以让我们选择位置所在的空间。我们之前已经讨论过**对象**空间、**视图**空间和**切线**空间，**而绝对世界**与我们之前描述的世界空间是顶点或片段的世界空间相同。**“世界**”选项因渲染管线而异，它使用管线的默认世界空间。在 URP 中，它与 **Absolute World** 相同，但 HDRP 默认使用摄像机相对渲染，因此世界空间相对于摄像机位置变为相对于摄像机位置。
+节点将获取顶点或片段的位置，无论您使用哪个着色器阶段。只有一个输出存在，那就是位置，但有一个下拉列表可以让我们选择位置所在的空间。我们之前已经讨论过**对象**空间、**视图**空间和**切线**空间，**而绝对世界**与我们之前描述的世界空间是顶点或片段的世界空间相同。“**世界**”选项因渲染管线而异，它使用管线的默认世界空间。在 URP 中，它与 **Absolute World** 相同，但 HDRP 默认使用摄像机相对渲染，因此世界空间相对于摄像机位置变为相对于摄像机位置。
 
 ### ₆₉ Screen Position
 
@@ -745,7 +745,7 @@ The `Vertex Color` node can be used to get the color attached to the mesh’s ve
 
 The `View Direction` node gets the vector between the vertex or fragment and the camera. The drop-down lets us change the **Space** between **World**, **View**, **Object** or **Tangent** – we’ve talked about all of those before.
 
-节点获取顶点或片段与相机之间的向量。下拉列表允许我们更改**“世界**”、“**视图**”、“**对象**”或**“切线**”之间的**空间**——我们之前已经讨论过所有这些。
+节点获取顶点或片段与相机之间的向量。下拉列表允许我们更改“**世界**”、“**视图**”、“**对象**”或“**切线**”之间的**空间**——我们之前已经讨论过所有这些。
 
 ![View Direction.](./img_every_node/view-direction.png)*Look at meeeee!*
 *看着我！*
@@ -840,7 +840,7 @@ Like all nodes under the High Definition Render Pipeline group, the `Diffusion P
 
 The `Exposure` node is an HDRP-exclusive node that you can use to get the camera’s exposure level on the current or previous frame. The only output from the node is a Vector3 representing that exposure level. There are four exposure types you can pick from the **Type** dropdown. The two labelled **Current** get exposure from this frame, while the **Previous** ones get the exposure from last frame. The two called **Inverse** return the inverse of the exposure on a given frame.
 
-该节点是 HDRP 独占节点，可用于获取相机在当前或上一帧上的曝光级别。节点的唯一输出是表示该曝光级别的 Vector3。您可以从**“类型**”下拉列表中选择四种曝光类型。两个标记为**“当前**”的帧从此帧获得曝光，而**“前**一个”从最后一帧获得曝光。两个称为 **Inverse** 返回给定帧上曝光的倒数。
+该节点是 HDRP 独占节点，可用于获取相机在当前或上一帧上的曝光级别。节点的唯一输出是表示该曝光级别的 Vector3。您可以从“**类型**”下拉列表中选择四种曝光类型。两个标记为“**当前**”的帧从此帧获得曝光，而“**前**一个”从最后一帧获得曝光。两个称为 **Inverse** 返回给定帧上曝光的倒数。
 
 ### ₈₃ HD Scene Color
 
@@ -928,7 +928,7 @@ UV 系列节点都可用于转换我们用于对纹理进行采样的 UV。
 
 The `Rotate` node takes in a **UV** as input and will rotate around the **Centre** point, which is another input `Vector 2`, by the rotation amount, which is a float input. This node also has a **Unit** dropdown, which determines whether the rotation is applied in radians or degrees. The single output is a new set of **UV** coordinates after the rotation has been applied.
 
-旋转节点接收**UV**作为输入，并将围绕**中心**点（另一个输入Vector2）旋转，旋转量为浮点输入。此节点还具有**“单位”**下拉列表，用于确定是以弧度还是度为单位应用旋转。单个输出是应用旋转后的一组新的 **UV** 坐标。
+旋转节点接收**UV**作为输入，并将围绕**中心**点（另一个输入Vector2）旋转，旋转量为浮点输入。此节点还具有“**单位”**下拉列表，用于确定是以弧度还是度为单位应用旋转。单个输出是应用旋转后的一组新的 **UV** 坐标。
 
 ![Rotate.](./img_every_node/rotate.png)*You spin me right round baby, right round.*
 *你把我转过来，宝贝，右转。*
@@ -937,7 +937,7 @@ The `Rotate` node takes in a **UV** as input and will rotate around the **Centre
 
 The `Spherize` node distorts the UVs as if they’re being applied to a sphere instead of a flat surface – the Unity documentation describes it like a fisheye lens. The **UV** input gives us the base UVs before the transformation, and like `Rotate`, the **Centre** gives us the origin point of the effect. The **Strength** determines how strongly the effect is applied, and the **Offset** is used to scroll the UVs before the transformation has been applied. The only output is the **UV**s after being spherized.
 
-球面化节点扭曲了UV，就好像它们被应用于球体而不是平面一样——Unity 文档将其描述为鱼眼镜头。**UV** 输入为我们提供了转换前的基本 UV，并且像 **一样，中心**为我们提供了效果的原点。**“强度**”（Strength） 决定了效果的强度，**而“偏移”（Offset**） 用于在应用变换之前滚动 UV。唯一的输出是球形后的**UV**。
+球面化节点扭曲了UV，就好像它们被应用于球体而不是平面一样——Unity 文档将其描述为鱼眼镜头。**UV** 输入为我们提供了转换前的基本 UV，并且像 **一样，中心**为我们提供了效果的原点。**强度**（Strength） 决定了效果的强度，而 **偏移（Offset）** 用于在应用变换之前滚动 UV。唯一的输出是球形后的**UV**。
 
 ![Spherize.](./img_every_node/spherize.png)*The Spherize node is great for imitating a fisheye lens.*
 *Spherize 节点非常适合模仿鱼眼镜头。*
@@ -1616,7 +1616,7 @@ The `White Balance` node is used for modifying the **Tint** and **Temperature** 
 
 The `Replace Color` node takes a color input, and we can define a color to replace, called **From**, and a color to replace it with, called **To**. Whenever the **From** color appears, it’s replaced with the **To** color. We also define a float called **Range**, which means that if any input color is within that range of **From**, it will also be replaced. And finally, increasing the **Fuzziness** input means there will be a smooth falloff between the original colors and the **To** color.
 
-该替换颜色节点接受颜色输入，我们可以定义要替换的颜色（**称为 From**）和要替换它的颜色（**称为 To**）。每当**出现“从**”颜色时，它就会替换为**“到**”颜色。我们还定义了一个名为 **Range** 的浮点数，这意味着如果任何输入颜色在 **From** 的范围内，它也将被替换。最后，增加**模糊性**输入意味着原始颜色和 **To** 颜色之间将出现平滑衰减。
+该替换颜色节点接受颜色输入，我们可以定义要替换的颜色（**称为 From**）和要替换它的颜色（**称为 To**）。每当**出现“从**”颜色时，它就会替换为“**到**”颜色。我们还定义了一个名为 **Range** 的浮点数，这意味着如果任何输入颜色在 **From** 的范围内，它也将被替换。最后，增加**模糊性**输入意味着原始颜色和 **To** 颜色之间将出现平滑衰减。
 
 ![Replace Color.](./img_every_node/replace-color.png)*We can swap out a range of colors easily like this.*
 *我们可以像这样轻松更换一系列颜色。*
@@ -1649,7 +1649,7 @@ The Normal node family is irreplaceable when working with normal mapping, whethe
 
 The `Normal Unpack` node takes a color or vector as input and unpacks it into a normal vector. That said, for textures, you can usually sample it as a normal map anyway, so this node is more useful if you’ve generated a normal texture within the graph somehow and you need to convert from colors to normal vectors. You can choose the **Space** of the input between **Tangent** or **Object** space using the dropdown. The output normal vector is a `Vector 3`.
 
-Normal Unpack节点将颜色或向量作为输入，并将其解压缩为法线向量。也就是说，对于纹理，您通常可以将其作为法线贴图进行采样，因此，如果您以某种方式在图形中生成了法线纹理，并且需要从颜色转换为法线向量，则此节点更有用。您可以使用下拉列表在**“切线**”或**“对象**”空间之间选择输入**的空间**。输出法向量是Vector3 。
+Normal Unpack节点将颜色或向量作为输入，并将其解压缩为法线向量。也就是说，对于纹理，您通常可以将其作为法线贴图进行采样，因此，如果您以某种方式在图形中生成了法线纹理，并且需要从颜色转换为法线向量，则此节点更有用。您可以使用下拉列表在“**切线**”或“**对象**”空间之间选择输入**的空间**。输出法向量是Vector3 。
 
 ![Normal Unpack.](./img_every_node/normal-unpack.png)*You can use Normal Unpack, but Sample Texture 2D can do the same thing.*
 *您可以使用“法线解包”，但“示例纹理 2D”也可以执行相同的操作。*
@@ -1667,7 +1667,7 @@ The `Normal Strength` node takes a set of normals as input as a `Vector 3` and s
 
 The `Normal From Texture` node takes a **Texture**, a **Sampler** and a set of **UV**s as input and uses that as a heightmap, from which it will generate normals. The **Offset** float input defines how far away the normal details extend from the surface, and the **Strength** float input multiplies the size of the result. The output is a `Vector 3` representing the calculated normal vector.
 
-该节点将一个 **Texture**、一个 **Sampler** 和一组 **UV**s 作为输入，并将其用作高度图，从中生成法线。**“偏移”**浮点数输入定义法线细节与曲面的距离，**而“强度**”浮点数输入则使结果的大小相乘。输出是Vector3表示计算出的法向量。
+该节点将一个 **Texture**、一个 **Sampler** 和一组 **UV**s 作为输入，并将其用作高度图，从中生成法线。“**偏移”**浮点数输入定义法线细节与曲面的距离，**而“强度**”浮点数输入则使结果的大小相乘。输出是Vector3表示计算出的法向量。
 
 ![Normal From Texture.](./img_every_node/normal-from-texture.png)*This provides an easy way to convert heightmaps to normals.*
 *这提供了一种将高度贴图转换为法线的简单方法。*
@@ -1914,7 +1914,7 @@ Similarly, **Infinite** is a special value that floating points can take. The `I
 
 A mesh defines whether faces are front-facing or back-facing based on the winding order of its vertices. That means the order the vertices are listed in the mesh data. The `Is Front Face` node will always return true unless the **Two Sided** option is ticked in the **Graph Settings**. But when it is ticked, we can decide to change the behaviour of the shader based on the facing direction of the mesh.
 
-网格根据其顶点的缠绕顺序定义面是正面还是背面。这意味着顶点在网格数据中列出的顺序。除非在**“图形设置**”中勾选“**双面**”选项，否则该节点将始终返回 true。但是当它被勾选时，我们可以决定根据网格的朝向来改变着色器的行为。
+网格根据其顶点的缠绕顺序定义面是正面还是背面。这意味着顶点在网格数据中列出的顺序。除非在“**图形设置**”中勾选“**双面**”选项，否则该节点将始终返回 true。但是当它被勾选时，我们可以决定根据网格的朝向来改变着色器的行为。
 
 ![Logic Nodes.](./img_every_node/logic-nodes.png)*There’s a lot of logic-based nodes - not much else accepts a Boolean.*
 *有很多基于逻辑的节点 - 没有多少其他节点接受布尔值*

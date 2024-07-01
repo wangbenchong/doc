@@ -6,7 +6,7 @@
 
 如下图：
 
-![](.\img\HelpURLAttribute.jpg)
+![](./img/HelpURLAttribute.jpg)
 
 对应着蓝色小书的图标，点击以后会跳转到配置的URL。
 
@@ -57,7 +57,7 @@ public class PlayerScript : MonoBehaviour
 
 在Inspector面板中，为一个字段Field指定一个提示。
 
-![](.\img\TooltipAttribute.jpg)
+![](./img/TooltipAttribute.jpg)
 
 ```c#
 using UnityEngine;
@@ -151,7 +151,7 @@ public class testEdit : MonoBehaviour {
 }
 ```
 
-![](.\img\SpaceAttribute.jpg)
+![](./img/SpaceAttribute.jpg)
 
 ## TextAreaAttribute
 
@@ -199,7 +199,7 @@ public class ContextTesting : MonoBehaviour {
 }
 ```
 
-![](.\img\ContextMenuAttribute.jpg)
+![](./img/ContextMenuAttribute.jpg)
 
 预定义的一些方法，如Reset，是可以进行重载的。
 
@@ -218,7 +218,7 @@ public class ContextTesting : MonoBehaviour {
     }
 ```
 
-![](.\img\ContextMenuItemAttribute.jpg)
+![](./img/ContextMenuItemAttribute.jpg)
 
 ## CreateAssetMenuAttribute
 
@@ -254,7 +254,7 @@ public class testEdit : ScriptableObject {
 颜色选择器，color picker，只能应用在Color字段上。
  默认参数为是否显示alpha，具体使用看下官方文档的参数描述，这里不加代码了
 
-![](.\img\ColorUsageAttribute.jpg)
+![](./img/ColorUsageAttribute.jpg)
 
 ## AddComponentMenu
 
@@ -321,9 +321,9 @@ public class testEdit : ScriptableObject {
 
  设置基础选中对象，应用该标识一个对象为选中对象，当我们在scene view中选择一个objects的时候，u3d会返回给我们是适合的对象，比如你选中的对象是prefab的一部分，默认会返回节点的根对象，默认根对象被设置成了基础选中对象，你可以修改他，让其它的对象成为基础选中对象，比如根对象可能就是一个空的GameObject，而我们要实际查看编辑的对象是子节点，这样我们可以将子节点中添加的脚本应用SelectionBase特性。
 
-![](.\img\SelectionBaseAttribute_1.jpg)
+![](./img/SelectionBaseAttribute_1.jpg)
 
-![](.\img\SelectionBaseAttribute_2.jpg)
+![](./img/SelectionBaseAttribute_2.jpg)
 
 我将脚本加到Camera_Offset后，成为了默认的选中对象，这样每次我在场景中选中时，Camera_Offset会被选择，并高亮显示。
 
@@ -401,7 +401,7 @@ public class ExampleClass : MonoBehaviour {
     }
 ```
 
-![](.\img\GUITargetAttribute.jpg)
+![](./img/GUITargetAttribute.jpg)
 
 说明：
  提供了如下参数：
