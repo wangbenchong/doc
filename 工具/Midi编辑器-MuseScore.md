@@ -75,3 +75,7 @@ Muse Hub的安装过程比较顺利，是强制安装到C盘的。安装路径�
 6. 音色下载完，选择【效果】切页，把头几个效果（主要是混响，其他随意）下面的【GET】按钮点一下。就开始下载效果了。
 7. 都下载好之后，就可以打开MuseScore了（也可以通过MuseHub的【主页】点击第一个应用程序来打开MuseScore）。
 8. MuseScore里面的混响器此时可以选择你刚刚下载的音色和效果了。
+
+## 临时删掉音色库以节省硬盘空间
+
+如果严格按照上面教程把音色库装到D盘，那么完全可以在不使用音色库的时候把这个文件夹：D:/Program Files/MuseScore 4/SoundDocument/Muse Hub Downloads/Instruments 直接删除或者剪切到别的地方。以后需要这个音效库了可以把文件夹恢复回来，或者直接在联网状态运行Muse Hub，它会把Instruments目录直接下载回来，很方便。

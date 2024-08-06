@@ -74,3 +74,9 @@ Overrides//重载
 [超小白向URP Scriptable Render Feature写法——实现老式CRT电视效果！ - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv17531935)
 
 [unity在URP中实现自定义Volume_unity volume-CSDN博客](https://blog.csdn.net/xdedzl/article/details/114746972)
+
+
+
+# 利用shader中的LightMode标签
+
+如果给两个pass的其中一个打上"LightMode" = "SRPDefaultUnlit"（不写默认就是这个，为了兼容builtin预留的标签，具体可查看unity安装目录下的DrawObjectsPass.cs脚本） 这样的Tags标签（另一个是”UniversalForward”）则两个Pass都会执行，并且“SRPDefaultUnlit”会先执行。但是通过frameDebugger能够查看到，说明没有合批。该手段只能在双pass执行的时候用一用。超过两个就只能RenderFeature了。

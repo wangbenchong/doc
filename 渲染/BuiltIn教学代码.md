@@ -1,19 +1,45 @@
 # 基础
 
+## BuiltIn和Urp特征区别
+
 BuiltIn特征：
 
 - CGPROGRAM / ENDCG
+- #include "UnityCG.cginc"//不是必须写
+- #include "Lighting.cginc"//这句写了上一句就可以省了
 - sampler2D _MainTex;
-- UnityObjectToClipPos();
-- tex2D();
+- float4 _MainTex_ST;//存缩放和偏移
+- struct及形参命名：appdata v, return o, v2f i
+- UnityObjectToClipPos();//vert下
+- o.uv = data.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//vert下
+- tex2D();//frag下
 
 Urp代码特征：
 
+- Tags { "RenderPipeline"="UniversalPipeline" }
 - HLSLINCLUE / HLSLPROGRAM / ENDHLSL
-- CBUFFER_START(UnityPerMaterial)  CBUFFER_END
+- #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+- CBUFFER_START(UnityPerMaterial),  CBUFFER_END
 - TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-- TransformObjectToHClip();
-- SAMPLE_TEXTURE2D();
+- float4 _MainTex_ST;//只声明就好
+- stuct及形参命名：Attributes IN, return OUT, Varyings IN
+- TransformObjectToHClip();//vert下
+- OUT.uv = TRANSFORM_TEX(IN.uv,  _MainTex); //vert下，自动调用 _MainTex_ST
+- SAMPLE_TEXTURE2D();//frag下
+
+## BuiltIn和Urp共通点
+
+基本一致的数学和时间函数：
+
+float4 _Time, _SinTime, _CosTime, unity_DeltaTime
+
+cell(), floor(),  round(), max(), min(), lerp(), clamp(), saturate() , sin(), cos(), tan(), asin(), dot(), cross(), abs(), sqrt(), pow()等等
+
+
+
+## SubShader Tags
+
+[【Shader进阶】SubShader块标签Tags——DisableBatching-CSDN博客](https://blog.csdn.net/qq_39574690/article/details/105400316)
 
 # 光照
 

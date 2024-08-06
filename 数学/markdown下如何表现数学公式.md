@@ -503,6 +503,8 @@ quadrantChart
 
 ### 类视图
 
+[保姆级教程--类图怎么画-CSDN博客](https://blog.csdn.net/q584401071/article/details/122201102)
+
 ```mermaid
 classDiagram
 Class01 <|-- AveryLongClass : Cool
@@ -554,6 +556,8 @@ gitGraph:
 ```
 
 ### 关系图
+
+[实体关系图_百度百科 (baidu.com)](https://baike.baidu.com/item/实体关系图/9005309)
 
 ```mermaid
 erDiagram
