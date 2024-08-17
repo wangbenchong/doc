@@ -309,3 +309,30 @@ namespace UnityEngine.Rendering
 }
 ```
 
+# Shader变量的后缀和前缀
+
+- _MainTex_TexelSize 里的 _TexelSize 后缀
+
+
+是贴图 _MainTex 的像素尺寸大小，值： Vector4(1 / width, 1 / height, width, height)
+ half2 offs = _MainTex_TexelSize.xy * half2(1,0) *  _BlurSize;
+
+- _MainTex_ST 里的 _ST 后缀
+
+是贴图_MainTex的tiling和offset的四元数
+_MainTex_ST.xy 是tiling的值
+_MainTex_ST.zw 是offset的值
+代码如：_
+
+```c
+_// Transforms 2D UV by scale/bias property, ##是连接的意思
+#define TRANSFORM_TEX(tex,name) (tex.xy * name##_ST.xy + name##_ST.zw)
+```
+
+
+
+- sample_前缀
+
+  TEXTURE2D(_SelfTexture2D);
+  float4 _SelfTexture2D_TexelSize;
+  SAMPLER(sampler_SelfTexture2D);

@@ -7,6 +7,12 @@
 
 解压直接运行，无需安装
 
+# GIF动态图压缩
+
+通过网盘分享的文件：UleadGIFAnimator_5.10_Single.zip
+链接: https://pan.baidu.com/s/1nO5blo67Bhox0DyRCOOwNA?pwd=y7hu 提取码: y7hu 
+--来自百度网盘超级会员v7的分享
+
 # Markdown文档插图规范
 
 遵循这个规范，合理使用相对路径，可以省去图床的麻烦，即便在gittee网页上也能直接显示出插图（github目前暂时还不行）。
