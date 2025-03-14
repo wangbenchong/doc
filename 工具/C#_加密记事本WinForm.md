@@ -42,6 +42,8 @@ namespace EncryptedNotepad
         private string password = null; // 当前密码
         private string defaultTitleName;
         const string PassPortFileName = "key.cfg";
+        private string _originalText = ""; // 保存初始文本内容
+        private bool _isTextChanged = false; // 标记文本是否已更改
 
         public MainForm()
         {
@@ -160,10 +162,10 @@ namespace EncryptedNotepad
                     // 读取文件内容
                     string plainText = File.ReadAllText(filePath, encode);
 
-                    // 加密文本
+                    // 解密文本
                     string encryptedText = DecryptText(plainText, password);
 
-                    // 保存加密后的内容
+                    // 保存解密后的内容
                     File.WriteAllText(filePath, encryptedText);
                 }
                 catch (Exception ex)
@@ -186,6 +188,9 @@ namespace EncryptedNotepad
                 txtContent.Text = decryptedText;
                 //MessageBox.Show("解密成功.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                _originalText = txtContent.Text;
+                _isTextChanged = false;
+
                 // 更新窗口标题
                 this.Text = $"{defaultTitleName} - {Path.GetFileName(currentFilePath)}";
 
@@ -203,12 +208,6 @@ namespace EncryptedNotepad
             string text = txtContent.Text;
             password = txtPassword.Text; // 更新密码
 
-            if (string.IsNullOrEmpty(text))
-            {
-                MessageBox.Show("请输入内容再保存", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             if (string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("请输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -221,6 +220,7 @@ namespace EncryptedNotepad
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
                 saveFileDialog.DefaultExt = "txt";
+                saveFileDialog.Title = "加密文件保存为...";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     currentFilePath = saveFileDialog.FileName;
@@ -237,6 +237,9 @@ namespace EncryptedNotepad
             // 保存到文件
             File.WriteAllText(currentFilePath, encryptedText);
             MessageBox.Show($"文件已加密保存到 {currentFilePath}", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            _originalText = txtContent.Text;
+            _isTextChanged = false;
 
             // 更新窗口标题
             this.Text = $"{defaultTitleName} - {Path.GetFileName(currentFilePath)}";
@@ -259,7 +262,7 @@ namespace EncryptedNotepad
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        #region 按钮点击
+        #region UI事件
         private void btnEncryptSave_Click(object sender, EventArgs e)
         {
             DoSave();
@@ -274,11 +277,19 @@ namespace EncryptedNotepad
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            if(_isTextChanged)
+            {
+                var dialogResult = MessageBox.Show("当前有尚未保存的修改，是否先做保存？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if(dialogResult == DialogResult.OK)
+                {
+                    DoSave();
+                }
+            }
             // 打开文件选择对话框
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
             openFileDialog.DefaultExt = "txt";
+            openFileDialog.Title = "请选择需要打开的加密文件";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 currentFilePath = openFileDialog.FileName;
@@ -289,7 +300,6 @@ namespace EncryptedNotepad
         private void btnEncryptFolder_Click(object sender, EventArgs e)
         {
             password = txtPassword.Text; // 更新密码
-
             if (string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -298,6 +308,7 @@ namespace EncryptedNotepad
 
             // 打开文件夹选择对话框
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            folderDialog.Description = "请选择要把哪个文件夹里的txt全部加密";
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
                 string folderPath = folderDialog.SelectedPath;
@@ -311,7 +322,6 @@ namespace EncryptedNotepad
         private void btnDecryptFolder_Click(object sender, EventArgs e)
         {
             password = txtPassword.Text; // 更新密码
-
             if (string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -320,6 +330,7 @@ namespace EncryptedNotepad
 
             // 打开文件夹选择对话框
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            folderDialog.Description = "请选择要把哪个文件夹里的txt全部解密";
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
                 string folderPath = folderDialog.SelectedPath;
@@ -332,14 +343,25 @@ namespace EncryptedNotepad
 
         private void btnNew_Click(object sender, EventArgs e)
         {
+            if (_isTextChanged)
+            {
+                var dialogResult = MessageBox.Show("当前有尚未保存的修改，是否先做保存？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.OK)
+                {
+                    DoSave();
+                }
+            }
             // 清空文本框内容
             txtContent.Text = string.Empty;
-
+            this._originalText = string.Empty;
+            this._isTextChanged = false;
+            this.currentFilePath = string.Empty;
             // 重置窗口标题
             this.Text = defaultTitleName;
 
             // 弹出文件保存对话框
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = "新建加密文件保存为...";
             saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
             saveFileDialog.DefaultExt = "txt";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -355,6 +377,28 @@ namespace EncryptedNotepad
         private void btnEye_MouseUp(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = true;//恢复为密码模式
+        }
+        private void txtContent_TextChanged(object sender, EventArgs e)
+        {
+            // 检查当前文本是否与初始文本不同
+            if (txtContent.Text != _originalText)
+            {
+                if (!_isTextChanged)
+                {
+                    // 如果文本已更改且未标记，更新标题栏
+                    this.Text += "*";
+                    _isTextChanged = true;
+                }
+            }
+            else
+            {
+                if (_isTextChanged)
+                {
+                    // 如果文本恢复为原始内容，移除标题栏的 * 号
+                    this.Text = this.Text.TrimEnd('*');
+                    _isTextChanged = false;
+                }
+            }
         }
         #endregion
 
@@ -650,7 +694,6 @@ namespace EncryptedNotepad
 
             return true; // 其他编码默认返回 true
         }
-
         #endregion
     }
 }

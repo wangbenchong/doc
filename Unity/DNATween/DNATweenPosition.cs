@@ -127,7 +127,6 @@ public class DNATweenPosition : DNATweener
     public override void SetStartByCurrentValue()
     {
         from = value;
-        from.Set(Mathf.RoundToInt(from.x), Mathf.RoundToInt(from.y), Mathf.RoundToInt(from.z));
     }
 
     public override void SetEndByCurrentValue() { to = value; }
