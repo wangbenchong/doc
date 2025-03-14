@@ -393,12 +393,12 @@ public class ExampleClass : MonoBehaviour {
 
 ```cpp
 [GUITarget(0,1,new int[]{2,3,4})]
-    void OnGUI()
-    {
-        if (GUI.Button (new Rect (0, 0, 128, 128), "Test")) {
-            Debug.Log ("blahblahblah....");
-        }
+void OnGUI()
+{
+    if (GUI.Button (new Rect (0, 0, 128, 128), "Test")) {
+        Debug.Log ("blahblahblah....");
     }
+}
 ```
 
 ![](./img/GUITargetAttribute.jpg)
@@ -408,3 +408,128 @@ public class ExampleClass : MonoBehaviour {
  displayIndex    Display index.display 索引
  displayIndex1   Display index. display索引
  displayIndexList  Display index list.display索引列表
+
+# 经典自定义Attribute
+
+## 在Transform变量下面加三个按钮
+
+其中第一个按钮支持自定义功能
+
+```csharp
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+using System;
+using System.Reflection;
+#endif
+
+namespace DNATools
+{
+    /// <summary>
+    /// 使用方法示例：[DNATools.TransformButton("Test Model", nameof(TestModel))]
+    /// </summary>
+    public class TransformButtonAttribute : PropertyAttribute
+    {
+        public string ButtonLabel { get; private set; } // 按钮的显示文本
+        public string MethodName { get; private set; } // 回调函数的方法名
+
+        // 构造函数，接受按钮文本和回调函数的方法名
+        public TransformButtonAttribute(string buttonLabel, string methodName)
+        {
+            ButtonLabel = buttonLabel;
+            MethodName = methodName;
+        }
+    }
+    #if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(TransformButtonAttribute))]
+    public class TransformButtonDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            // 获取 TransformButtonAttribute
+            TransformButtonAttribute transformButton = attribute as TransformButtonAttribute;
+
+            // 确保字段类型是 Transform
+            if (property.propertyType == SerializedPropertyType.ObjectReference &&
+                (property.objectReferenceValue == null || property.objectReferenceValue is Transform))
+            {
+                // 绘制 Transform 字段
+                EditorGUI.PropertyField(position, property, label);
+
+                // 计算按钮的位置
+                //Rect buttonRect = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight);
+
+                // 绘制按钮
+                //if (GUI.Button(buttonRect, transformButton.ButtonLabel))
+                EditorGUILayout.BeginHorizontal();
+                if(GUILayout.Button(transformButton?.ButtonLabel))
+                {
+                    // 获取 Transform 值
+                    Transform transform = (Transform)property.objectReferenceValue;
+
+                    // 获取脚本实例
+                    UnityEngine.Object targetObject = property.serializedObject.targetObject;
+                    Type targetType = targetObject.GetType();
+
+                    // 通过反射获取方法
+                    MethodInfo method = targetType.GetMethod(transformButton.MethodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+
+                    if (method != null)
+                    {
+                        // 调用方法
+                        if (method.IsStatic)
+                        {
+                            method.Invoke(null, new object[] { transform });
+                        }
+                        else
+                        {
+                            method.Invoke(targetObject, new object[] { transform });
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"Method '{transformButton.MethodName}' not found in {targetType.Name}.");
+                    }
+                }
+
+                if (GUILayout.Button("Select", GUILayout.Width(50f)))
+                {
+                    var tran = (Transform)property.objectReferenceValue;
+                    var go = tran?.gameObject;
+                    Selection.activeGameObject = go;
+                }
+                if (GUILayout.Button("Ping",GUILayout.Width(50f)))
+                {
+                    var tran = (Transform)property.objectReferenceValue;
+                    var go = tran?.gameObject;
+                    EditorGUIUtility.PingObject(go);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            else
+            {
+                // 如果字段类型不是 Transform，显示错误提示
+                EditorGUI.LabelField(position, label.text, "Use TransformButton with Transform fields only.");
+            }
+        }
+
+        // public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        // {
+        //     // 增加高度以容纳按钮
+        //     return EditorGUIUtility.singleLineHeight * 2 + 4; // 字段高度 + 按钮高度 + 间距
+        // }
+    }
+    #endif
+}
+```
+
+
+
+# 第三方扩展：Odin插件
+
+[Unity使用Odin完成编辑器开发 【基础知识篇 第一节】中文 分组 颜色 按钮 条件_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kwAkepEwp/?spm_id_from=333.1387.favlist.content.click&vd_source=563d44869c3ecebb1867233573d16b7b)
+
+百度网盘分享的文件：[Odin Inspector and Serializer v3.3.1.4.unitypackage](https://pan.baidu.com/s/1fUa2UK6TkuL-z51in6uWbg?pwd=0000)
+
+Odin官网：https://odininspector.com/tutorials，可以看到，自定义Attribute只是其功能之一，非常强大
+

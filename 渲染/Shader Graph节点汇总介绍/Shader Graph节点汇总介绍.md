@@ -36,7 +36,7 @@ In **object space**, the position of all vertices of a model are relative to a c
 
 在**对象空间**中，模型的所有顶点的位置都相对于对象的中心点或枢轴点。
 
-![Object Space.](./img_every_node/0-object-space.png)
+![Object Space.](./img/0-object-space.png)
 
 ## World Space
 
@@ -50,7 +50,7 @@ Here’s where render pipelines muddy the water a bit. In both URP and HDRP, **a
 
 这是渲染管道使水变得有点浑浊的地方。在 URP 和 HDRP 中，**绝对世界空间**总是使用我刚才对世界空间的描述。在URP中，这个定义也用于**世界空间**。但 HDRP 使用**相机相对渲染**，其中场景中对象的位置相对于相机位置（但不是其旋转）变为相对于摄像机位置;HDRP 中的**世界空间**是相对于相机的，而**绝对世界空间**则不是。
 
-![World Space.](./img_every_node/0-world-space.png)
+![World Space.](./img/0-world-space.png)
 
 ## Tangent Space
 
@@ -58,7 +58,7 @@ In **tangent space**, positions and directions are relative to an individual ver
 
 在**切线空间**中，位置和方向相对于单个顶点及其法线。
 
-![Tangent Space.](./img_every_node/0-tangent-space.png)
+![Tangent Space.](./img/0-tangent-space.png)
 
 ## View/Eye Space
 
@@ -66,7 +66,7 @@ In **view/eye space**, objects are relative to the camera and its forward-facing
 
 在**视图/眼睛空间**中，对象相对于相机及其前向方向。这与**相机相对渲染**不同，因为相机的旋转被考虑在内。
 
-![View Space.](./img_every_node/0-view-space.png)
+![View Space.](./img/0-view-space.png)
 
 ## Clip space
 
@@ -96,7 +96,7 @@ The `Position` block defines the position of each vertex on a mesh. If left unch
 
 该模块定义每个顶点在网格上的位置。如果保持不变，则每个顶点位置将与建模程序中的位置相同，但我们可以对这个Vector3进行修改以物理方式更改顶点在世界中的位置。您可以将其用于任何需要物理移动网格的效果，例如海浪，但不幸的是，我们无法修改单个像素/片段的位置，只能修改顶点。
 
-![Position (Block).](./img_every_node/1-position-block.png)
+![Position (Block).](./img/1-position-block.png)
 *Add an offset to the Position along the vertex normals to inflate a model.*
 *沿顶点法线向“位置”添加偏移量以充气模型。*
 
@@ -106,7 +106,7 @@ The `Normal` block defines the direction the vertex normal points in. This direc
 
 该模块定义顶点法线指向的方向。这个方向是许多光照计算的关键，因此改变这个方向可能会改变光照与对象交互的方式。我们可以在片段阶段使用另一个块节点更改此每个像素，这与 Position一样，这是一个  Vector 3
 
-![Normal (Block).](./img_every_node/normal-block.png)
+![Normal (Block).](./img/normal-block.png)
 *This graph will invert lighting on your object.  此图将反转对象上的照明*
 
 ### ₃ Tangent (Block)
@@ -115,7 +115,7 @@ The tangent vector lies perpendicular to the vertex normal, and for a flat surfa
 
 切向量垂直于顶点法线，对于平面，它通常位于物体的表面上。我们可以修改块以更改切向量 - 如果您更改顶点法线以使其仍然垂直，我建议您更改此设置。这也是一个 Vector 3
 
-![Tangent (Block).](./img_every_node/tangent-block.png)
+![Tangent (Block).](./img/tangent-block.png)
 *If modifying the normals, it’s a good idea to modify the tangent too.*
 *如果修改法线，最好也修改切线*
 
@@ -133,7 +133,7 @@ This was called `Albedo` in some versions of Shader Graph. The `Base Color` woul
 
 这在某些版本的 Shader Graph 中叫做 Albeo。如果将所有照明、透明度和其他效果都排除在外，则Base Color将是对象的颜色。
 
-![Base Color (Block).](./img_every_node/base-color-block.png)
+![Base Color (Block).](./img/base-color-block.png)
 *Shader Graph uses the same Color window as other parts of Unity.* 
 *Shader Graph 使用与 Unity 其他部分相同的颜色窗口。*
 
@@ -149,7 +149,7 @@ Emissive light is great for creating bloom around objects. Think neon lights, gl
 
 自发光非常适合在物体周围产生光晕。想想霓虹灯、炽热的火焰或魔法咒语。该色块接受 **HDR** 颜色，这使我们能够将光的强度提高到远远超过颜色通常允许的强度。
 
-![Emission (Block).](./img_every_node/emission-block.png)
+![Emission (Block).](./img/emission-block.png)
 *Setting a high-intensity green emission gives objects an alien glow.*
 *设置高强度的绿色发射会给物体带来外星光芒。*
 
@@ -159,7 +159,7 @@ The `Metallic` block expects a float. When it is 0, the lighting on the objects 
 
 ”金属”块需要一个浮点数。当它为 0 时，物体上的照明就好像它完全是非金属的，当它为 1 时，物体是完全金属的。这仅在使用**金属**工作流程时才有效 - 使用“**图形设置**”中的“**工作流程**”选项在此工作流程和“**镜面反射**”之间进行选择（您的材质必须为“**点亮**”才能显示该选项）。
 
-![Metallic (Block).](./img_every_node/metallic-block.png)
+![Metallic (Block).](./img/metallic-block.png)
 *The same material, with Metallic set to 0 and 1 respectively.*
 *相同的材质，金属色分别设置为 0 和 1。*
 
@@ -169,7 +169,7 @@ Unlike `Metallic`, the `Specular` block expects a color as input, because specul
 
 与Metallic 不同，该块需要一种颜色作为输入，因为镜面高光可以着色不同的颜色。颜色越亮，颜色越接近白色，高光越大
 
-![Specular (Block).](./img_every_node/specular-block.png)
+![Specular (Block).](./img/specular-block.png)
 *Colored specular highlights can make the rest of the material look kind of strange!*
 *彩色镜面高光可以使材料的其余部分看起来有点奇怪！*
 
@@ -179,11 +179,11 @@ The smoother an object, the more visible lighting highlights are. When `Smoothne
 
 对象越平滑，可见的照明高光就越多。当为 0 时，表面照明表现粗糙且哑光。当它为 1 时，表面就像被抛光成镜面光泽一样。
 
-![Smoothness (Block).](./img_every_node/smoothness-block.png)
+![Smoothness (Block).](./img/smoothness-block.png)
 *Setting smoothness to 1 results in sharper highlights.*
 *将平滑度设置为 1 可产生更清晰的高光。*
 
-![Smoothness.](./img_every_node/smoothness.png)
+![Smoothness.](./img/smoothness.png)
 *Here’s how smoothness works under the hood.*
 *以下是引擎盖下的平滑度工作原理。*
 
@@ -193,7 +193,7 @@ The smoother an object, the more visible lighting highlights are. When `Smoothne
 
 `Ambient Occlusion`(环境光遮蔽)用于衡量像素被场景中其他对象（如墙壁）遮挡的光源程度。这是一个浮点数 - 当它为 0 时，像素应根据落在它上面的任何光线完全照亮。当它为 1 时，照明被人为地减少到最小量。
 
-![Ambient Occlusion (Block).](./img_every_node/ambient-occlusion-block.png)
+![Ambient Occlusion (Block).](./img/ambient-occlusion-block.png)
 *Ambient Occlusion can be used to add slight shadows around object boundaries (see left).*
 *环境光遮蔽可用于在对象边界周围添加轻微的阴影（见左图)。*
 
@@ -203,7 +203,7 @@ The smoother an object, the more visible lighting highlights are. When `Smoothne
 
 `Alpha`是衡量像素透明度的度量，与许多其他块一样，它从 0 到 1，其中 0 是完全透明的，1 是完全不透明的。渲染透明度比渲染不透明对象的计算成本更高，因此我们需要在 Unity 的图形**设置**中选择“**透明表面**”选项来正确处理此着色器。
 
-![Alpha (Block).](./img_every_node/alpha-block.png)
+![Alpha (Block).](./img/alpha-block.png)
 *Turning down alpha makes the object more transparent.*
 *调低 alpha 会使对象更加透明。*
 
@@ -213,7 +213,7 @@ Alpha clipping is a technique where pixels with an alpha below a specific thresh
 
 Alpha 剪裁是一种技术，其中 Alpha 低于特定阈值的像素被剔除。我们可以通过勾选 **Alpha Clip** 选项在 **Graph Settings** 中启用该块。无论 **Surface** 是设置为“**透明**”还是“**不透明**”，这都有效，因此该块在不透明材质上并不总是完全无用！这对于使用不透明渲染的假透明效果很有用，但像素会以图案剔除以创建透明错觉。
 
-![Alpha Clip Threshold (Block).](./img_every_node/alpha-clip-block.png)
+![Alpha Clip Threshold (Block).](./img/alpha-clip-block.png)
 *Look closely - every pixel on the sphere is opaque, but the whole thing seems transparent.*
 *仔细观察 - 球体上的每个像素都是不透明的，但整个东西似乎是透明的。*
 
@@ -225,7 +225,7 @@ Properties provide an interface between the shader and the Unity Editor. We can 
 
 属性在着色器和 Unity 编辑器之间提供接口。我们可以将称为属性的变量公开到编辑器的检查器窗口，同时还为我们提供了一个整洁的位置来存储图形的所有变量。您可以像搜索任何节点一样在“创建节点”菜单中搜索它们，或者将它们从属性列表（称为 **Blackboard**）拖到主图形表面。要添加新属性，请使用 Blackboard 上的加号箭头并选择所需的属性类型。
 
-![Blackboard.](./img_every_node/blackboard.png)
+![Blackboard.](./img/blackboard.png)
 *Press the plus arrow to add new properties.*
 *按加号箭头添加新属性。*
 
@@ -237,7 +237,7 @@ A `Float` (or `Vector 1` as they’re called in earlier versions of Shader Graph
 
 一个Float（或在早期版本的 Shader Graph 中称为Vector 1）是单个浮点值。与每个变量类型一样，我们可以更改其**名称**（将出现在图形上的人类可读名称）及其**引用**字符串，这是我们用于引用 C# 脚本中的着色器变量的不同名称。引用字符串的约定通常是下划线，后跟以大写字母开头的单词，没有空格（例如，用_MainTex表示名为“Main Texture”的属性）。
 
-![Float (Property).](./img_every_node/float-property.png)
+![Float (Property).](./img/float-property.png)
 *This is the Node Settings window. There’s lots to tweak here!*
 *这是“节点设置”窗口。这里有很多需要调整的地方！*
 
@@ -273,7 +273,7 @@ The `Color` property type has a **Mode** toggle between **Default** and **HDR**.
 
 属性类型在“**默认**”和“**HDR**”之间具有“**模式**”切换。如果我们选择 HDR，那么我们会在颜色窗口中获得额外的选项 - 当我们讨论节点时，我们将更全面地介绍这些选项。
 
-![Color (Property).](./img_every_node/color-property.png)
+![Color (Property).](./img/color-property.png)
 *Colors are the basic building blocks of shaders. You’ll be using them a lot.*
 *颜色是着色器的基本构建块。你会经常使用它们。*
 
@@ -289,7 +289,7 @@ A `Boolean` property can be either **True** or **False**, which is controlled us
 
 `Gradient`在这里的工作方式与它们在 Unity 编辑器中的其他任何地方的工作方式类似 - 我们可以在渐变窗口中添加或删除手柄，以在该点设置渐变的颜色（底行）或 alpha（顶行）。“**公开**”复选框显示为灰色，因此此属性类型无法向检查器公开。
 
-![Gradient (Property).](./img_every_node/gradient-property.png)
+![Gradient (Property).](./img/gradient-property.png)
 *Gradients are great ways to add a color ramp to your shaders.*
 *渐变是向着色器添加色带的好方法。*
 
@@ -305,7 +305,7 @@ A `Texture 2D Array` is a collection of 2D textures with the same size and forma
 
 `Texture 2d Array`是具有相同大小和格式的 2D 纹理的集合，这些纹理已打包在一起，以便 GPU 可以像读取单个纹理一样读取它们，以提高效率。我们可以使用特殊节点对它们进行采样，我们将在后面看到。
 
-![Texture2D Array (Property).](./img_every_node/texture2d-array-property.png)
+![Texture2D Array (Property).](./img/texture2d-array-property.png)
 *You can create a Texture2D Array by slicing an existing Texture2D into sections.*
 *您可以通过将现有 Texture2D 切成多个部分来创建 Texture2D 数组。*
 
@@ -315,7 +315,7 @@ A `Texture 3D` is similar to Texture 2D, but we have an added dimension - it’s
 
 类似于 Texture 2D，但我们有一个额外的维度 - 它就像一个颜色数据的 3D 块。与 Texture 2D 不同，它无权访问“**模式**”选项。
 
-![Texture3D (Property).](./img_every_node/texture3d-property.png)
+![Texture3D (Property).](./img/texture3d-property.png)
 *You can generate Texture3D data in scripting or by slicing a Texture2D.*
 *您可以在脚本中或通过对 Texture2D 进行切片来生成 Texture3D 数据。*
 
@@ -325,7 +325,7 @@ A `Cubemap` is a special texture type which is conceptually like the net of a cu
 
 是一种特殊的纹理类型，在概念上类似于立方体的网 - 将它们视为拼接在一起的六个纹理。它们对于天空盒和反射映射很有用。
 
-![Cubemap (Property).](./img_every_node/cubemap-property.png)
+![Cubemap (Property).](./img/cubemap-property.png)
 *A Cubemap is a specially-imported Texture2D or collection of textures.*
 *Cubemap 是专门导入的 Texture2D 或纹理集合。*
 
@@ -371,7 +371,7 @@ A `Boolean` keyword is either true or false, so using one will result in two sha
 
 关键字要么是 true 要么是 false，因此使用一个关键字将产生两个着色器变体。根据**定义**的不同，着色器的作用不同：**着色器功能**将在编译时剥离任何未使用的着色器变体，从而删除它们;**Multi Compile** 将始终构建所有变体;当当前渲染管线已经定义了关键字时，可以使用**预定义**，因此它不会在生成的着色器代码中重新定义。否则，这可能会导致着色器错误。
 
-![Keyword (Property).](./img_every_node/keyword-property.png)
+![Keyword (Property).](./img/keyword-property.png)
 *Keywords give you an even bigger degree of control over your shaders.*
 *关键字使您可以更大程度地控制着色器。*
 
@@ -413,7 +413,7 @@ The `Color` node comes with a rectangle which we can click to define a primitive
 
 该节点带有一个矩形，我们可以单击该矩形来定义原始颜色。与 Unity 中的大多数颜色选择器窗口一样，我们可以在红-绿-蓝和色调饱和度值颜色空间之间切换，设置 alpha 或使用现有色板。或者，我们可以使用颜色选择器在Unity窗口中选择任何颜色。通过将**模式**下拉列表更改为 **HDR**，我们可以访问 HDR（高动态范围）颜色，从而将强度提高到 0 以上，这对于自发光材质特别有用。但是，并非每个接受颜色输入的节点都会考虑 HDR。它有一个输出，它只是您定义的颜色。
 
-![Color.](./img_every_node/color-node.png)
+![Color.](./img/color-node.png)
 *Setting the Color node to HDR gives us an extra Intensity setting which we can use in emissive materials.*
 *将“颜色”节点设置为 HDR 为我们提供了一个额外的“强度”设置，我们可以在自发光材质中使用该设置。*
 
@@ -441,7 +441,7 @@ And unsurprisingly, the `Vector 4` node has four inputs, X, Y, Z and W, and one 
 
 不出所料，该节点有四个输入，X、Y、Z 和 W，以及一个将所有四个组合成一个 .所有这些节点的行为都类似于属性类型。
 
-![Vector 1-4.](./img_every_node/vector-nodes.png)
+![Vector 1-4.](./img/vector-nodes.png)
 *Take note of the number of inputs and the size of the output of each node.*
 *记下每个节点的输入数和输出大小。*
 
@@ -463,7 +463,7 @@ The `Slider` node is useful if you want to use a `Float` inside your graph, and 
 
 如果要在图形内部使用，并且不希望用户从着色器外部修改值，则该节点非常有用，但出于测试目的，您需要一些额外的易用性。我们可以定义最小值和最大值，然后使用滑块，我们可以输出这些最小值和最大值之间的值。
 
-![Integer, Boolean and Slider.](./img_every_node/number-nodes.png)
+![Integer, Boolean and Slider.](./img/number-nodes.png)
 *Some nodes have special functions on the node body, not just inputs and outputs.*
 *一些节点在节点主体上具有特殊功能，而不仅仅是输入和输出。*
 
@@ -473,7 +473,7 @@ The `Time` node gives us access to several floats, all of which change over time
 
 该节点允许我们访问多个浮点数，所有这些浮点数都会随时间而变化。**时间**输出为我们提供了自场景开始以来的时间（以秒为单位）;**正弦时间**与将**时间**输出到正弦函数中相同;**余弦时间**就像在余弦函数中使用**时间**;**Delta Time** 是自上一帧以来经过的时间（以秒为单位）;**平滑增量**类似于**增量时间**，但它试图通过在几帧内对增量进行平均来平滑值。
 
-![Time.](./img_every_node/time-node.png)
+![Time.](./img/time-node.png)
 *Quite a few nodes are just for retrieving information, so they don’t have inputs, only outputs.*
 *相当多的节点只是用于检索信息，所以它们没有输入，只有输出。*
 
@@ -495,7 +495,7 @@ The `Sample Texture 2D` node is one of the nodes I use the most, in almost every
 
 该节点是我使用最多的节点之一，几乎在我构建的每个着色器中。它包含三个输入：一个是要采样的**纹理**，第二个是要对纹理进行采样的 **UV** 坐标，第三个是确定如何对纹理进行采样的**采样器状态**。该节点提供了两个额外的选项。当 **Type** 为 **Default** 时，节点对纹理的颜色进行采样，当它设置为 **Normal** 时，我们可以使用该节点对法线贴图进行采样。只有在**正常**模式下采样以确定输出正常信息的空间时，**空间**才相关 - 它是**对象**或**世界**。
 
-![Sample Texture 2D](./img_every_node/sample-texture-2d-node.png)
+![Sample Texture 2D](./img/sample-texture-2d-node.png)
 *This is one of the most important nodes. If you don’t fill the UV and Sampler inputs, default values are used.*
 *这是最重要的节点之一。如果不填充 UV 和 Sampler 输入，则使用默认值。*
 
@@ -509,7 +509,7 @@ The `Sample Texture 2D Array` node acts much like the `Sample Texture 2D` node, 
 
 该节点的行为与节点非常相似，但现在我们没有“**类型**”或“**空间**”选项。取而代之的是，我们现在有一个 **Index** 输入来确定数组中的哪个纹理要采样 - 记住这些数组的工作原理。
 
-![Sample Texture 2D Array.](./img_every_node/sample-texture-2d-array-node.png)
+![Sample Texture 2D Array.](./img/sample-texture-2d-array-node.png)
 *Note the slightly different output on both nodes - they’re using different indices.*
 *请注意，两个节点上的输出略有不同 - 它们使用不同的索引。*
 
@@ -519,7 +519,7 @@ The `Sample Texture 2D LOD` node is the same as `Sample Texture 2D`, except we h
 
 该节点与Sample Texture 2D 相同，只是我们添加了一个 **LOD** 输入。我们可以用它来设置对纹理进行采样的 mipmap 级别。因为我们手动设置了 mipmap 级别，所以我们实际上可以在着色器的顶点阶段使用这个节点 - 在研究这些节点的作用之前，我没有意识到这一点！
 
-![Sample Texture 2D LOD.](./img_every_node/sample-texture-2d-lod.png)
+![Sample Texture 2D LOD.](./img/sample-texture-2d-lod.png)
 *Sampling a normal texture and adding it to the vertex normal vector.*
 *对法线纹理进行采样并将其添加到顶点法线向量中。*
 
@@ -529,7 +529,7 @@ The `Sample Texture 2D LOD` node is the same as `Sample Texture 2D`, except we h
 
 `Sample Texture 3D`在概念上与Sample Texture 2D 相同，只是我们提供了一个**纹理 3D**，**并且 UV** 坐标必须是三维的，而不仅仅是二维的。我们仍然可以提供**采样器状态**，但我们没有额外的下拉选项，并且由于某种原因，我们只有一个 **Vector 4** 输出，而没有在 上找到的分离通道输出。
 
-![Sample Texture 3D.](./img_every_node/sample-texture-3d.png)
+![Sample Texture 3D.](./img/sample-texture-3d.png)
 *This node tree is setup so we can tweak the Z value to scroll through the 3D texture data.*
 *设置此节点树，以便我们可以调整 Z 值以滚动浏览 3D 纹理数据。*
 
@@ -539,7 +539,7 @@ The `Sample Cubemap` node takes in a **Cubemap**, a **Sampler State** and an **L
 
 Sample Cubemap节点采用一个**立方体贴图**、一个**采样器状态**和一个 **LOD** 级别，所有这些都是我们之前见过的，还有一个方向 **Dir**，它被用来代替 UV 来确定我们应该在立方体贴图上的位置进行采样。从概念上讲，将立方体贴图视为一个带纹理的立方体，但膨胀成球体形状。**Dir** 输入是世界空间中的一个向量，从球体的中心向外指向该球体上的一个点。唯一的输出是颜色。由于我们通过 **LOD** 输入指定 mipmap 级别，因此我们可以在着色器的片段和顶点阶段都使用它，但要注意，如果方向输入没有连接任何内容，您可能会遇到问题。这非常适合在天空盒上使用。
 
-![Sample Cubemap.](./img_every_node/sample-cubemap.png)
+![Sample Cubemap.](./img/sample-cubemap.png)
 *Cubemaps are commonly used to create skybox textures to simulate the sky.*
 *立方体贴图通常用于创建天空盒纹理以模拟天空。*
 
@@ -549,7 +549,7 @@ The `Sample Reflected Cubemap` node is like the `Sample Cubemap` node, except we
 
 与Sample Cubemap节点类似，只是我们有一个额外的 **Normal** 输入，并且该输入和视图方向都需要在对象空间中。从概念上讲，这个节点就像我们在观察世界中的对象，并使用其表面法向量从对象反射视图方向向量，然后使用反射向量对立方体贴图进行采样。与 Sample Cubemap不同在于，该节点非常适合将来自天空盒的反射光添加到场景中的对象。
 
-![Sample Reflected Cubemap.](./img_every_node/sample-reflected-cubemap.png)
+![Sample Reflected Cubemap.](./img/sample-reflected-cubemap.png)
 *A reflected cubemap, on the other hand, are used for reflection mapping.*
 *另一方面，反射立方体贴图用于反射映射。*
 
@@ -597,7 +597,7 @@ To finish off the set, we can use a `Cubemap Asset` node to access a cubemap tex
 
 为了完成这个集合，我们可以使用一个节点来访问图形中的立方体贴图纹理。
 
-![Texture Assets.](./img_every_node/texture-assets.png)
+![Texture Assets.](./img/texture-assets.png)
 *We can grab textures directly within the shader without using properties.*
 *我们可以直接在着色器中抓取纹理，而无需使用属性。*
 
@@ -625,7 +625,7 @@ The `Scene Color` node lets us access the framebuffer before rendering has finis
 
 该节点允许我们在渲染完成此帧之前访问帧缓冲区，并且它只能在片段着色器阶段使用。在 URP 中，我们只能在**透明**材质上使用它，它只会显示不透明的对象，并且节点的行为可以在渲染管线之间更改。**UV** 输入采用您要采样的屏幕位置，默认情况下，它使用与正在渲染的像素相同的屏幕位置 UV。当我们到达节点时，我将讨论下拉列表中的其他选项。输出是在此位置采样的颜色。
 
-![Scene Color.](./img_every_node/scene-color.png)
+![Scene Color.](./img/scene-color.png)
 *How Scene Color appears for opaque (left) and transparent (right) shaders, with added Fresnel. All pixels are fully opaque.*
 *不透明（左）和透明（右)着色器的场景颜色的显示方式，并添加了菲涅耳。所有像素都是完全不透明的。*
 
@@ -643,7 +643,7 @@ This node also contains a **Sampling** option with three settings. **Linear 01**
 
 此节点还包含具有三个设置的“**采样**”选项。**线性 01** 将返回一个介于 0 和 1 之间归一化的深度值，其中值为 1 的像素位于相机的近剪裁平面上，0 是远剪切平面（尽管在某些情况下可能会相反），并且两个平面之间的对象深度为 0.5。
 
-![Scene Depth.](./img_every_node/scene-depth.png)
+![Scene Depth.](./img/scene-depth.png)
 *This is the Scene Depth using Linear 01 mode.*
 *这是使用 Linear 01 模式的场景深度。*
 
@@ -697,11 +697,11 @@ Both sets of UVs can be generated automatically by Unity during the lightmapping
 
 这两组UV都可以由Unity在光照贴图过程中自动生成，但您也可以手动创建它们 - 但如果您不知道如何操作，那么无需担心。节点上有一个额外的复选框来应用光照贴图缩放，如果勾选，它将自动转换光照贴图纹理 - 通常最好保持勾选状态。唯一的输出是此位置的光照或阴影的颜色。
 
-![Baked GI.](./img_every_node/baked-gi.png)
+![Baked GI.](./img/baked-gi.png)
 *The top-left corner of this wall still has baked shadows from a wall section that I’ve since disabled.*
 *这面墙的左上角仍然有我禁用的墙面部分的阴影。*
 
-![Lighting Nodes.](./img_every_node/lighting-nodes.png)
+![Lighting Nodes.](./img/lighting-nodes.png)
 *These nodes work best on unlit materials, where you’re not using Unity’s automatic lighting systems.*
 *这些节点在未使用Unity自动光照系统的未光照材质上效果最佳。*
 
@@ -739,7 +739,7 @@ Using the drop-down, we can pick between the following matrices: the **Model** m
 
 使用下拉列表，我们可以在以下矩阵之间进行选择：**模型**矩阵从对象空间转换为世界空间，而 **InverseModel** 则以相反的方式进行转换。**视图**矩阵从世界空间转换为相对于摄像机的视图空间，而 **InverseView** 则相反。**投影**矩阵从视图空间转换为剪辑空间，其中可以剪裁相机视图之外的对象部分。**InverseProjection** 矩阵则相反。最后，**ViewProjection** 矩阵将我们从世界空间直接带到剪辑空间。**InverseViewProjection** 则相反。节点的唯一输出是选定的矩阵。
 
-![Matrix Nodes.](./img_every_node/matrix-nodes.png)
+![Matrix Nodes.](./img/matrix-nodes.png)
 *Matrices are commonly used for transforming between spaces.*
 *矩阵通常用于空间之间的转换。*
 
@@ -783,7 +783,7 @@ The `View Direction` node gets the vector between the vertex or fragment and the
 
 节点获取顶点或片段与相机之间的向量。下拉列表允许我们更改“**世界**”、“**视图**”、“**对象**”或“**切线**”之间的**空间**——我们之前已经讨论过所有这些。
 
-![View Direction.](./img_every_node/view-direction.png)
+![View Direction.](./img/view-direction.png)
 *Look at meeeee!*
 *看着我！*
 
@@ -799,7 +799,7 @@ The `Tangent Vector` node gets a vector that lies on the surface. This vector is
 
 节点获取位于表面上的向量。这个向量垂直于 ，和节点一样，我们得到四个空间选项。
 
-![Normal & Tangent Vectors.](./img_every_node/normal-tangent-vectors.png)
+![Normal & Tangent Vectors.](./img/normal-tangent-vectors.png)
 *The normal, tangent and bitangent vectors form a basis for tangent space.*
 *法向量、切向量和双向向量构成了切向量的基础。*
 
@@ -809,7 +809,7 @@ The `Bitangent Vector` node gets another vector that is parallel with the surfac
 
 节点获取另一个与曲面平行的向量。如果取 和 之间的叉积，则得到与节点相同的结果。我们稍后将讨论交叉积。
 
-![Bitangent Vector.](./img_every_node/bitangent-vector.png)
+![Bitangent Vector.](./img/bitangent-vector.png)
 *We can take the cross between the Tangent and Normal to get the Bitangent (the order is important).*
 *我们可以取切线和法线之间的交叉来得到双切线（阶数很重要)。*
 
@@ -831,7 +831,7 @@ Which brings us to the `Sample Gradient` node, which is the only node that curre
 
 这将我们带到了节点，这是当前唯一将**梯度**作为输入的节点。它还使用一个名为 **Time** 的输入，它是介于 0 和 1 之间的浮点数，用于确定在哪个位置对梯度进行采样。输出是在该点采样的颜色。
 
-![Gradient Nodes.](./img_every_node/gradient-nodes.png)
+![Gradient Nodes.](./img/gradient-nodes.png)
 *These are the only nodes that utilise gradients. We can pass the output color to other nodes, though.*
 *这些是唯一利用梯度的节点。不过，我们可以将输出颜色传递给其他节点。*
 
@@ -841,7 +841,7 @@ The `Blackbody` node is interesting – it takes in a temperature in Kelvin as i
 
 这个节点很有意思——它以开尔文为单位的温度作为输入，并输出该温度下黑体的颜色。不知道什么是黑体？那么你可能不是物理学家。黑体是一种理想化的完全不透明、非反射的物体，因此发出的热辐射是其温度的函数。它们从黑色开始，随着温度的升高，在红色、橙色、黄色和最后白色之间循环。
 
-![Blackbody.](./img_every_node/blackbody.png)
+![Blackbody.](./img/blackbody.png)
 *The color moves from black to red to white as the temperature increases.*
 *随着温度的升高，颜色从黑色变为红色再到白色。*
 
@@ -862,7 +862,7 @@ The `Metal Reflectance` is similar to `Dielectric Specular`, but now it outputs 
 
 `金属反射率` 与 Dielectric Specular 类似，但现在它输出某些金属上的镜面高光的颜色。主要区别在于，金属的镜面高光是彩色的，而不是灰度的，就像介电材料一样。Unity 提供铁、银、铝、金、铜、铬、镍、钛、钴和铂的值，没有更多定制金属选项。
 
-![PBR Nodes.](./img_every_node/pbr-nodes.png)
+![PBR Nodes.](./img/pbr-nodes.png)
 *We can use these presets to set specular values for common objects.*
 *我们可以使用这些预设来设置常见对象的镜面反射值。*
 
@@ -890,7 +890,7 @@ The `HD Scene Color` is the HDRP-exclusive counterpart of the regular `Scene Col
 
 是常规节点的 HDRP 独占对应项。与 不同的是，它有一个额外的 **LOD** 输入，让我们可以选择用于访问颜色缓冲区的 mipmap 级别——此节点始终使用三线性滤波在 mipmap 之间平滑。我们还有一个**曝光**复选框来选择是否应用曝光 - 默认情况下，它被禁用以避免双重曝光。节点的唯一输出是采样的颜色。
 
-![HD Scene Color.](./img_every_node/hd-scene-color.png)
+![HD Scene Color.](./img/hd-scene-color.png)
 *We can change the LOD level of the HD Scene Color node to create blurry windows.*
 *我们可以更改 HD Scene Color 节点的 LOD 级别以创建模糊窗口。*
 
@@ -923,7 +923,7 @@ The `Split` node takes in a `Vector 4` as input and output the four channels of 
 
 节点接受 Vector4 作为输入，并将向量的四个通道输出为单独的浮点数。如果您提供的向量少于 4 个分量，则“额外”输出将为零。
 
-![Split.](./img_every_node/split.png)
+![Split.](./img/split.png)
 *We can separate out each channel of a color using Split.*
 *我们可以使用拆分分离出颜色的每个通道。*
 
@@ -933,7 +933,7 @@ Swizzling is when you take the components of a vector and output them in a diffe
 
 Swizzling 是指获取向量的分量并以不同的顺序输出它们。该节点接受最多四个元素的向量作为输入，并在节点上提供四个选项来确定如何调整输入。这个节点总是输出一个 ，每个选项都允许我们选择一个输入通道来用于相应的输出。例如，将“Green Out”下拉列表更改为“蓝色”表示第二个输出分量采用第三个输入分量。
 
-![Swizzle.](./img_every_node/swizzle.png)
+![Swizzle.](./img/swizzle.png)
 *With Swizzle, we can shuffle the order of, remove, or duplicate components of a vector.*
 *使用 Swizzle（中译为鸡尾酒)，我们可以打乱向量的顺序、删除或复制向量的分量。*
 
@@ -943,7 +943,7 @@ The `Flip` node takes a vector of up to four elements as input, and for each inp
 
 翻转节点将最多四个元素的向量作为输入，对于每个输入组件，节点都会提供一个复选框来决定是否翻转该输入。翻转意味着正值变为负值，反之亦然。输出向量的分量与输入一样多。
 
-![Flip.](./img_every_node/flip.png)
+![Flip.](./img/flip.png)
 *Remember that values below 0 are preserved, so the red channel here outputs -1.*
 *请记住，将保留低于 0 的值，因此此处的红色通道输出 -1。*
 
@@ -953,7 +953,7 @@ The `Combine` node lets us feed up to four values into the **R**, **G**, **B** a
 
 该节点允许我们向 **R**、**G**、**B** 和 **A** 输入输入最多四个值，节点将这些单独的元素组合成向量。该节点提供三个输出，分别包含四个、三个和两个分量，具体取决于要创建的向量的大小。
 
-![Combine.](./img_every_node/combine.png)
+![Combine.](./img/combine.png)
 *We can build colors or other vectors by joining together components from other nodes.*
 *我们可以通过将来自其他节点的组件连接在一起来构建颜色或其他向量。*
 
@@ -968,7 +968,7 @@ UV 系列节点都可用于转换我们用于对纹理进行采样的 UV。
 
 `平铺和偏移`是你会看到我经常使用的另一个节点。顾名思义，您可以使用此节点来平铺和偏移 UV，这对纹理特别有用 - **平铺**输入是控制纹理在对象上复制的次数，**而 Offset** 输入可用于将纹理滚动到您想要的任何方向。另一个输入是应用平铺和偏移的 **UV**s 集。输出是应用平铺和偏移后的一组新 **UV**。
 
-![Tiling And Offset.](./img_every_node/tiling-and-offset.png)
+![Tiling And Offset.](./img/tiling-and-offset.png)
 *Tiling And Offset is great for animating texture by scrolling over time.*
 *平铺和偏移非常适合通过随时间滚动来制作纹理动画。*
 
@@ -978,7 +978,7 @@ The `Rotate` node takes in a **UV** as input and will rotate around the **Centre
 
 旋转节点接收**UV**作为输入，并将围绕**中心**点（另一个输入Vector2）旋转，旋转量为浮点输入。此节点还具有“**单位”**下拉列表，用于确定是以弧度还是度为单位应用旋转。单个输出是应用旋转后的一组新的 **UV** 坐标。
 
-![Rotate.](./img_every_node/rotate.png)
+![Rotate.](./img/rotate.png)
 *You spin me right round baby, right round.*
 *你把我转过来，宝贝，右转。*
 
@@ -988,7 +988,7 @@ The `Spherize` node distorts the UVs as if they’re being applied to a sphere i
 
 球面化节点扭曲了UV，就好像它们被应用于球体而不是平面一样——Unity 文档将其描述为鱼眼镜头。**UV** 输入为我们提供了转换前的基本 UV，并且像 **一样，中心**为我们提供了效果的原点。**强度**（Strength） 决定了效果的强度，而 **偏移（Offset）** 用于在应用变换之前滚动 UV。唯一的输出是球形后的**UV**。
 
-![Spherize.](./img_every_node/spherize.png)
+![Spherize.](./img/spherize.png)
 *The Spherize node is great for imitating a fisheye lens.*
 *Spherize 节点非常适合模仿鱼眼镜头。*
 
@@ -998,7 +998,7 @@ The `Twirl` node has the same four inputs as `Spherize`, except now the transfor
 
 转动节点具有与Spherize 相同的四个输入，只不过现在的变换是 **UV**s 从外边缘螺旋。单输出是旋转后的新一组**UV**。
 
-![Twirl.](./img_every_node/twirl.png)
+![Twirl.](./img/twirl.png)
 *Twirl is somewhere between Rotate and Spherize.*
 *Twirl 介于 Rotate 和 Spherize 之间。*
 
@@ -1008,7 +1008,7 @@ The `Radial Shear` node also takes those same four inputs as `Twirl` and `Spheri
 
 径向剪切节点也接受像Twirl 和 Spherize 一样的四连输入，但现在变换是来自任何中心点的波效应。输出是应用变换后的一组新 **UV**。
 
-![Radial Shear.](./img_every_node/radial-shear.png)
+![Radial Shear.](./img/radial-shear.png)
 *This is like Twirl, but we have control over both axes.*
 *这就像漩涡一样，但我们可以控制两个轴。*
 
@@ -1018,7 +1018,7 @@ The `Triplanar` node is a bit more complicated to explain. The idea is that we s
 
 该“三平面”节点的解释有点复杂。我们的想法是，我们沿着世界空间 X、Y 和 Z 轴对纹理进行三次采样，最终得到三个从这三个方向应用看起来很棒的映射。为此，我们提供了一个**纹理**和一个**采样器**作为输入。然后，根据曲面上的法向量将其中一个映射平面投影到网格上。选择失真最少的那个，并进行一定量的混合。
 
-![Triplanar Mapping.](./img_every_node/triplanar-mapping.png)
+![Triplanar Mapping.](./img/triplanar-mapping.png)
 *Here’s the three axes used to apply the texture.*
 *下面是用于应用纹理的三个轴。*
 
@@ -1026,7 +1026,7 @@ We supply the **Position** and **Normal** vectors for the mapping as inputs too,
 
 我们还提供了用于映射的 **Position** 和 **Normal** 向量作为输入，以及一个 **Blend** 参数，用于控制我们在边缘的三个样本之间的平滑程度。此参数越高，映射越清晰。最后，我们提供了一个 **Tile** float 参数，用于在将映射应用于网格之前对 UV 进行平铺。输出是混合后的颜色。我们可以使用节点中间的 **Type** 设置在 **Default** 和 **Normal** 之间切换，它告诉 Unity 我们期望采样哪种类型的纹理。
 
-![Triplanar.](./img_every_node/triplanar.png)
+![Triplanar.](./img/triplanar.png)
 *Triplanar will map the same texture in three directions onto an object.*
 *Triplanar 会在三个方向上将相同的纹理映射到一个对象上。*
 
@@ -1040,7 +1040,7 @@ Certain kinds of panoramic images can be decoded using polar coordinates, which 
 
 某些类型的全景图像可以使用极坐标进行解码，这意味着我们可以将它们用于天空盒或反射图。
 
-![Polar Coordinates.](./img_every_node/polar-coordinates.png)
+![Polar Coordinates.](./img/polar-coordinates.png)
 *We can use polar coordinates for several cool patterns, like these two.*
 *我们可以将极坐标用于几种很酷的模式，比如这两个。*
 
@@ -1050,7 +1050,7 @@ The `Flipbook` node is very useful if you’re trying to make a flipbook animati
 
 如果您尝试制作翻书动画，该节点非常有用，尤其是对于精灵。到目前为止**，UV** 输入与这些节点上的 UV 输入相同，我们还可以提供 **Width** 和 **Height** 作为浮点数，这应该是纹理上 x 和 y 方向的翻书图块的数量。Tile 输入将确定要采样的 **Tile，Unity** 将计算新的 UV，这些 UV 仅选取纹理的那部分，从而成为输出。UV 的方向，换言之，Tile 输入拾取图块的顺序，由 **Invert X** 和 **Invert Y** 选项确定。默认情况下，勾选 **Invert Y**，并从左上角开始拾取图块并首先水平移动。通常，您将使用节点中的输出 UV 来采样您想到的任何纹理。
 
-![Flipbook.](./img_every_node/flipbook.png)
+![Flipbook.](./img/flipbook.png)
 *This node tree will cycle through the whole sprite sheet for this character sprite.*
 *此节点树将循环遍历此角色精灵的整个精灵表。*
 
@@ -1060,7 +1060,7 @@ The `Parallax Mapping` node can be used to fake depth inside your material by di
 
 该节点（视差映射）可用于通过置换 UV 来伪造材料内部的深度。我们可以提供一个**高度贴图**，它是一种灰度纹理，用于控制表面每个部分的高度或高度。除此之外，我们还可以添加一个**采样器状态**。**振幅**浮点数是一个乘数，以厘米为单位，用于从高度图中读取的高度，**UV**s 用于对高度图进行采样。输出的**视差UV**是修改后的UV，可用于对应用视差的另一种纹理进行采样。
 
-![Parallax Mapping.](./img_every_node/parallax-mapping.png)
+![Parallax Mapping.](./img/parallax-mapping.png)
 *Using the same texture for the base and the heightmap, you can see how the offset is applied.*
 *对底座和高度贴图使用相同的纹理，您可以看到偏移是如何应用的。*
 
@@ -1074,7 +1074,7 @@ We also now have an **LOD** parameter to sample the heightmap at different mipma
 
 我们现在还有一个 **LOD** 参数，用于在不同的 mipmap 下对高度贴图进行采样，以及一个 **LOD 阈值**参数 – 低于此值的 mipmap 级别将不会应用视差效应以提高效率，这对于为您的材质构建 LOD 系统很有用。**视差UV**是类似的输出，现在我们有一个额外的**像素深度偏移**输出，可用于屏幕空间环境光遮蔽。您可能需要将其添加为主堆栈上的块节点。
 
-![Parallax Occlusion Mapping.](./img_every_node/parallax-occlusion-mapping.png)
+![Parallax Occlusion Mapping.](./img/parallax-occlusion-mapping.png)
 *Using the same texture for the base and the heightmap, you can see how the offset is applied.*
 *对底座和高度贴图使用相同的纹理，您可以看到偏移是如何应用的。*
 
@@ -1103,7 +1103,7 @@ The `Multiply` node takes your two inputs and multiplies them together, although
 
 该节点接受您的两个输入并将它们相乘，尽管这比其他基本数学节点更深入。如果两个输入都是浮点数，则将它们相乘，如果它们都是向量，则按元素将它们相乘，并返回一个与较小输入大小相同的新向量。如果两个输入都是矩阵，节点将截断它们，使它们大小相同，并在两者之间执行矩阵乘法，输出一个与较小输入大小相同的新矩阵。如果输入向量和矩阵，节点会向向量添加元素，直到它足够大，然后将两者相乘。
 
-![Multiply.](./img_every_node/multiply.png)
+![Multiply.](./img/multiply.png)
 *Multiplying is more complex than expected depending on the inputs!*
 *乘法比预期的要复杂，具体取决于输入！*
 
@@ -1143,7 +1143,7 @@ The `Inverse Lerp` node does the inverse process to `Lerp`. Given input values *
 
 节点对 Lerp 执行逆过程。给定输入值 **A**、**B** 和 **T**，将计算出节点中输出 **T** 所需的 0 和 1 之间的插值因子。我希望这是有道理的！
 
-![Lerp & Inverse Lerp.](./img_every_node/lerping.png)
+![Lerp & Inverse Lerp.](./img/lerping.png)
 *The Lerp result is 25% between 0 and 0.5. The Inverse Lerp result is 0.25.*
 *Lerp 结果在 0 到 0.5 之间为 25%。Inverse Lerp 结果为 0.25。*
 
@@ -1153,7 +1153,7 @@ The `Inverse Lerp` node does the inverse process to `Lerp`. Given input values *
 
 `Smoothstep`是一个特殊的S形函数，可用于在输入值超过某个阈值时创建平滑但快速的梯度。**In** 参数是输入值。该节点采用两个 **Edge** 参数，用于确定曲线的下限和上限阈值。当 **In** 低于 **Edge 1** 时，输出为 0，当 **In** 高于 **Edge 2** 时，输出为 1。在这些阈值之间，输出是介于 0 和 1 之间的平滑曲线。
 
-![Smoothstep.](./img_every_node/smoothstep.png)
+![Smoothstep.](./img/smoothstep.png)
 *Smoothstep is great for setting up thresholds with small amounts of blending.*
 *Smoothstep 非常适合通过少量混合设置阈值。*
 
@@ -1169,7 +1169,7 @@ The `Clamp` node takes in an input vector of up to four elements, and will clamp
 
 该节点（Clamp译为夹子）接受最多四个元素的输入向量，并将逐个元素钳位值，以便它们永远不会低于**最小**值输入，也不会高于**最大**值输入。输出是箝位后的矢量。
 
-![Clamp.](./img_every_node/clamp.png)
+![Clamp.](./img/clamp.png)
 *Clamp is an easy way to remove values too high or too low for your needs.*
 *Clamp 是一种简单的方法，可以去除过高或过低的值，以满足您的需求。*
 
@@ -1197,7 +1197,7 @@ The `One Minus` node takes each component of the input vector and returns one, m
 
 该节点获取输入向量的每个分量并返回一个减去该值。令人震惊，我知道。
 
-![Rounding Nodes.](./img_every_node/rounding-nodes.png)
+![Rounding Nodes.](./img/rounding-nodes.png)
 *It’s difficult to make these nodes look interesting in screenshots!*
 *很难让这些节点在屏幕截图中看起来很有趣！*
 
@@ -1207,7 +1207,7 @@ The `Remap` node is a special type of interpolation. We take an input vector of 
 
 “重映射”节点是一种特殊类型的插值。我们采用最多四个元素的输入向量。然后我们采用两个Vector2输入：一个是**最小最大**值向量，它指定输入应具有的最小值和最大值。**Out Min Max** 向量指定输出应具有的最小值和最大值。因此，该节点最终基本上会使用输入值和 **In Min Max** 执行 Inverse Lerp以确定插值因子，然后在 **Out Min Max** 值之间使用该插值因子执行Lerp。然后输出结果。
 
-![Remap.](./img_every_node/remap.png)
+![Remap.](./img/remap.png)
 *The In input to the Remap is the same as the T input to the Inverse Lerp on this pair of nodes.*
 *Remap 的 In 输入与此对节点上 Inverse Lerp 的 T 输入相同。*
 
@@ -1217,7 +1217,7 @@ The `Random Range` node can be used to generate pseudo-random numbers between th
 
 该节点可用于在 **Min** 和 **Max** 输入浮点数之间生成伪随机数。我们指定一个用作输入种子值，然后输出一个浮点数。此节点非常适合生成随机噪声，但由于我们指定了种子，因此您可以使用对象空间中片段的位置，以便输出值在帧之间保持一致。或者，您可以使用时间作为输入来随机化帧之间的值。
 
-![Random Range.](./img_every_node/random-range.png)
+![Random Range.](./img/random-range.png)
 *The Random Range node gives random values depending on an input seed.*
 *“随机范围”节点根据输入种子提供随机值。*
 
@@ -1227,7 +1227,7 @@ The `Fraction` node takes an input vector, and for each component, returns a new
 
 节点采用一个输入向量，对于每个组件，返回一个新向量，其中每个值取小数点后的部分。因此，输出始终介于 0 和 1 之间。
 
-![Fraction.](./img_every_node/fraction.png)
+![Fraction.](./img/fraction.png)
 *This pair of nodes will rise from 0 to 1 then blink right back to 0 continually.*
 *这对节点将从 0 上升到 1，然后不断闪烁回 0。*
 
@@ -1267,7 +1267,7 @@ The `Step` node is a very useful function that takes in an input called **In**, 
 
 该节点是一个非常有用的函数，它接受一个名为 **In** 的输入，如果该输入低于 **Edge** 输入，则输出为 0。否则，如果 **In** 高于 **Edge** 输入，则输出变为 1。如果使用向量输入，则它按元素进行操作。
 
-![Step.](./img_every_node/step.png)
+![Step.](./img/step.png)
 *Use Step as a threshold on a color or other value.*
 *使用“步长”作为颜色或其他值的阈值。*
 
@@ -1289,7 +1289,7 @@ The `Noise Sine Wave` node will return the sine of the input value, but will app
 
 该节点将返回输入值的正弦值，但将对该值应用一个小的伪随机噪声。噪声的大小在 **Min Max** 中指定的最小值和最大值之间是随机的。输出只是正弦波值。
 
-![Noise Sine Wave.](./img_every_node/noise-sine-wave.png)
+![Noise Sine Wave.](./img/noise-sine-wave.png)
 *The noise component adds variation to the usual sine wave.*
 *噪声分量增加了通常的正弦波的变化。*
 
@@ -1299,7 +1299,7 @@ A `Square Wave` is one that constantly switches between the values -1 and 1 at a
 
 方波是定期在值 -1 和 1 之间不断切换的值。节点接受一个输入值，并使用该值作为时间参数返回一个方波。如果你连接一个节点，那么它将每秒完成一个循环。
 
-![Square Wave.](./img_every_node/square-wave.png)
+![Square Wave.](./img/square-wave.png)
 *Don’t be square, use the Square Wave today!*
 *不要正方形，今天就用方波吧！*
 
@@ -1309,7 +1309,7 @@ A `Triangle Wave` rises from -1 to 1 linearly, then falls back to -1 linearly. T
 
 三角波从 -1 线性上升到 1，然后线性回落到 -1。曲线看起来像一系列三角形的山峰，因此得名。此节点在一秒钟的间隔内再次从 -1 变为 1 再到 -1。
 
-![Triangle Wave.](./img_every_node/triangle-wave.png)
+![Triangle Wave.](./img/triangle-wave.png)
 *Use a triangle wave if you need something sharper than a sine wave.*
 *如果您需要比正弦波更尖锐的东西，请使用三角波。*
 
@@ -1319,11 +1319,11 @@ A `Sawtooth Wave` rises -1 to 1 linearly, then instantaneously drops back down t
 
  锯齿波，线性上升 -1 到 1，然后瞬间回落到 -1。曲线看起来像一系列尖锐的山峰，就像锯子一样。该节点在一秒钟内完成从 -1 到 1 的一个循环。
 
-![Sawtooth Wave.](./img_every_node/sawtooth-wave.png)
+![Sawtooth Wave.](./img/sawtooth-wave.png)
 *A sawtooth wave is similar to a Time and Modulo combo, but it goes from -1 to 1 instead of 0 to 1.*
 *锯齿波类似于时间和模量组合，但它从 -1 到 1，而不是 0 到 1。*
 
-![Math Wave Nodes.](./img_every_node/math-wave-nodes.png)
+![Math Wave Nodes.](./img/math-wave-nodes.png)
 *These four nodes are great for looping material animations over time.*
 *这四个节点非常适合随时间循环播放材质动画。*
 
@@ -1369,7 +1369,7 @@ And finally, the `Hyperbolic Sine`, `Hyperbolic Cosine` and `Hyperbolic Tangent`
 
 最后，双曲正弦，双曲余弦，双曲正切  节点在输入角度上执行三个双曲三角函数。输入和输出是Float值。
 
-![Trigonometry Nodes.](./img_every_node/trigonometry-nodes.png)
+![Trigonometry Nodes.](./img/trigonometry-nodes.png)
 *It’s not easy to represent these nodes in screenshots.*
 *在屏幕截图中表示这些节点并不容易。*
 
@@ -1384,7 +1384,7 @@ The `Distance` node takes in two vectors and returns, as a float, the Euclidean 
 
 该节点接受两个向量，并以浮点形式返回两个向量之间的欧几里得距离。这是两者之间的直线距离。
 
-![Distance.](./img_every_node/distance.png)
+![Distance.](./img/distance.png)
 *I think we need a bit of distance.*
 *我认为我们需要一点距离。*
 
@@ -1394,7 +1394,7 @@ The `Dot Product` is a measure of the angle between two vectors. When two vector
 
 是两个向量之间角度的量度。当两个向量垂直时，点积为零，当它们平行时，它是 1 或负 1，具体取决于它们分别指向相同还是相反的方向。点积节点接收两个向量，并将它们之间的点积作为Float 返回。
 
-![Dot Product.](./img_every_node/dot-product.png)
+![Dot Product.](./img/dot-product.png)
 *When the dot product is 0, the two vectors are orthogonal.*
 *当点积为 0 时，两个向量是正交的。*
 
@@ -1404,7 +1404,7 @@ The `Cross Product` between two vectors returns a third vector which is perpendi
 
 两个向量之间返回第三个向量，该向量垂直于两者。您可能会使用叉积来获取方向，因此幅度并不重要，但为了清楚起见，第三个向量的幅度等于两个输入的幅度乘以它们之间角度的正弦。叉积节点在两个输入上执行叉积，该输入必须是 Vector3们，并输出一个新的Vector3 – 方向基于向量的左手法则。换言之，如果向量 **A** 指向上方，而向量 **B** 指向右侧，则输出向量指向前方。
 
-![Cross Product.](./img_every_node/cross-product.png)
+![Cross Product.](./img/cross-product.png)
 *Are you cross with me?*
 *你和我一起穿越吗？*
 
@@ -1420,7 +1420,7 @@ The `Fresnel Effect` node is another great node which can be used for adding ext
 
 该（菲涅尔效应）节点是另一个很棒的节点，可用于以掠过角度为对象添加额外的照明 - 具体来说，它计算表面法线和视图方向之间的角度。如果应用于球体，您将看到应用于“边缘”的光源，这在节点预览中很容易看到。节点的输入是曲面 **Normal** 和 **View Dir**，两者（Vector3）都假定位于世界空间中，以及一个名为 **Power** 的浮点，可用于锐化菲涅耳效应。输出是一个单一的浮点数，代表菲涅耳的整体强度。
 
-![Fresnel Effect.](./img_every_node/fresnel-effect.png)
+![Fresnel Effect.](./img/fresnel-effect.png)
 *Fresnel, also known as rim lighting, adds a glow at grazing angles.*
 *菲涅耳，也称为边缘照明，在掠角处增加辉光。*
 
@@ -1430,7 +1430,7 @@ The `Reflection` node takes in an incident direction vector and a surface normal
 
 该（反射）节点将入射方向矢量和曲面法线作为两个输入，并输出一个新向量，该向量是使用法向量作为镜像线的入射向量的反射。
 
-![Reflection.](./img_every_node/reflection.png)
+![Reflection.](./img/reflection.png)
 *Let’s reflect on the choices that brought us here.*
 *让我们反思一下将我们带到这里的选择。*
 
@@ -1440,7 +1440,7 @@ The `Projection` node takes two vectors, **A** and **B**, and projects **A** ont
 
 投影节点采用两个向量 **A** 和 **B**，并将 **A** 投影到 **B** 上以创建输出向量。这意味着我们最终会得到一个平行于 **B** 的向量，但可能更长或更短，具体取决于 **A** 的长度。
 
-![Projection.](./img_every_node/projection.png)
+![Projection.](./img/projection.png)
 *Make sure vector B is non-zero!*
 *确保向量 B 不为零！*
 
@@ -1450,7 +1450,7 @@ The `Rejection` node also takes two vectors, **A** and **B**, and returns a new 
 
 该（直译为排斥，数学上译为余部）节点还采用两个向量 **A** 和 **B**，并返回一个新向量，该向量从 **B** 上最接近 **A** 端点的点指向 **A** 本身的端点。余部向量垂直于 **B**。事实上，余部向量等于 **A** 减去 **A** 对 **B** 的投影。
 
-![Rejection.](./img_every_node/rejection.png)
+![Rejection.](./img/rejection.png)
 *We can define rejection in terms of projection. Neat!*
 *我们可以用投射来定义余部。整洁！*
 
@@ -1460,7 +1460,7 @@ The `Rotate About Axis` node takes a `Vector 3` **Input** and a second `Vector 3
 
 该（绕轴旋转）节点采用一个 **Input** 和一个表示轴旋转的第二个，以及一个 **Rotation** 角度作为浮点数。我们在节点上还有一个控件，让我们可以在旋转输入的度数和弧度之间进行选择。节点输出绕旋转轴旋转的原始向量。
 
-![Rotate About Axis.](./img_every_node/rotate-about-axis.png)
+![Rotate About Axis.](./img/rotate-about-axis.png)
 *Not to be confused with the Rotation node.*
 *不要与 Rotation 节点混淆。*
 
@@ -1470,7 +1470,7 @@ The `Sphere Mask` takes a **Coordinate**, a position in any arbitrary space, and
 
 球形遮罩采用**坐标**、任意空间中的位置以及由**中心**点和**半径**表示的球体。如果原始位置在球体内，则输出为 1。否则，它为零。虽然，还有一个**硬度**参数，它被设计为介于 0 和 1 之间，您可以使用它来平滑 0 和 1 输出之间的衰减。硬度参数越高，过渡越清晰。如果希望它成为硬边框，请将其设置为 1。
 
-![Sphere Mask.](./img_every_node/sphere-mask.png)
+![Sphere Mask.](./img/sphere-mask.png)
 *Expand this to three dimensions, and you’ve got a sphere mask.*
 *将其扩展到三维，你就得到了一个球体蒙版。*
 
@@ -1498,7 +1498,7 @@ And finally, `DDXY` takes the derivative diagonally by returning the sum of the 
 
 最后，DDXY通过水平和垂直返回两个导数的总和来对角线取导数。实际上，这就像在同一个输入上相加并取绝对值。所有三个派生节点仅在片段着色器阶段可用。您可以将它们用于边缘检测等操作，方法是读取 OR 中的值并检测相邻像素之间存在巨大差异的位置。
 
-![Derivative Nodes.](./img_every_node/derivative-nodes.png)
+![Derivative Nodes.](./img/derivative-nodes.png)
 *You get these derivatives with an unexpectedly low overhead.*
 
 ## Math/Matrix Nodes
@@ -1530,7 +1530,7 @@ The `Matrix Transpose` node reflects the elements of the matrix in its leading d
 
 矩阵转置节点在其前导对角线中反映矩阵的元素，使行成为列，反之亦然。输入和输出都是相同大小的矩阵。
 
-![Math/Matrix Nodes.](./img_every_node/math-matrix-nodes.png)
+![Math/Matrix Nodes.](./img/math-matrix-nodes.png)
 *Matrices are just arrays of numbers - and they’re great in combination with vectors.*
 *矩阵只是数字数组 - 它们与向量结合使用非常有用。*
 
@@ -1575,7 +1575,7 @@ The `Posterize` node takes in an input value and a step value. This node will cl
 
 海报化节点接受输入值和步长值。该节点将把输入的范围限制在 0 和 1 之间，并量化其值，以便它只能采用等于提供的步数加 1 的值。例如，如果步数为 4，则输出将向下舍入为值 0、0.25、0.5、0.75 或 1。
 
-![Posterize.](./img_every_node/posterize.png)
+![Posterize.](./img/posterize.png)
 *Posterize doesn’t mean turning it into a poster, but that would’ve been cool too.*
 *海报化并不意味着把它变成海报，但那也会很酷。*
 
@@ -1597,7 +1597,7 @@ The `Exponential` node raises a particular number to the power of the float inpu
 
 指数节点将特定数字提高到浮点输入的幂。我们可以使用 **Base** 下拉列表来选择基数，这让我们可以在 **2** 和 **e** 之间进行选择。**e** 是欧拉数，约为 2.72。
 
-![Exponential.](./img_every_node/exponential.png)
+![Exponential.](./img/exponential.png)
 *Exponential nodes are quickly growing in popularity.*
 *指数节点正在迅速飙涨。*
 
@@ -1607,7 +1607,7 @@ The `Log` node does the opposite process as the `Exponential` node. If 2 to the 
 
 对数节点执行与节点相反的过程。如果 2 的 4 次方等于 16，则 16 的对数基数 2 等于 4。我们接收一个浮点数，并在特定基数下返回其日志。我们可以使用 **Base** 下拉列表选择基数，但现在我们可以选择 **2**、**e** 或 **10**。
 
-![Log.](./img_every_node/log.png)
+![Log.](./img/log.png)
 *Logarithms do the opposite of exponents. Compare the two highlighted points with those on Exponential!*
 *对数与指数相反。将两个突出显示的点与指数上的点进行比较！*
 
@@ -1624,7 +1624,7 @@ The `Blend` node is normally used to blend one color into another. In this case,
 
 该（混合）节点通常用于将一种颜色混合到另一种颜色中。在本例中，我们将基色和混合色传递到节点中，然后根据第三个输入将 **Blend** 输入混合到 Base in put 上，这是一个称为 **Opacity** 的浮点数。当 **Opacity** 为 0 时，基数保持不变，当 **Opacity** 为 1 时，混合最强。还有一个**模式**下拉列表，让我们可以选择用于混合的方法——有很多选项，所以我不会一一列举。唯一的输出是混合完成后的颜色
 
-![Blend.](./img_every_node/blend.png)
+![Blend.](./img/blend.png)
 *There are plenty of blending options, similar to those found in graphics programs.*
 *有很多混合选项，类似于图形程序中的选项。*
 
@@ -1636,7 +1636,7 @@ The `Blend` node is normally used to blend one color into another. In this case,
 
 `Dither`是我最喜欢的另一个节点。我们在屏幕空间中使用它以某种方式应用有意的噪声——在内部，节点定义了一个整洁的噪声值模式，用作阈值。输入是值的向量，对于每个元素，如果其值低于抖动模式定义的阈值，则输出为 0。否则，它是 1。我们还需要 as 输入，我们可以将其相乘以缩放抖动效果。
 
-![Dither.](./img_every_node/dither.png)
+![Dither.](./img/dither.png)
 *Dither is one of my favourite nodes - it’s great for fake transparency effects.*
 *抖动是我最喜欢的节点之一 - 它非常适合假透明效果。*
 
@@ -1648,7 +1648,7 @@ The `Color Mask` node takes in an **Input** color, a **Mask Color**, and a **Ran
 
 该节点（颜色掩模）采用**输入**颜色、**掩码颜色**和**范围**浮点数。如果输入颜色等于蒙版颜色，或在指定的范围内，则节点的输出为 1。否则，它为零。但是，还有一个**模糊性**输入。如果我们将其提高到零以上，则范围边缘的值将在 1 和 0 之间出现软过渡。输出是表示掩码值的单个浮点数。
 
-![Color Mask.](./img_every_node/color-mask.png)
+![Color Mask.](./img/color-mask.png)
 *I’ve picked all the yellow parts of this texture.*
 *我已经挑选了这个纹理的所有黄色部分。*
 
@@ -1658,7 +1658,7 @@ The `Channel Mask` node takes in a color as input. The **Channel**s option on th
 
 通道掩模节点接受颜色作为输入。节点上的**通道**选项允许我们选择通道的任意组合。对于选择的每个颜色通道，此节点将颜色保留在该通道中，但通过将其值设置为零来丢弃未选择的颜色通道。输出是蒙版颜色。
 
-![Channel Mask.](./img_every_node/channel-mask.png)
+![Channel Mask.](./img/channel-mask.png)
 *If you decide you hate the green channel, now you can delete it.*
 *如果您决定讨厌绿色频道，现在可以将其删除。*
 
@@ -1673,7 +1673,7 @@ The `Hue` node can be used to offset the hue of whatever color is passed as an i
 
 该（色相）节点可用于使用 **Offset** 输入指定的量来偏移作为输入传递的任何颜色的色调。该节点带有不同**模式**之间的切换 - 出于某种原因，文档将选项列为**度**数和**弧度**，但在节点上，选项似乎是**度**数和**归一化**。选择**度**数时，可在 0 到 360 之间的整个色调范围内循环。当选择**归一化**时，色调范围覆盖在 0 和 1 之间的偏移量之间。
 
-![Hue.](./img_every_node/hue.png)
+![Hue.](./img/hue.png)
 *Most people would call cycling through hues ‘changing color’.*
 *大多数人会把循环穿色称为“变色”。*
 
@@ -1683,7 +1683,7 @@ The `Saturation` node adjusts the amount of saturation in the input color by wha
 
 该（饱和度）节点通过传递到 **Saturation** 浮点数输入的任何量来调整输入颜色中的饱和度量。当饱和度值为 1 时，原始颜色的饱和度保持不变，当它为零时，输出颜色将完全没有饱和度。
 
-![Saturation.](./img_every_node/saturation.png)
+![Saturation.](./img/saturation.png)
 *Colors get closer to greyscale as saturation decreases to 0.*
 *当饱和度降至 0 时，颜色会更接近灰度。*
 
@@ -1693,7 +1693,7 @@ The `Contrast` node does a similar thing, except it adjusts the amount of contra
 
 对比度节点执行类似操作，只不过它通过用于**对比度**输入浮点数的任何量来调整输入颜色的对比度。
 
-![Contrast.](./img_every_node/contrast.png)
+![Contrast.](./img/contrast.png)
 *Increasing contrast creates very vibrant images.*
 *增加对比度可创建非常生动的图像。*
 
@@ -1703,7 +1703,7 @@ The `White Balance` node is used for modifying the **Tint** and **Temperature** 
 
 该（白平衡）节点用于修改输入颜色的**色调**和**温度**。**温度**有点难以确定，但一般来说，冷色更蓝，暖色更红，所以将温度降低到 0 以下会使颜色更蓝，将其提高到 0 以上会使颜色更红。另一方面，当**色调**增加时，色调往往会偏移为粉红色或绿色。
 
-![White Balance.](./img_every_node/white-balance.png)
+![White Balance.](./img/white-balance.png)
 *White Balance does strange things to colors.*
 *白平衡对颜色有奇怪的影响。*
 
@@ -1713,7 +1713,7 @@ The `Replace Color` node takes a color input, and we can define a color to repla
 
 该替换颜色节点接受颜色输入，我们可以定义要替换的颜色（**称为 From**）和要替换它的颜色（**称为 To**）。每当**出现“从**”颜色时，它就会替换为“**到**”颜色。我们还定义了一个名为 **Range** 的浮点数，这意味着如果任何输入颜色在 **From** 的范围内，它也将被替换。最后，增加**模糊性**输入意味着原始颜色和 **To** 颜色之间将出现平滑衰减。
 
-![Replace Color.](./img_every_node/replace-color.png)
+![Replace Color.](./img/replace-color.png)
 *We can swap out a range of colors easily like this.*
 *我们可以像这样轻松更换一系列颜色。*
 
@@ -1723,7 +1723,7 @@ The `Invert Colors` node takes an input color, and for each channel, returns one
 
 反转颜色节点采用输入颜色，对于每个通道，返回 1 减去通道。此节点假定每个颜色通道的输入颜色介于 0 和 1 之间，因此对于高强度的 HDR 颜色来说，这可能会显得很奇怪。
 
-![Invert Colors.](./img_every_node/invert-colors.png)
+![Invert Colors.](./img/invert-colors.png)
 *Invert any combination of color channels easily.*
 *轻松反转颜色通道的任意组合。*
 
@@ -1733,7 +1733,7 @@ The `Channel Mixer` node takes in a color input, and for each of the red, green 
 
 该（通道混合）节点接受颜色输入，对于每个红色、绿色和蓝色通道，我们可以重新映射它们对输出颜色的红色、绿色和蓝色通道的贡献量。我们通过单击标有 **R**、**G** 和 **B** 的三个按钮之一来执行此操作。选择其中一个时，修改滑块（可以在 -2 和 2 之间运行）会更改输入通道对三个输出通道的贡献程度。例如，如果我们选择 **R**，则使滑块为 0、0 和 2，这意味着输入红色对输出蓝色的贡献率为 200%。
 
-![Channel Mixer.](./img_every_node/channel-mixer.png)
+![Channel Mixer.](./img/channel-mixer.png)
 *In this image, both red and green contribute to output blue, weighted equally.*
 *在此图像中，红色和绿色都有助于输出蓝色，权重相等。*
 
@@ -1749,7 +1749,7 @@ The `Normal Unpack` node takes a color or vector as input and unpacks it into a 
 
 Normal Unpack节点将颜色或向量作为输入，并将其解压缩为法线向量。也就是说，对于纹理，您通常可以将其作为法线贴图进行采样，因此，如果您以某种方式在图形中生成了法线纹理，并且需要从颜色转换为法线向量，则此节点更有用。您可以使用下拉列表在“**切线**”或“**对象**”空间之间选择输入**的空间**。输出法向量是Vector3 。
 
-![Normal Unpack.](./img_every_node/normal-unpack.png)
+![Normal Unpack.](./img/normal-unpack.png)
 *You can use Normal Unpack, but Sample Texture 2D can do the same thing.*
 *您可以使用“法线解包”，但“示例纹理 2D”也可以执行相同的操作。*
 
@@ -1759,7 +1759,7 @@ The `Normal Strength` node takes a set of normals as input as a `Vector 3` and s
 
 法线强度节点将一组法线作为Vector3输入，并通过**强度**浮点数输入缩放其强度。强度为 1 时法线保持不变，而 0 将返回完全平坦的法线贴图，所有法线都指向上方。
 
-![Normal Strength.](./img_every_node/normal-strength.png)
+![Normal Strength.](./img/normal-strength.png)
 *If your normals are a bit too strong, we can tone them down a little.*
 *如果你的法线有点太强了，我们可以把它们调低一点。*
 
@@ -1769,7 +1769,7 @@ The `Normal From Texture` node takes a **Texture**, a **Sampler** and a set of *
 
 该节点将一个 **Texture**、一个 **Sampler** 和一组 **UV**s 作为输入，并将其用作高度图，从中生成法线。“**偏移”**浮点数输入定义法线细节与曲面的距离，**而“强度**”浮点数输入则使结果的大小相乘。输出是Vector3表示计算出的法向量。
 
-![Normal From Texture.](./img_every_node/normal-from-texture.png)
+![Normal From Texture.](./img/normal-from-texture.png)
 *This provides an easy way to convert heightmaps to normals.*
 *这提供了一种将高度贴图转换为法线的简单方法。*
 
@@ -1779,7 +1779,7 @@ The `Normal From Height` node is similar, except it takes in a singular height v
 
 “Normal From Height”节点类似，只是它采用奇异的高度值，并基于该值和输入**Strength强度**浮点生成法向向量。我们可以在 **Tangent** 和 **World** 之间更改用于输出法线**的空间**。**Tangent** 对于处理纹理很有用，而 **World** 非常适合处理光照。
 
-![Normal From Height.](./img_every_node/normal-from-height.png)
+![Normal From Height.](./img/normal-from-height.png)
 *We can generate height data in the shader and convert it to normals like this.*
 *我们可以在着色器中生成高度数据并将其转换为法线，如下所示。*
 
@@ -1789,7 +1789,7 @@ The `Normal Blend` node takes in two normals, adds them together, normalises the
 
 法线混合节点接收两个法线，将它们相加，对它们进行归一化并返回结果。这非常适合将基本法线纹理 **A** 和细节法线纹理 **B** 组合在一起。我们在这里有两种模式可供选择：**默认**执行我刚才描述的操作，**而重新定向**将法线旋转第一个和第二个地图之间的角度。这样一来，细节法线纹理就不仅仅是在基础法线纹理之上分层，而是将细节法线纹理映射到基础法线所描述的表面上。
 
-![Normal Blend.](./img_every_node/normal-blend.png)
+![Normal Blend.](./img/normal-blend.png)
 *Will it blend? Well normally, yes.*
 *它会混合吗？嗯，通常，是的。*
 
@@ -1803,7 +1803,7 @@ This lets you package your normal data into the red and green channels of the te
 
 这样一来，只要您知道法线始终指向正方向，就可以将法线数据打包到纹理的红色和绿色通道中，从而释放蓝色和 Alpha 通道用于其他用途，从而减少着色器所需的纹理样本和纹理内存的数量。例如，您可以在蓝色通道中包含平滑度贴图，因为它只需要灰度数据，但您需要在外部创建这些填充纹理。
 
-![Normal Reconstruct Z.](./img_every_node/normal-reconstruct-z.png)
+![Normal Reconstruct Z.](./img/normal-reconstruct-z.png)
 *We can hide extra data by using only two channels for normal data.*
 *对于普通数据，我们可以通过仅使用两个通道来隐藏额外的数据。*
 
@@ -1817,7 +1817,7 @@ The `Colorspace Conversion` node can be used to convert an input color between t
 
 该色彩空间转换节点可用于在 **RGB**、**HSV** 和**线性**色彩空间之间转换输入颜色。我们有两个下拉选项来选择**输入**和**输出**色彩空间。
 
-![Colorspace Conversion.](./img_every_node/colorspace-conversion.png)
+![Colorspace Conversion.](./img/colorspace-conversion.png)
 *This makes it easy to work in other color spaces, such as HSV.*
 *这使得在其他颜色空间（如 HSV)中工作变得容易。*
 
@@ -1831,7 +1831,7 @@ The `Checkerboard` node creates an alternating pattern of tiles, colored accordi
 
 该（棋盘格）节点创建图块的交替图案，根据**颜色 A** 和**颜色 B** 输入进行着色。**UV** 用于将图案映射到对象上，**频率**用于缩放这些轴上的检查板。输出是棋盘格颜色，尽管在本文中，文档意外地将输出列为 **UV** 。
 
-![Checkerboard.](./img_every_node/checkerboard.png)
+![Checkerboard.](./img/checkerboard.png)
 *Checkerboard patterns are great for prototyping especially.*
 *棋盘图案特别适合原型设计。*
 
@@ -1859,7 +1859,7 @@ The `Voronoi` node is a very pretty and versatile type of noise. It works by gen
 
 沃罗诺伊节点是一种非常漂亮且用途广泛的噪声类型。它的工作原理是在网格上生成点，将它们沿随机方向重新定位，然后根据与点的距离为网格中的每个像素着色——我们离点越近，像素越暗。我们提供了一个用于映射纹理的 **UV**，以及一个用于随机移动点的角度**偏移**浮点和一个单元**密度**浮点，以决定添加的点数。**Out** 输出仅以浮点数形式给出与最近点的距离，通常用作 Voronoi 模式。**Cells** 输出为我们提供了 Unity 所谓的“原始单元格数据”，尽管在文档中读取自动生成的代码，但它似乎是根据每个单元格的随机 x 偏移量着色的。
 
-![Noise Nodes.](./img_every_node/noise-nodes.png)
+![Noise Nodes.](./img/noise-nodes.png)
 *Noise is your best friend when dealing with procedural materials.*
 *在处理程序材料时，噪音是您最好的朋友。*
 
@@ -1901,7 +1901,7 @@ And finally, the `Rounded Polygon` node has the same inputs as `Polygon`, plus a
 
 最后，圆角多边形节点具有与 相同的输入，外加一个**圆度**浮点选项，其作用类似于 上的半径选项。
 
-![Shapes Nodes.](./img_every_node/shapes-nodes.png)
+![Shapes Nodes.](./img/shapes-nodes.png)
 *These SDF-based shape nodes give you a good starting point for procedural materials.*
 *这些基于 SDF 的形状节点为程序化材质提供了良好的起点。*
 
@@ -1923,7 +1923,7 @@ Double-click on any wire between node inputs/outputs and you’ll create a `Redi
 
 双击节点输入/输出之间的任何连接线，您将在它们之间创建一个重定向节点。它对着色器输出没有影响，但您可以移动节点来清理图形。
 
-![Preview & Redirect.](./img_every_node/preview.png)
+![Preview & Redirect.](./img/preview.png)
 *Preview doesn’t work on every input - mostly just colors and vectors.*
 *预览并不适用于每个输入 - 大多数情况下只适用于颜色和矢量。*
 
@@ -1933,7 +1933,7 @@ These are listed in their own section in the Create Node menu, but I’ll talk a
 
 它们在“创建节点”菜单的单独部分中列出，但我将在这里讨论它们。每当您将节点拖动到图形上时，该节点基于您添加的任何属性，它将具有多个输入和一个输出。根据在检查器中在此材料上定义的关键字的值，关键字节点将选择输入到相应关键字选项的任何内容。例如，如果我们使用一个关键字，我们可以将一系列节点连接到 **On** 和 **Off** 输入，并根据关键字的值选择输出。
 
-![Keyword.](./img_every_node/keyword-node.png)
+![Keyword.](./img/keyword-node.png)
 *Based on the value of the keyword, the output of the node will change.*
 *根据关键字的值，节点的输出将发生变化。*
 
@@ -1943,7 +1943,7 @@ These are also in a separate section like `Keyword` nodes. A `Sub Graph` is a se
 
 这些也像节点一样在单独的部分中。A 是我们可以创建的一种单独的着色器图。它们有自己的输出节点，我们可以向这些节点添加输出，当我们向子图添加属性时，它们将成为结果节点的输入。然后，我们可以在图形上以通常的方式创建节点。一旦我们创建了一个子图，我们就可以在主图中搜索它们，并像使用任何其他节点一样使用它们——子图的属性显示为左侧的输入，子图中的输出显示为节点右侧的输出。
 
-![Sub Graph.](./img_every_node/subgraph.png)
+![Sub Graph.](./img/subgraph.png)
 *Sub Graphs lets us condense lots of nodes into a single node.*
 *子图允许我们将许多节点压缩到一个节点中。*
 
@@ -1953,7 +1953,7 @@ The `Custom Function` node lets us write custom shader code to run inside the no
 
 该节点允许我们编写自定义着色器代码以在节点内运行。我不会在这里详细介绍，因为这个节点可能是其中最复杂和最定制的节点之一，但是如果我们单击**节点设置**，我们可以定义我们喜欢的任何类型的输入和输出列表，然后我们可以附加着色器代码文件或直接将代码写入设置窗口。该自定义代码是用 HLSL 编写的，我们可以从文件中写出特定函数的名称以用于此节点。
 
-![Custom Function.](./img_every_node/custom-function.png)
+![Custom Function.](./img/custom-function.png)
 *A common operation with custom function nodes is to get information from lights in the scene.*
 *自定义函数节点的一个常见操作是从场景中的灯光获取信息。*
 
@@ -2028,7 +2028,7 @@ A mesh defines whether faces are front-facing or back-facing based on the windin
 
 网格根据其顶点的缠绕顺序定义面是正面还是背面。这意味着顶点在网格数据中列出的顺序。除非在“**图形设置**”中勾选“**双面**”选项，否则该节点将始终返回 true。但是当它被勾选时，我们可以决定根据网格的朝向来改变着色器的行为。
 
-![Logic Nodes.](./img_every_node/logic-nodes.png)
+![Logic Nodes.](./img/logic-nodes.png)
 *There’s a lot of logic-based nodes - not much else accepts a Boolean.*
 *有很多基于逻辑的节点 - 没有多少其他节点接受布尔值*
 

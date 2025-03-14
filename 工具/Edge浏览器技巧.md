@@ -9,7 +9,9 @@ graph LR
 
 YouTube去广告 6.18
 
-CSDN广告完全过滤 4.2.4
+CSDN广告完全过滤 4.2.4(疑似失效，可使用下面的)
+
+[100%解锁CSDN文库vip文章阅读限制 2.2](https://github.com/Mrlimuyu/CSDN-VIP)
 
 解除B站区域限制 8.5.3
 
@@ -38,3 +40,27 @@ graph LR
 右键 --> 检查
 ```
 
+# 查看浏览器使用哪个内核版本号
+
+浏览器按F12，控制台输入 javascript:alert(navigator.userAgent)
+
+出现弹窗，文本如下：
+
+```c#
+Mozilla/5.0		这是浏览器版本
+(Windows NT 10.0; Win64; x64)	这是操作系统版本
+AppleWebKit/537.36 (KHTML, like Gecko)	这是浏览器引擎
+Chrome/131.0.0.0	这是内核类型及版本
+Safari/537.36	这是伪装的引擎
+Edg/131.0.0.0	这是浏览器名称及版本
+```
+
+# 浏览器进入阅读模式
+
+网址前面加前缀：
+
+```
+read:
+```
+
+之后会进入无图纯净模式
