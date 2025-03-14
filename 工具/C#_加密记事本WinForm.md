@@ -22,6 +22,7 @@
    - 双击 `btnEncryptFolder` 按钮，生成 `btnEncryptFolder_Click` 事件处理程序。
    - 双击 `btnDecryptFolder` 按钮，生成 `btnDecryptFolder_Click` 事件处理程序。
    - 选中 `btnEye` 按钮，查看属性面板的【闪电】图标，双击里面的MouseDown和MouseUp，会自动生成 `btnEye_MouseDown` 和 `btnEye_MouseUp` 事件处理程序。
+   - 选中 `txtContent` 文本框，查看属性面板的【闪电】图标，双击里面的TextChanged，会自动生成 `txtContent_TextChanged` 事件处理程序。
 
 # 主代码
 
