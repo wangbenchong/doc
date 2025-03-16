@@ -171,4 +171,94 @@ public static class DNAEditorTools
         }
 #endif
     }
+
+#if UNITY_2018_3_OR_NEWER
+    [SettingsProvider]
+    public static SettingsProvider CreatePreferencesGUI()
+    {
+        return new SettingsProvider( "Project/DNATween", SettingsScope.Project )
+        {
+            guiHandler = ( searchContext ) => PreferencesGUI(),
+            keywords = new System.Collections.Generic.HashSet<string>() { "DNATween", "Curve"}
+        };
+    }
+#endif
+
+    [MenuItem( "CONTEXT/DNATween/Open Settings" )]
+    private static void OpenPreferencesWindow( MenuCommand command )
+    {
+#if UNITY_2018_3_OR_NEWER
+        SettingsService.OpenProjectSettings( "Project/DNATween" );
+#else
+        System.Type preferencesWindowType = typeof( EditorWindow ).Assembly.GetType( "UnityEditor.PreferencesWindow" );
+        preferencesWindowType.GetMethod( "ShowPreferencesWindow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ).Invoke( null, null );
+
+        EditorWindow preferencesWindow = EditorWindow.GetWindow( preferencesWindowType );
+        if( (bool) preferencesWindowType.GetField( "m_RefreshCustomPreferences", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( preferencesWindow ) )
+        {
+            preferencesWindowType.GetMethod( "AddCustomSections", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).Invoke( preferencesWindow, null );
+            preferencesWindowType.GetField( "m_RefreshCustomPreferences", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).SetValue( preferencesWindow, false );
+        }
+
+        int targetSectionIndex = -1;
+        System.Collections.IList sections = (System.Collections.IList) preferencesWindowType.GetField( "m_Sections", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( preferencesWindow );
+        for( int i = 0; i < sections.Count; i++ )
+        {
+            if( ( (GUIContent) sections[i].GetType().GetField( "content", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( sections[i] ) ).text == "DNATween" )
+            {
+                targetSectionIndex = i;
+                break;
+            }
+        }
+
+        if( targetSectionIndex >= 0 )
+            preferencesWindowType.GetProperty( "selectedSectionIndex", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).SetValue( preferencesWindow, targetSectionIndex, null );
+#endif
+    }
+
+#if !UNITY_2018_3_OR_NEWER
+    [PreferenceItem( "DNATween" )]
+#endif
+    public static void PreferencesGUI()
+    {
+        EditorGUILayout.LabelField( "CurveAssets Folder", DNATweener.AnimCurveFolder );
+        if(GUILayout.Button("Select Folder" ))
+        {
+            string folderPath = EditorUtility.OpenFolderPanel("Select Folder", DNATweener.AnimCurveFolder, "");
+            if(!string.IsNullOrEmpty(folderPath))
+            {
+                folderPath = folderPath.Replace(Application.dataPath, "Assets");
+                DNATweener.AnimCurveFolder = folderPath;
+            }
+        }
+    }
+
+    [MenuItem("DNATools/Copy Transform to Scene View Camera")]// %#c")] // Ctrl + Shift + C
+    private static void CopyTransformToCamera()
+    {
+        // 获取当前选中的物体
+        GameObject selectedObject = Selection.activeGameObject;
+
+        if (selectedObject != null)
+        {
+            // 获取场景视图的相机
+            SceneView sceneView = SceneView.lastActiveSceneView;
+
+            if (sceneView != null)
+            {
+                // 将选中物体的位置和旋转赋值给场景相机
+                sceneView.pivot = selectedObject.transform.position;
+                sceneView.rotation = selectedObject.transform.rotation;
+                sceneView.Repaint(); // 刷新场景视图
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Error","No active Scene View found.","OK");
+            }
+        }
+        else
+        {
+            EditorUtility.DisplayDialog("Error","No object selected.","OK");
+        }
+    }
 }

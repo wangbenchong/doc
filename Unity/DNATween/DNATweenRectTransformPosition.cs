@@ -37,11 +37,6 @@ public class DNATweenRectTransformPosition : DNATweener
     protected override void OnUpdate(float factor, bool isFinished) { value = from * (1f - factor) + to * factor; }
 
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenRectTransformPosition>(targetObj);
-    }
-
     [ContextMenu("Set 'From' to current value")]
     public override void SetStartByCurrentValue() { from = value; }
 

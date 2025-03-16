@@ -54,11 +54,6 @@ public class DNATweenRotation : DNATweener
         ;
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenRotation>(targetObj);
-    }
-
     [ContextMenu("Set 'From' to current value")]
     public override void SetStartByCurrentValue() { from = value.eulerAngles; }
 

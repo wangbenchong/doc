@@ -41,12 +41,6 @@ public class DNATweenOrthoSize : DNATweener
 
     protected override void OnUpdate(float factor, bool isFinished) { value = from * (1f - factor) + to * factor; }
 
-
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenOrthoSize>(targetObj);
-    }
-
     public override void SetStartByCurrentValue() { from = value; }
     public override void SetEndByCurrentValue() { to = value; }
 }

@@ -138,11 +138,6 @@ public class DNATweenNumber_Float : DNATweener
         return tweenNum;
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenNumber_Float>(targetObj);
-    }
-
     [ContextMenu("Set 'From' to current value")]
     public override void SetStartByCurrentValue()
     {

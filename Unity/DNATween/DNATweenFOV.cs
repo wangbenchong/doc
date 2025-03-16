@@ -32,12 +32,6 @@ public class DNATweenFOV : DNATweener
 
     protected override void OnUpdate(float factor, bool isFinished) { value = from * (1f - factor) + to * factor; }
 
-
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenFOV>(targetObj);
-    }
-
     [ContextMenu("Set 'From' to current value")]
     public override void SetStartByCurrentValue() { from = value; }
 

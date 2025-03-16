@@ -6,6 +6,7 @@ using System;
 public class DNATweenTweener : DNATweener
 {
     public List<DNATweener> tweenList = null;
+    [Tooltip("是否使用子动画曲线")]
 
     public bool UseChildAnimCurve = false;
     protected override void OnUpdate(float factor, bool isFinished)

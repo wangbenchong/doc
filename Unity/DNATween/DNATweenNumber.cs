@@ -105,11 +105,6 @@ public class DNATweenNumber : DNATweener
         value = result;
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenNumber>(targetObj);
-    }
-
     [ContextMenu("Set 'From' to current value")]
     public override void SetStartByCurrentValue()
     {

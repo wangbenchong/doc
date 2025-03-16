@@ -16,6 +16,11 @@ public class AnimationCurveDataEditor : Editor
         if (GUI.changed)
         {
             _target.Curve = curve;
+            EditorUtility.SetDirty(target);
+        }
+        if(GUILayout.Button("Save"))
+        {
+            AssetDatabase.SaveAssets();
         }
     }
 }

@@ -17,7 +17,6 @@ public class DNATweenPosition : DNATweener
     public bool worldSpace = false;
 
     #region PathCurve
-    //[FormerlySerializedAs("PerpendicularCurve")]
     [HideInInspector]
     public bool useNormalCurve = false;
     [HideInInspector]
@@ -117,11 +116,6 @@ public class DNATweenPosition : DNATweener
     {
         SetLeftNormalVector(true);
         base.Play(forward);
-    }
-
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenPosition>(targetObj);
     }
 
     public override void SetStartByCurrentValue()

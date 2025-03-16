@@ -40,12 +40,6 @@ public class DNATweenScale : DNATweener
         value = from * (1f - factor) + to * factor;
     }
 
-
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenScale>(targetObj);
-    }
-
     public override void SetStartByCurrentValue() { from = value; }
 
     public override void SetEndByCurrentValue() { to = value; }

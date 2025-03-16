@@ -80,7 +80,6 @@ public abstract class DNATweener : MonoBehaviour
     private Action onDelayFinishedAction = null;
     #endregion
 
-    protected bool bActive = true;
     protected bool bReuse = true;
 
     bool mStarted = false;
@@ -163,8 +162,6 @@ public abstract class DNATweener : MonoBehaviour
             return;
         }
 #endif
-        if (!bActive)
-            return;
 
         //UnityEngine.Profiling.Profiler.BeginSample("DNATweener-Update", gameObject);
         //#if UNITY_EDITOR
@@ -692,7 +689,6 @@ public abstract class DNATweener : MonoBehaviour
             AddOnFinishedAction(cbFinish);
         }
         bReuse = reuse;
-        bActive = true;
 
         PlayForward();
     }
@@ -708,12 +704,16 @@ public abstract class DNATweener : MonoBehaviour
         return tweenCOM;
     }
 
-    protected static void DeactiveTween<T>(GameObject targetObj) where T : DNATweener
+    /// <summary>
+    /// For Common UnityEvent to call
+    /// </summary>
+    /// <param name="go"></param>
+
+    public void DestroyGameobject(GameObject go)
     {
-        T tweenCOM = targetObj.GetComponent<T>();
-        if (tweenCOM != null)
+        if (go != null)
         {
-            tweenCOM.bActive = false;
+            Destroy(go);
         }
     }
 
@@ -763,14 +763,40 @@ public abstract class DNATweener : MonoBehaviour
         IsEditorUpdate = false;
         UnityEditor.EditorApplication.update -= Update;
     }
+
+    private static string _animCurveFolder = "";
+    /// <summary>
+    /// 曲线存储路径——根目录
+    /// </summary>
+    public static string AnimCurveFolder
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_animCurveFolder))
+            {
+                _animCurveFolder = UnityEditor.EditorPrefs.GetString("DNATween_AnimCurveFolder", "Assets/AnimationCurveData");
+            }
+            return _animCurveFolder;
+        }
+        set
+        {
+            if(_animCurveFolder != value)
+            {
+                UnityEditor.EditorPrefs.SetString("DNATween_AnimCurveFolder", value);
+                _animCurveFolder = value;
+            }
+        }
+    }
+
     [ContextMenu("新建曲线")]
     public void _CreateUIAnimationCurveData()
     {
         CreateUIAnimationCurveData();
     }
+    
     private static void CreateUIAnimationCurveData()
     {
-        string path = "Assets/AnimationCurveData/Curve_XXX.asset";
+        string path = AnimCurveFolder + "/Curve_XXX.asset";
         AnimationCurveData asset = ScriptableObject.CreateInstance<AnimationCurveData>();
         UnityEditor.AssetDatabase.CreateAsset(asset, path);
         UnityEditor.AssetDatabase.ImportAsset(path, UnityEditor.ImportAssetOptions.ForceSynchronousImport);
@@ -788,8 +814,7 @@ public abstract class DNATweener : MonoBehaviour
     }
     private static void SelectCurveFolder()
     {
-        string path = "Assets/AnimationCurveData/";
-        string fullpath = Application.dataPath.Replace("Assets", "") + path;
+        string fullpath = Application.dataPath.Replace("Assets", "") + AnimCurveFolder;
         fullpath = fullpath.Replace("/", "\\");
         System.IO.DirectoryInfo dinfo = new System.IO.DirectoryInfo(fullpath);
         if (dinfo.Exists)
@@ -797,13 +822,13 @@ public abstract class DNATweener : MonoBehaviour
             System.IO.FileInfo[] finfo = dinfo.GetFiles("*.asset");
             if (finfo != null && finfo.Length > 0)
             {
-                var obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path + finfo[0].Name);
+                var obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(AnimCurveFolder + "/" + finfo[0].Name);
                 UnityEditor.Selection.activeObject = obj;
                 UnityEditor.EditorGUIUtility.PingObject(obj);
                 return;
             }
         }
-        UnityEditor.EditorUtility.DisplayDialog("Error", "Not Find Path " + path, "ok");
+        UnityEditor.EditorUtility.DisplayDialog("Error", "Not Find Path " + AnimCurveFolder, "ok");
     }
 #endif//编辑器函数
 }

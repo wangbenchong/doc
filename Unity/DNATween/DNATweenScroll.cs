@@ -98,11 +98,6 @@ public class DNATweenScroll : DNATweener
         ScrollVectorY = Mathf.Lerp(fromY, toY, factor);
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenScroll>(targetObj);
-    }
-
     public override void SetStartByCurrentValue()
     {
         fromX = ScrollVectorX;

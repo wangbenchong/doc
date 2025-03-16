@@ -231,11 +231,6 @@ public class DNATweenAlpha : DNATweener
         return tweenAlpha;
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenAlpha>(targetObj);
-    }
-
     public override void SetStartByCurrentValue()
     {
         from = Value;

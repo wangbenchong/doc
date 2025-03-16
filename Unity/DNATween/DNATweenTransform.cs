@@ -48,10 +48,4 @@ public class DNATweenTransform : DNATweener
             }
         }
     }
-
-
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenTransform>(targetObj);
-    }
 }

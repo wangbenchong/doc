@@ -170,13 +170,6 @@ public class DNATweenColor : DNATweener
         TransTarget = trans;
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DNATweenColor tweenColor = CreateTween<DNATweenColor>(targetObj);
-        tweenColor.value = tweenColor.from;
-        DeactiveTween<DNATweenColor>(targetObj);
-    }
-
     /// <summary>
     /// Tween the value.
     /// </summary>

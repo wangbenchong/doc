@@ -76,11 +76,6 @@ public class DNATweenVolume : DNATweener
         mSource.enabled = (mSource.volume > 0.01f);
     }
 
-    public static void Deactive(GameObject targetObj)
-    {
-        DeactiveTween<DNATweenVolume>(targetObj);
-    }
-
     public override void SetStartByCurrentValue() { from = value; }
     public override void SetEndByCurrentValue() { to = value; }
 }
