@@ -94,7 +94,7 @@ https://www.bilibili.com/video/BV1Pe4y1p77D
 
 ## NotePad++
 
-纯文本编辑器，但支持自定义语法
+纯文本编辑器，但支持自定义语法，比如自定义shader语法：[shader_(Notepad++语法).xml](./shader_(Notepad++语法).xml)
 
 ## Cursor
 

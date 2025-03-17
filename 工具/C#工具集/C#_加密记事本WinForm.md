@@ -2,11 +2,21 @@
 
 直接下载：[加密记事本.exe](./加密记事本.exe)
 
+界面外观：
+ ![](./img/加密记事本外观.jpg)
+技术难点和亮点（顺序由难到易)：
+
+- 开启自动换行时，行号的正确显示与流畅刷新。（需要人脑自行寻找思路，AI仅提供辅助）
+- 各种文件编码正常识别。（需要不断纠正AI，大约迭代4次）
+- 按行加密并且支持生成密钥文件`key.cfg`，防止每次打开软件都要重新输入密码。（AI基本直接胜任）
+- 标题栏显示当前文件名，并且当有修改未保存时，加星号*后缀。（AI基本直接胜任）
+
 # 界面设计
 
 1. **控件布局**：
-   - 添加一个 `TextBox`（命名为 `txtContent`），用于输入和显示文本。Anchor设置为四个方向，随窗口拉伸。
+   - 添加一个 `TextBox`（命名为 `txtContent`），用于输入和显示文本。Anchor设置为四个方向，随窗口拉伸。ScrollBars设为Vertical这样纵向滚动条常显，WordWrap设为True这样可以自动换行，AcceptsTab设为True这样可以接收Tab键。
    - 添加一个 `TextBox`（命名为 `txtPassword`），用于输入密码。Anchor设置为上左右三个方向，随窗口拉伸。
+   - 复制 `txtContent`（命名为 `hiddenTextBox1`），用于显示行号时计算字符串占用多少行，Visible设为False隐藏，高度可改小一点。
    - 添加六个 `Button`：
      - 一个用于新建（命名为`btnNew`，文本为“新建”）。
      - 一个用于加密保存（命名为 `btnEncryptSave`，文本为“保存(Ctrl+S)”）。
@@ -15,6 +25,7 @@
      - 一个用于解密整个文件夹的txt文件（命名为 `btnDecryptFolder`，文本为“解密文件夹”）。
      - 一个用于临时查看密码的按钮（命名为 `btnEye`，文本为“👁”）。Anchor设置为上右两个方向。
    - 添加一个 `Label`，用于提示密码输入（文本为“密码”）。
+   - 添加一个 `Panel` （命名为`lineNumberPanel`），用于显示行号，BackColor设为InactiveCaption。
 2. **事件绑定**：
    - 双击 `btnEncryptSave` 按钮，生成 `btnEncryptSave_Click` 事件处理程序。
    - 双击 `btnDecryptRead` 按钮，生成 `btnDecryptRead_Click` 事件处理程序。
@@ -23,6 +34,7 @@
    - 双击 `btnDecryptFolder` 按钮，生成 `btnDecryptFolder_Click` 事件处理程序。
    - 选中 `btnEye` 按钮，查看属性面板的【闪电】图标，双击里面的MouseDown和MouseUp，会自动生成 `btnEye_MouseDown` 和 `btnEye_MouseUp` 事件处理程序。
    - 选中 `txtContent` 文本框，查看属性面板的【闪电】图标，双击里面的TextChanged，会自动生成 `txtContent_TextChanged` 事件处理程序。
+   - 选中 `lineNumberPanel`， 查看属性面板的【闪电】图标，双击里面的Paint，会自动生成 `lineNumberPanel_Paint` 事件处理程序。
 
 # 主代码
 
@@ -45,6 +57,8 @@ namespace EncryptedNotepad
         const string PassPortFileName = "key.cfg";
         private string _originalText = ""; // 保存初始文本内容
         private bool _isTextChanged = false; // 标记文本是否已更改
+        private TextBoxScrollListener scrollListener;//监听文本框进度条滑动
+        private Timer timer;//可设置每隔一段时间执行一次
 
         public MainForm()
         {
@@ -58,6 +72,21 @@ namespace EncryptedNotepad
             // 绑定拖拽事件
             this.DragEnter += MainForm_DragEnter;
             this.DragDrop += MainForm_DragDrop;
+
+            // 使用反射设置 DoubleBuffered 属性，避免行号重绘时闪烁
+            typeof(Panel).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
+                null, lineNumberPanel, new object[] { true });
+
+            // 初始化滚动条监听器
+            this.scrollListener = new TextBoxScrollListener(this.txtContent);
+            this.scrollListener.Scrolled += (s, e) => { needRefreshLineNumberQuick = true; };
+
+            // 初始化 Timer
+            this.timer = new Timer();
+            this.timer.Interval = 100; // 0.1 秒
+            this.timer.Tick += new EventHandler(this.Timer_Tick);
+            this.timer.Start(); // 启动定时器
         }
 
         // 拖拽进入窗体时触发
@@ -249,6 +278,7 @@ namespace EncryptedNotepad
             SavePassword();
         }
 
+        #region 重写方法
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             // 检测是否按下了 Ctrl + S
@@ -262,6 +292,7 @@ namespace EncryptedNotepad
             // 其他按键交给基类处理
             return base.ProcessCmdKey(ref msg, keyData);
         }
+        #endregion
 
         #region UI事件
         private void btnEncryptSave_Click(object sender, EventArgs e)
@@ -398,6 +429,180 @@ namespace EncryptedNotepad
                     // 如果文本恢复为原始内容，移除标题栏的 * 号
                     this.Text = this.Text.TrimEnd('*');
                     _isTextChanged = false;
+                }
+            }
+            // 文本变化时重绘行号
+            needRefreshLineNumber = true;
+        }
+        private void txtContent_SizeChanged(object sender, EventArgs e)
+        {
+            // 尺寸变化时重绘行号
+            needRefreshLineNumber = true;
+        }
+        #endregion
+
+        #region 显示行号逻辑
+        //因为从TextBox直接获取到的是物理行号（考虑了自动换行），而不是逻辑行号（只考虑换行符）
+        //所以用这个结构来存物理行号和逻辑行号的映射关系，索引是物理行号-1，取值是逻辑行号
+        private List<int> lineNumberMapping = new List<int>();
+        const int LINE_NUM_REFRESH_CD = 5;//0.5秒之后刷新行号
+        private bool needRefreshLineNumberQuick = false;
+        private bool needRefreshLineNumber
+        {
+            set
+            {
+                if(value)
+                {
+                    refreshLineTimeCounter = 0;
+                }
+                else
+                {
+                    refreshLineTimeCounter = LINE_NUM_REFRESH_CD + 1;
+                }
+            }
+        }
+        private int refreshLineTimeCounter = LINE_NUM_REFRESH_CD + 1;
+
+        /// <summary>
+        /// 每隔0.1秒执行一次
+        /// </summary>
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            bool hasDoneInvalidate = false;
+            if (refreshLineTimeCounter < LINE_NUM_REFRESH_CD)
+            {
+                refreshLineTimeCounter ++;
+            }
+            else if(refreshLineTimeCounter == LINE_NUM_REFRESH_CD)
+            {
+                UpdateLineNumberMapping();
+                lineNumberPanel.Invalidate();
+                hasDoneInvalidate = true;
+                refreshLineTimeCounter++;
+            }
+            if(!hasDoneInvalidate && needRefreshLineNumberQuick)
+            {
+                lineNumberPanel.Invalidate();
+                needRefreshLineNumberQuick = false;
+            }
+        }
+        private void UpdateLineNumberMapping()
+        {
+            if(string.IsNullOrEmpty(txtContent.Text))
+            {
+                AddLineNumMap(1, 0);
+                return;
+            }
+            int index = 0;
+            // 获取 TextBox 的文本内容
+            string[] lines = txtContent.Text.Replace("\r","").Split('\n');
+
+            // 计算每行的逻辑行号和物理行数
+            int logicalLineNumber = 1;
+            using (Graphics g = txtContent.CreateGraphics())
+            {
+                foreach (string line in lines)
+                {
+                    // 计算当前行的物理行数
+                    int physicalLines = GetPhysicalLineCount(line, g);
+
+                    // 将逻辑行号映射到物理行号
+                    for (int i = 0; i < physicalLines; i++)
+                    {
+                        AddLineNumMap(logicalLineNumber, index); // 逻辑行号从 1 开始
+                        index++;
+                    }
+                    logicalLineNumber++;
+                }
+            }
+        }
+        private void AddLineNumMap(int value, int index)
+        {
+            if(lineNumberMapping.Count > index)
+            {
+                lineNumberMapping[index] = value;
+            }
+            else
+            {
+                lineNumberMapping.Add(value);
+            }
+        }
+        
+        private int GetPhysicalLineCount(string text, Graphics g)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 1;
+            }
+            //尽量拦截不换行的情况
+            int len = text.Length;
+            if(len < 5)
+            {
+                return 1;
+            }
+            //继续拦截
+            // 计算文本的宽度
+            float textWidth = g.MeasureString(text, txtContent.Font).Width;
+            if(textWidth < txtContent.Size.Width - 50)//50是安全值，也许不用这么大
+            {
+                return 1;
+            }
+            //执行到这里几乎一定会换行
+            var hiddenTextBox = hiddenTextBox1;//也可以多弄几个TextBox轮序访问，性能提升不大
+            hiddenTextBox.Text = text;
+            return hiddenTextBox.GetLineFromCharIndex(len - 1) + 1;
+        }
+        private int GetLogicLineNumber(int physicalLineIndex)
+        {
+            if (lineNumberMapping.Count > physicalLineIndex)
+            {
+                return lineNumberMapping[physicalLineIndex];
+            }
+            return physicalLineIndex + 1;
+        }
+        /// <summary>
+        /// 绘制行号
+        /// </summary>
+        private void lineNumberPanel_Paint(object sender, PaintEventArgs e)
+        {
+            // 获取可见区域的物理行数
+            int firstLine = txtContent.GetLineFromCharIndex(txtContent.GetCharIndexFromPosition(Point.Empty));
+            int lastLine = txtContent.GetLineFromCharIndex(txtContent.GetCharIndexFromPosition(new Point(0, txtContent.ClientSize.Height)));
+
+            // 设置字体
+            using (Font font = new Font("Consolas", 10))
+            {
+                int preLogicLineNumber = 0;
+                float prePointY = 0;
+                for (int i = firstLine; i <= lastLine; i++)
+                {
+                    int logicLineNumber = GetLogicLineNumber(i);
+                    if (preLogicLineNumber != logicLineNumber)
+                    {
+                        // 获取每行的起始字符索引
+                        int lineStartIndex = txtContent.GetFirstCharIndexFromLine(i);
+                        if (lineStartIndex < 0) // 检查索引是否有效
+                        {
+                            continue;
+                        }
+                        // 获取每行的位置
+                        Point lineStartPosition = txtContent.GetPositionFromCharIndex(lineStartIndex);
+                        var lineNumberStr = logicLineNumber.ToString();
+                        // 计算行号的宽度
+                        float lineNumberWidth = e.Graphics.MeasureString(lineNumberStr, font).Width;
+                        // 绘制行号
+                        PointF drawPoint = new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, lineStartPosition.Y + 5);
+                        e.Graphics.DrawString(lineNumberStr, font, Brushes.White, drawPoint);
+                        preLogicLineNumber = logicLineNumber;
+                        prePointY = drawPoint.Y;
+                    }
+                    if(i == lastLine && txtContent.Text.EndsWith("\n"))
+                    {
+                        var endLineNumberStr = (preLogicLineNumber + 1).ToString();
+                        // 计算行号的宽度
+                        float lineNumberWidth = e.Graphics.MeasureString(endLineNumberStr, font).Width;
+                        e.Graphics.DrawString(endLineNumberStr, font, Brushes.White, new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, prePointY + txtContent.Font.Size * 1.4f + 4));
+                    }
                 }
             }
         }
@@ -697,6 +902,60 @@ namespace EncryptedNotepad
         }
         #endregion
     }
+    #region 监听进度条滑动专用类
+    public class TextBoxScrollListener : NativeWindow
+    {
+        private const int WM_VSCROLL = 0x0115; // 垂直滚动消息
+        private const int WM_MOUSEWHEEL = 0x020A; // 鼠标滚轮消息
+        private const int WM_LBUTTONDOWN = 0x0201; // 左键按下
+        private const int WM_MOUSEMOVE = 0x0200; // 鼠标移动
+        private const int WM_LBUTTONUP = 0x0202; // 左键释放
+
+        public event EventHandler Scrolled;
+        private int state = 0;
+
+        public TextBoxScrollListener(TextBox textBox)
+        {
+            if (textBox.IsHandleCreated)
+            {
+                AssignHandle(textBox.Handle);
+            }
+            else
+            {
+                textBox.HandleCreated += (s, e) => AssignHandle(textBox.Handle);
+            }
+        }
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_VSCROLL || m.Msg == WM_MOUSEWHEEL)
+            {
+                // 触发滚动事件
+                Scrolled?.Invoke(this, EventArgs.Empty);
+            }
+            else if(m.Msg == WM_LBUTTONDOWN)
+            {
+                state = WM_LBUTTONDOWN;
+            }
+            else if(m.Msg == WM_MOUSEMOVE)
+            {
+                if(state == WM_LBUTTONDOWN)
+                {
+                    state = WM_MOUSEMOVE;
+                }
+            }
+            else if(m.Msg == WM_LBUTTONUP)
+            {
+                if(state == WM_MOUSEMOVE)
+                {
+                    //这里会触发拖拽结束，也视为滚动，因为拖拽框选文字，也有可能使滚动条滚动
+                    Scrolled?.Invoke(this, EventArgs.Empty);
+                }
+                state = 0;
+            }
+            base.WndProc(ref m);
+        }
+    }
+    #endregion
 }
 ```
 
