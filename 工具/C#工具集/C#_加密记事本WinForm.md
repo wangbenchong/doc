@@ -2,41 +2,67 @@
 
 直接下载：[加密记事本.exe](./加密记事本.exe)
 
-界面外观：
+# 界面外观
+
+- 首次使用请先填好密码，最近一次填过的密码会保存在同目录下名为key.cfg的文件，这样下次打开会自动填好密码。
+- 自定义的快捷键有三个：Ctrl+S保存，Ctrl+F查找，Esc关闭查找，其他快捷键都是通用的，不再列举。
+
+明亮模式：
 
  ![](./img/EncryptedNotepad_01.jpg)
 
-技术难点和亮点（顺序由难到易)：
+暗夜模式：
+
+ ![](./img/EncryptedNotepad_02.jpg)
+
+特殊用法：把加密过的文件再次加密，每次加密用不同的密码形成不同的key.cfg文件，把每个key.cfg交给不同的人。这样只有把所有人的key文件统统汇集到一起，才能读取到文件的原内容（相当于一个需要N把钥匙才能打开的锁）。
+
+# 技术难点和亮点
+
+顺序由难到易：
 
 - 开启自动换行时，行号的正确显示与流畅刷新。（需要人脑自行寻找思路，AI仅提供辅助）
-- 各种文件编码正常识别。（需要不断纠正AI，大约迭代4次）
+- 各种文件编码正常识别。（需要不断纠正AI，大约迭代5次）
+- 查找与替换浮窗。（需要不断纠正AI，大约迭代4次）
 - 按行加密并且支持生成密钥文件`key.cfg`，防止每次打开软件都要重新输入密码。（AI基本直接胜任）
 - 标题栏显示当前文件名，并且当有修改未保存时，加星号*后缀。（AI基本直接胜任）
 
 # 界面设计
 
 1. **控件布局**：
-   - 添加一个 `TextBox`（命名为 `txtContent`），用于输入和显示文本。Anchor设置为四个方向，随窗口拉伸。ScrollBars设为Vertical这样纵向滚动条常显，WordWrap设为True这样可以自动换行，AcceptsTab设为True这样可以接收Tab键。
-   - 添加一个 `TextBox`（命名为 `txtPassword`），用于输入密码。Anchor设置为上左右三个方向，随窗口拉伸。
-   - 复制 `txtContent`（命名为 `hiddenTextBox1`），用于显示行号时计算字符串占用多少行，Visible设为False隐藏，高度可改小一点。
-   - 添加六个 `Button`：
+   1. 以下所有TextBox的BorderStyle都设为None，方便换肤处理（否则会有亮边）
+   2. 添加一个 `TextBox`（命名为 `txtContent`），用于输入和显示文本。Anchor设置为四个方向，随窗口拉伸。ScrollBars设为Vertical这样纵向滚动条常显，WordWrap设为True这样可以自动换行，AcceptsTab设为True这样可以接收Tab键。
+   3. 添加一个 `TextBox`（命名为 `txtPassword`），用于输入密码。Anchor设置为上左右三个方向，随窗口拉伸。
+   4. 复制 `txtContent`（命名为 `hiddenTextBox1`），用于显示行号时计算字符串占用多少行，Visible设为False隐藏，高度可改小一点。
+   5. 添加六个 `Button`：
      - 一个用于新建（命名为`btnNew`，文本为“新建”）。
      - 一个用于加密保存（命名为 `btnEncryptSave`，文本为“保存(Ctrl+S)”）。
      - 一个用于解密读取（命名为 `btnDecryptRead`，文本为“打开(拖拽)”）。
      - 一个用于加密整个文件夹的txt文件（命名为 `btnEncryptFolder`，文本为“加密文件夹”）。
      - 一个用于解密整个文件夹的txt文件（命名为 `btnDecryptFolder`，文本为“解密文件夹”）。
      - 一个用于临时查看密码的按钮（命名为 `btnEye`，文本为“👁”）。Anchor设置为上右两个方向。
-   - 添加一个 `Label`，用于提示密码输入（文本为“密码”）。
-   - 添加一个 `Panel` （命名为`lineNumberPanel`），用于显示行号，BackColor设为InactiveCaption。
+   6. 添加一个 `Label`，用于提示密码输入（文本为“密码”）。
+   7. 添加一个 `Panel` （命名为`lineNumberPanel`），用于显示行号，BackColor设为InactiveCaption。
+
 2. **事件绑定**：
    - 双击 `btnEncryptSave` 按钮，生成 `btnEncryptSave_Click` 事件处理程序。
    - 双击 `btnDecryptRead` 按钮，生成 `btnDecryptRead_Click` 事件处理程序。
    - 双击 `btnNew` 按钮，生成 `btnNew_Click` 事件处理程序。
    - 双击 `btnEncryptFolder` 按钮，生成 `btnEncryptFolder_Click` 事件处理程序。
    - 双击 `btnDecryptFolder` 按钮，生成 `btnDecryptFolder_Click` 事件处理程序。
-   - 选中 `btnEye` 按钮，查看属性面板的【闪电】图标，双击里面的MouseDown和MouseUp，会自动生成 `btnEye_MouseDown` 和 `btnEye_MouseUp` 事件处理程序。
-   - 选中 `txtContent` 文本框，查看属性面板的【闪电】图标，双击里面的TextChanged，会自动生成 `txtContent_TextChanged` 事件处理程序。
-   - 选中 `lineNumberPanel`， 查看属性面板的【闪电】图标，双击里面的Paint，会自动生成 `lineNumberPanel_Paint` 事件处理程序。
+   - 选中 `btnEye` 按钮，查看属性面板的事件（闪电图标），双击里面的MouseDown和MouseUp，会自动生成 `btnEye_MouseDown` 和 `btnEye_MouseUp` 事件处理程序。
+   - 选中 `txtContent` 文本框，查看属性面板的事件（闪电图标），双击里面的TextChanged，会自动生成 `txtContent_TextChanged` 事件处理程序。
+   - 选中 `lineNumberPanel`， 查看属性面板的事件（闪电图标），双击里面的Paint，会自动生成 `lineNumberPanel_Paint` 事件处理程序。
+
+3. **后续补充——查找与替换浮窗**：
+   - 添加`panelSearch`，AllowDrop为False，事件中分别双击MouseDown、MouseMove、MouseUp来做拖拽逻辑
+   - 添加`btnCloseSearch`，文本为：“✕”，双击生成`btnCloseSearch_Click`，FlatType设为Flat
+   - 添加`btnSearch`，文本为：“查找”，双击生成`btnSearch_Click`
+   - 添加`btnReplace`，文本为：“替换”，双击生成`btnReplace_Click`
+   - 添加`txtSearch`，双击生成`txtSearch_TextChanged`
+   - 添加`txtReplace`
+   - 添加一个Label作为标题，文本为“查找与替换（可拖拽）”，CausesValidation和Enabled设为False从而不会被选中
+
 
 # 主代码
 
@@ -54,7 +80,6 @@ namespace EncryptedNotepad
     public partial class MainForm : Form
     {
         private string currentFilePath = null; // 当前打开的文件路径
-        private string password = null; // 当前密码
         private string defaultTitleName;
         const string PassPortFileName = "key.cfg";
         private string _originalText = ""; // 保存初始文本内容
@@ -65,6 +90,9 @@ namespace EncryptedNotepad
         public MainForm()
         {
             InitializeComponent();
+            // 初始化颜色风格
+            InitComponentColor();
+
             LoadPassword(); // 启动时加载密码
             defaultTitleName = this.Text;
 
@@ -79,16 +107,27 @@ namespace EncryptedNotepad
             typeof(Panel).InvokeMember("DoubleBuffered",
                 System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
                 null, lineNumberPanel, new object[] { true });
+            
+            //初始化行号字体
+            LineNumFont = new Font("Consolas", 10);
 
             // 初始化滚动条监听器
             this.scrollListener = new TextBoxScrollListener(this.txtContent);
-            this.scrollListener.Scrolled += (s, e) => { needRefreshLineNumberQuick = true; };
+            this.scrollListener.Scrolled += scrollListener_Scrolled;
 
             // 初始化 Timer
             this.timer = new Timer();
             this.timer.Interval = 100; // 0.1 秒
             this.timer.Tick += new EventHandler(this.Timer_Tick);
             this.timer.Start(); // 启动定时器
+
+            // 初始化用于计算行号的隐藏文本框
+            this.hiddenTextBox1.Enabled = false;
+
+            // 初始化搜索框
+            panelSearch.Visible = false;
+            panelSearchOffsetX = panelSearch.Location.X - btnEye.Location.X;
+            panelSearchOffsetY = panelSearch.Location.Y - btnEye.Location.Y;
         }
 
         // 拖拽进入窗体时触发
@@ -113,9 +152,7 @@ namespace EncryptedNotepad
             string filePath = files[0];
 
             // 调用你的读取文件逻辑
-            password = txtPassword.Text; // 更新密码
-
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(txtPassword.Text))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -134,8 +171,16 @@ namespace EncryptedNotepad
                     byte[] encryptedPassword = File.ReadAllBytes(PassPortFileName);
 
                     // 使用固定密钥解密密码
-                    password = DecryptStringFromBytes(encryptedPassword, "fixed_key_for_password_storage");
-                    txtPassword.Text = password; // 显示密码
+                    var password = DecryptStringFromBytes(encryptedPassword, "fixed_key_for_password_storage");
+                    string[] arr = password.Split(LINE_END, StringSplitOptions.None);
+                    txtPassword.Text = arr[0]; // 显示密码
+                    if(arr.Length > 1)
+                    {
+                        bool value = StringToBool(arr[1]);
+                        //如果刷新出问题可改用延迟执行
+                        //DelayToDo(4, () => { IsDark = value; });
+                        IsDark = value;
+                    }
                 }
                 catch
                 {
@@ -148,8 +193,9 @@ namespace EncryptedNotepad
         {
             try
             {
+                var configStr = $"{txtPassword.Text}\n{BoolToString(IsDark)}";
                 // 使用固定密钥加密密码
-                byte[] encryptedPassword = EncryptStringToBytes(password, "fixed_key_for_password_storage");
+                byte[] encryptedPassword = EncryptStringToBytes(configStr, "fixed_key_for_password_storage");
 
                 // 保存到文件
                 File.WriteAllBytes(PassPortFileName, encryptedPassword);
@@ -216,7 +262,8 @@ namespace EncryptedNotepad
             // 解密数据
             try
             {
-                string decryptedText = DecryptText(encryptedText, password);
+                string decryptedText = DecryptText(encryptedText, txtPassword.Text);
+                needRefreshLineNumberSpeedUp = true;
                 txtContent.Text = decryptedText;
                 //MessageBox.Show("解密成功.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -238,11 +285,10 @@ namespace EncryptedNotepad
         private void DoSave()
         {
             string text = txtContent.Text;
-            password = txtPassword.Text; // 更新密码
 
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(txtPassword.Text))
             {
-                MessageBox.Show("请输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -264,7 +310,7 @@ namespace EncryptedNotepad
             }
 
             // 加密文本
-            string encryptedText = EncryptText(text, password);
+            string encryptedText = EncryptText(text, txtPassword.Text);
 
             // 保存到文件
             File.WriteAllText(currentFilePath, encryptedText);
@@ -290,6 +336,17 @@ namespace EncryptedNotepad
                 DoSave();
                 return true; // 表示已处理该快捷键
             }
+            // 检测是否按下了 Ctrl + F
+            else if (keyData == (Keys.Control | Keys.F))
+            {
+                OnPressCtrlF();
+                return true;
+            }
+            else if (keyData == (Keys.Escape))
+            {
+                OnPressEsc();
+                return true;
+            }
 
             // 其他按键交给基类处理
             return base.ProcessCmdKey(ref msg, keyData);
@@ -304,9 +361,7 @@ namespace EncryptedNotepad
 
         private void btnDecryptRead_Click(object sender, EventArgs e)
         {
-            password = txtPassword.Text; // 更新密码
-
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(txtPassword.Text))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -333,8 +388,7 @@ namespace EncryptedNotepad
 
         private void btnEncryptFolder_Click(object sender, EventArgs e)
         {
-            password = txtPassword.Text; // 更新密码
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(txtPassword.Text))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -348,15 +402,14 @@ namespace EncryptedNotepad
                 string folderPath = folderDialog.SelectedPath;
 
                 // 加密文件夹中的所有 .txt 文件
-                EncryptFolder(folderPath, password);
+                EncryptFolder(folderPath, txtPassword.Text);
                 MessageBox.Show($"所有来自 {folderPath} 的txt文件都完成了加密.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btnDecryptFolder_Click(object sender, EventArgs e)
         {
-            password = txtPassword.Text; // 更新密码
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(txtPassword.Text))
             {
                 MessageBox.Show("请先输入密码", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -370,7 +423,7 @@ namespace EncryptedNotepad
                 string folderPath = folderDialog.SelectedPath;
 
                 // 加密文件夹中的所有 .txt 文件
-                DecryptFolder(folderPath, password);
+                DecryptFolder(folderPath, txtPassword.Text);
                 MessageBox.Show($"所有来自 {folderPath} 的txt文件都完成了解密.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -433,13 +486,29 @@ namespace EncryptedNotepad
                     _isTextChanged = false;
                 }
             }
-            // 文本变化时重绘行号
-            needRefreshLineNumber = true;
+            // 文本变化时重新计算行号、重绘行号
+            needRefreshLineNumberFull = true;
+            // 重置搜索索引
+            searchIndex = 0;
         }
         private void txtContent_SizeChanged(object sender, EventArgs e)
         {
-            // 尺寸变化时重绘行号
-            needRefreshLineNumber = true;
+            // 尺寸变化时重新计算行号、重绘行号
+            needRefreshLineNumberFull = true;
+            SetSearchSafePlace();
+        }
+        private void txtContent_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            //当输入的是回车时，应当提前下一次行号刷新的时间
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.needRefreshLineNumberSpeedUp = true;
+            }
+        }
+        private void scrollListener_Scrolled(object sender, EventArgs e)
+        {
+            // 滚动条变化时重绘行号
+            needRefreshLineNumberPaint = true;
         }
         #endregion
 
@@ -447,15 +516,26 @@ namespace EncryptedNotepad
         //因为从TextBox直接获取到的是物理行号（考虑了自动换行），而不是逻辑行号（只考虑换行符）
         //所以用这个结构来存物理行号和逻辑行号的映射关系，索引是物理行号-1，取值是逻辑行号
         private List<int> lineNumberMapping = new List<int>();
+        private Font LineNumFont = null;
+        private float[] LineNumWidth = {-1,-1,-1,-1,-1};
         const int LINE_NUM_REFRESH_CD = 5;//0.5秒之后刷新行号
-        private bool needRefreshLineNumberQuick = false;
-        private bool needRefreshLineNumber
+        private bool needRefreshLineNumberPaint = false;
+        private bool needRefreshLineNumberSpeedUp = false;
+        private bool needRefreshLineNumberFull
         {
             set
             {
                 if(value)
                 {
-                    refreshLineTimeCounter = 0;
+                    if(needRefreshLineNumberSpeedUp)
+                    {
+                        refreshLineTimeCounter = LINE_NUM_REFRESH_CD - 1;
+                        needRefreshLineNumberSpeedUp = false;
+                    }
+                    else
+                    {
+                        refreshLineTimeCounter = 0;
+                    }
                 }
                 else
                 {
@@ -482,12 +562,24 @@ namespace EncryptedNotepad
                 hasDoneInvalidate = true;
                 refreshLineTimeCounter++;
             }
-            if(!hasDoneInvalidate && needRefreshLineNumberQuick)
+            if(!hasDoneInvalidate && needRefreshLineNumberPaint)
             {
                 lineNumberPanel.Invalidate();
-                needRefreshLineNumberQuick = false;
+                needRefreshLineNumberPaint = false;
+            }
+            //通用延迟执行机制
+            for(int i = delayList.Count - 1; i>= 0; i--)
+            {
+                var data = delayList[i];
+                data.time--;
+                if(data.time <= 0)
+                {
+                    data.callBack?.Invoke();
+                    delayList.RemoveAt(i);
+                }
             }
         }
+        
         private void UpdateLineNumberMapping()
         {
             if(string.IsNullOrEmpty(txtContent.Text))
@@ -497,7 +589,7 @@ namespace EncryptedNotepad
             }
             int index = 0;
             // 获取 TextBox 的文本内容
-            string[] lines = txtContent.Text.Replace("\r","").Split('\n');
+            string[] lines = txtContent.Text.Split(LINE_END, StringSplitOptions.None);
 
             // 计算每行的逻辑行号和物理行数
             int logicalLineNumber = 1;
@@ -563,6 +655,23 @@ namespace EncryptedNotepad
             return physicalLineIndex + 1;
         }
         /// <summary>
+        /// 获取行号字符串的物理宽度，已计算过的不会重复计算，节省性能
+        /// </summary>
+        float GetLineNumWidth(string lineNumStr, PaintEventArgs e)
+        {
+            int len = lineNumStr.Length;
+            if(len > 5)//几乎不可能遇到，这么大行数要卡死了
+            {
+                return e.Graphics.MeasureString(lineNumStr, LineNumFont).Width;
+            }
+            int index = len - 1;
+            if(LineNumWidth[index] < 0)
+            {
+                LineNumWidth[index] = e.Graphics.MeasureString(lineNumStr, LineNumFont).Width;
+            }
+            return LineNumWidth[index];
+        }
+        /// <summary>
         /// 绘制行号
         /// </summary>
         private void lineNumberPanel_Paint(object sender, PaintEventArgs e)
@@ -571,50 +680,285 @@ namespace EncryptedNotepad
             int firstLine = txtContent.GetLineFromCharIndex(txtContent.GetCharIndexFromPosition(Point.Empty));
             int lastLine = txtContent.GetLineFromCharIndex(txtContent.GetCharIndexFromPosition(new Point(0, txtContent.ClientSize.Height)));
 
-            // 设置字体
-            using (Font font = new Font("Consolas", 10))
+            int preLogicLineNumber = 0;
+            for (int i = firstLine; i <= lastLine; i++)
             {
-                int preLogicLineNumber = 0;
-                float prePointY = 0;
-                for (int i = firstLine; i <= lastLine; i++)
+                int logicLineNumber = GetLogicLineNumber(i);
+                if (preLogicLineNumber != logicLineNumber)
                 {
-                    int logicLineNumber = GetLogicLineNumber(i);
-                    if (preLogicLineNumber != logicLineNumber)
+                    // 获取每行的起始字符索引
+                    int lineStartIndex = txtContent.GetFirstCharIndexFromLine(i);
+                    if (lineStartIndex < 0) // 检查索引是否有效
                     {
-                        // 获取每行的起始字符索引
-                        int lineStartIndex = txtContent.GetFirstCharIndexFromLine(i);
-                        if (lineStartIndex < 0) // 检查索引是否有效
-                        {
-                            continue;
-                        }
-                        // 获取每行的位置
-                        Point lineStartPosition = txtContent.GetPositionFromCharIndex(lineStartIndex);
-                        var lineNumberStr = logicLineNumber.ToString();
-                        // 计算行号的宽度
-                        float lineNumberWidth = e.Graphics.MeasureString(lineNumberStr, font).Width;
-                        // 绘制行号
-                        PointF drawPoint = new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, lineStartPosition.Y + 5);
-                        e.Graphics.DrawString(lineNumberStr, font, Brushes.White, drawPoint);
-                        preLogicLineNumber = logicLineNumber;
-                        prePointY = drawPoint.Y;
+                        continue;
                     }
-                    if(i == lastLine && txtContent.Text.EndsWith("\n"))
+                    // 获取每行的位置
+                    Point lineStartPosition = txtContent.GetPositionFromCharIndex(lineStartIndex);
+                    var lineNumberStr = logicLineNumber.ToString();
+                    // 计算行号的宽度
+                    float lineNumberWidth = GetLineNumWidth(lineNumberStr, e);
+                    // 绘制行号
+                    PointF drawPoint = new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, lineStartPosition.Y + 5);
+                    e.Graphics.DrawString(lineNumberStr, LineNumFont, Brushes.White, drawPoint);
+                    preLogicLineNumber = logicLineNumber;
+                }
+                if (i == lastLine && txtContent.Text.EndsWith("\n"))
+                {
+                    int len = txtContent.Text.Length;
+                    //可见区最后一行是文章结尾
+                    if (lastLine == txtContent.GetLineFromCharIndex(len - 1))
                     {
+                        // 获取行的末尾字符坐标
+                        Point lastLinePosition = txtContent.GetPositionFromCharIndex(len - 1);
                         var endLineNumberStr = (preLogicLineNumber + 1).ToString();
                         // 计算行号的宽度
-                        float lineNumberWidth = e.Graphics.MeasureString(endLineNumberStr, font).Width;
-                        e.Graphics.DrawString(endLineNumberStr, font, Brushes.White, new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, prePointY + txtContent.Font.Size * 1.4f + 4));
+                        float lineNumberWidth = GetLineNumWidth(endLineNumberStr, e);
+                        e.Graphics.DrawString(endLineNumberStr, LineNumFont, Brushes.White, new PointF(this.lineNumberPanel.Width - lineNumberWidth - 2, lastLinePosition.Y + txtContent.Font.Size * 1.4f + 9));
                     }
                 }
             }
         }
         #endregion
 
+        #region 查找和替换
+        //相对于右上角btnEye的偏移位置
+        int panelSearchOffsetX, panelSearchOffsetY;
+        //记录按下时的偏移量
+        private Point panelSearchPressOffset;
+        bool isDragingSearchPanel = false;
+        private void panelSearch_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // 启动拖拽操作
+                isDragingSearchPanel = true;
+                panelSearchPressOffset = e.Location; // 记录鼠标按下时的偏移量
+            }
+        }
+        private void panelSearch_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(isDragingSearchPanel)
+            {
+                Point newLocation = panelSearch.PointToScreen(e.Location);
+                newLocation.Offset(-panelSearchPressOffset.X, -panelSearchPressOffset.Y);
+                newLocation = this.PointToClient(newLocation);
+
+                // 限制 Panel 的移动范围
+                newLocation.X = Math.Max(0, Math.Min(newLocation.X, this.ClientSize.Width - panelSearch.Width));
+                newLocation.Y = Math.Max(0, Math.Min(newLocation.Y, this.ClientSize.Height - panelSearch.Height));
+
+                panelSearch.Location = newLocation;
+            }
+        }
+        // 限制 Panel 的移动范围
+        private void SetSearchSafePlace()
+        {
+            if(panelSearch.Visible)
+            {
+                var pos = panelSearch.Location;
+                pos.X = Math.Max(0, Math.Min(pos.X, this.ClientSize.Width - panelSearch.Width));
+                pos.Y = Math.Max(0, Math.Min(pos.Y, this.ClientSize.Height - panelSearch.Height));
+                panelSearch.Location = pos;
+            }
+        }
+        private void panelSearch_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                isDragingSearchPanel = false;
+        }
+
+        private void btnCloseSearch_Click(object sender, EventArgs e)
+        {
+            panelSearch.Visible = false;
+        }
+        int searchIndex = 0;
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                int matchIndex = -1;
+                try
+                {
+                    matchIndex = txtContent.Text.IndexOf(txtSearch.Text, searchIndex);
+                }catch { }
+                
+                if (matchIndex >= 0)
+                {
+                    txtContent.Select(matchIndex, txtSearch.Text.Length);
+                    txtContent.ScrollToCaret();
+                    txtContent.Focus();
+                    needRefreshLineNumberPaint = true;
+                    //为下一次查询做准备
+                    searchIndex = matchIndex + txtSearch.Text.Length;
+                }
+                else
+                {
+                    searchIndex = 0;
+                    MessageBox.Show("已查询到结尾", "未找到", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+        private void btnReplace_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                txtContent.Text = txtContent.Text.Replace(txtSearch.Text, txtReplace.Text);
+                needRefreshLineNumberFull = true;
+                MessageBox.Show("替换完毕","替换", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            searchIndex = 0;
+        }
+        private void OnPressCtrlF()
+        {
+            if(!panelSearch.Visible)
+            {
+                panelSearch.Visible = true;
+                Point pos = btnEye.Location;
+                pos.X += panelSearchOffsetX;
+                pos.Y += panelSearchOffsetY;
+                panelSearch.Location = pos;
+            }
+            txtSearch.Text = string.IsNullOrEmpty(txtContent.SelectedText) ?
+                string.Empty :
+                txtContent.SelectedText.Substring(0,Math.Min(50, txtContent.SelectedText.Length));
+            searchIndex = 0;
+        }
+        private void OnPressEsc()
+        {
+            panelSearch.Visible = false;
+        }
+        #endregion
+
+        #region 色彩风格
+        List<Button> allChangeColorBtn = new List<Button>();
+        List<TextBox> allChangeColorText = new List<TextBox>();
+        Color baseBtnBgColor;
+        Color darkBtnBgColor = Color.FromArgb(255, 52, 52, 52);
+        Color baseBorderColor;
+        Color darkBorderColor = Color.Black;
+        Color baseBtnTxtColor;
+        Color darkBtnTxtColor = Color.FromArgb(255, 241, 241, 241);
+        Color baseInputBgColor = Color.White;
+        Color darkInputBgColor = Color.FromArgb(255, 30, 30, 30);
+        Color baseInputTxtColor;
+        Color darkInputTxtColor = Color.FromArgb(255, 186, 186, 186);
+        Color baseLineNumColor;
+        Color darkLineNumColor = Color.FromArgb(255, 28, 60, 84);
+        Color baseFormColor;
+        Color darkFormColor = Color.FromArgb(255, 65, 65, 65);
+        private void InitComponentColor()
+        {
+            allChangeColorBtn.Add(btnDecryptFolder);
+            allChangeColorBtn.Add(btnDecryptRead);
+            allChangeColorBtn.Add(btnEncryptFolder);
+            allChangeColorBtn.Add(btnEncryptSave);
+            allChangeColorBtn.Add(btnEye);
+            allChangeColorBtn.Add(btnNew);
+            allChangeColorText.Add(txtContent);
+            allChangeColorText.Add(txtPassword);
+            baseBtnBgColor = btnEye.BackColor;
+            baseBtnTxtColor = btnEye.ForeColor;
+            baseBorderColor = btnEye.FlatAppearance.BorderColor;
+            baseInputTxtColor = txtContent.ForeColor;
+            baseLineNumColor = lineNumberPanel.BackColor;
+            baseFormColor = this.BackColor;
+        }
+        private bool isDark = false;
+        public bool IsDark
+        {
+            get
+            {
+                return isDark;
+            }
+            set
+            {
+                if(value != isDark)
+                {
+                    foreach(var btn in allChangeColorBtn)
+                    {
+                        btn.BackColor = value ? darkBtnBgColor : baseBtnBgColor;
+                        btn.ForeColor = value ? darkBtnTxtColor : baseBtnTxtColor;
+                        btn.UseVisualStyleBackColor = !value;
+                        btn.FlatStyle = value ? FlatStyle.Flat : FlatStyle.Standard;
+                        btn.FlatAppearance.BorderColor = value ? darkBorderColor : baseBorderColor;
+                        if(value)
+                        {
+                            btn.Width +=2;
+                            btn.Height ++;
+                        }
+                        else
+                        {
+                            btn.Width -=2;
+                            btn.Height --;
+                        }
+                    }
+                    foreach (var tb in allChangeColorText)
+                    {
+                        tb.BackColor = value ? darkInputBgColor : baseInputBgColor;
+                        tb.ForeColor = value ? darkInputTxtColor : baseInputTxtColor;
+                    }
+                    lineNumberPanel.BackColor = value ? darkLineNumColor : baseLineNumColor;
+                    label1.ForeColor = value ? darkBtnTxtColor : baseBtnTxtColor;
+                    this.BackColor = value ? darkFormColor : baseFormColor;
+                    isDark = value;
+                }
+            }
+        }
+        private void 明亮模式ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IsDark)
+            {
+                IsDark = false;
+                SavePassword();
+            }
+        }
+        private void 暗夜模式ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(!IsDark)
+            {
+                IsDark = true;
+                SavePassword();
+            }
+        }
+        #endregion
+
         #region 静态工具函数
+        /// <summary>
+        /// 延迟执行
+        /// </summary>
+        List<DelayData> delayList = new List<DelayData>();
+        public class DelayData
+        {
+            public int time;
+            public System.Action callBack;
+            public DelayData(int time, System.Action callBack)
+            {
+                this.time = time;
+                this.callBack = callBack;
+            }
+        }
+        public void DelayToDo(int time, System.Action callback)
+        {
+            delayList.Add(new DelayData(time, callback));
+        }
+
+        private static string BoolToString(bool b)
+        {
+            return b ? "1" : "0";
+        }
+        private static bool StringToBool(string str)
+        {
+            return str == "1";
+        }
+        //单独\r的情况只在老版Mac上存在，可忽略
+        private static string[] LINE_END = new[] { "\r\n", "\n" };
         static string EncryptText(string plainText, string password)
         {
             // 按行拆分文本
-            string[] lines = plainText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            string[] lines = plainText.Split(LINE_END, StringSplitOptions.None);
 
             // 对每一行单独加密
             StringBuilder encryptedText = new StringBuilder();
@@ -637,7 +981,7 @@ namespace EncryptedNotepad
         static string DecryptText(string encryptedText, string password)
         {
             // 按行拆分加密文本
-            string[] lines = encryptedText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            string[] lines = encryptedText.Split(LINE_END, StringSplitOptions.None);
 
             // 对每一行单独解密
             StringBuilder decryptedText = new StringBuilder();
@@ -902,6 +1246,7 @@ namespace EncryptedNotepad
 
             return true; // 其他编码默认返回 true
         }
+
         #endregion
     }
     #region 监听进度条滑动专用类
