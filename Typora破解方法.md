@@ -119,24 +119,73 @@ https://github.com/obgnail/typora_plugin
    keyword = "img2"
    cursorOffset = [ -5, -5 ]
    callback = "![](./img/.jpg)"
-       
-   [[slash_commands.COMMANDS]]
-   enable = true
-   type = "snippet"
-   icon = "👕"
-   hint = "以上（箭头）"
-   keyword = "ArrowUp"
-   cursorOffset = [ -6, -4 ]
-   callback = "↑↑ *以上* ↑↑"
    
    [[slash_commands.COMMANDS]]
    enable = true
-   type = "snippet"
-   icon = "👕"
-   hint = "以下（箭头）"
+   type = "command"
+   icon = "🌟"
+   hint = "上（箭头）"
+   cursorOffset = [ -4, -4 ]
+   keyword = "ArrowUp"
+   callback = """
+   (text) => {
+       const cnt = '↑↑ *@* ↑↑'.replace(/@/g, this.inputs.textAfter)
+       const { range, bookmark } = this.utils.getRangy()
+       bookmark.start = 0
+       bookmark.end += this.inputs.textAfter.length
+       range.moveToBookmark(bookmark)
+       range.deleteContents()
+       this.utils.insertText(null, cnt, false)
+   }
+   """
+   
+   [[slash_commands.COMMANDS]]
+   enable = true
+   type = "command"
+   icon = "🌟"
+   hint = "下（箭头）"
+   cursorOffset = [ -4, -4 ]
    keyword = "ArrowDown"
-   cursorOffset = [ -6, -4 ]
-   callback = "↓↓ *以下* ↓↓"
+   callback = """
+   (text) => {
+       const cnt = '↓↓ *@* ↓↓'.replace(/@/g, this.inputs.textAfter)
+       const { range, bookmark } = this.utils.getRangy()
+       bookmark.start = 0
+       bookmark.end += this.inputs.textAfter.length
+       range.moveToBookmark(bookmark)
+       range.deleteContents()
+       this.utils.insertText(null, cnt, false)
+   }
+   """
+   
+   [[slash_commands.COMMANDS]]
+   enable = false
+   type = "gen-snp"
+   icon = "🌟"
+   hint = "示例：插入"
+   keyword = "insert"
+   callback = "(text) => 'abc@def@gh'.replace(/@/g, this.inputs.textAfter)"
+   
+   [[slash_commands.COMMANDS]]
+   enable = false
+   type = "gen-snp"
+   icon = "🌟"
+   keyword = "BlockCodeGenerator"
+   callback = "(...langs) => langs.map(l => '```' + l.toLowerCase() + '\\n```').join('\\n\\n')"
+   
+   [[slash_commands.COMMANDS]]
+   enable = false
+   type = "gen-snp"
+   icon = "🌟"
+   keyword = "CalloutGenerator"
+   callback = "(...types) => types.map(t => `> [!${t.toUpperCase()}]\\n>\\n> `).join('\\n\\n')"
+   
+   [[slash_commands.COMMANDS]]
+   enable = false
+   type = "command"
+   icon = "🌟"
+   keyword = "TableGenerator"
+   callback = "(col, row) => { col = parseInt(col); row = parseInt(row); const c = ['      ', ' ---- ', ...Array(row - 1).fill('      ')].map(e => `|${Array(col).fill(e).join('|')}|`).join('\\n'); this.utils.insertText(null, c, false) }"
    
    //...以下部分省略...
    ```
