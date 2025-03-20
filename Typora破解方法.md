@@ -129,13 +129,31 @@ https://github.com/obgnail/typora_plugin
    keyword = "ArrowUp"
    callback = """
    (text) => {
-       const cnt = '↑↑ *@* ↑↑'.replace(/@/g, this.inputs.textAfter)
-       const { range, bookmark } = this.utils.getRangy()
-       bookmark.start = 0
-       bookmark.end += this.inputs.textAfter.length
-       range.moveToBookmark(bookmark)
-       range.deleteContents()
-       this.utils.insertText(null, cnt, false)
+       // 去掉 textBefore 中最后一个斜杠及其之后的所有字符
+       const lastSlashIndex = this.inputs.textBefore.lastIndexOf('/');
+       const textBefore = lastSlashIndex !== -1
+           ? this.inputs.textBefore.slice(0, lastSlashIndex)
+           : this.inputs.textBefore;
+   
+       // 获取斜杠前后的内容，拼接成整行内容
+       const fullText = textBefore + this.inputs.textAfter;
+   
+       // 构造替换后的内容，支持多次替换
+       const cnt = '↑↑ *@* ↑↑'.replace(/@/g, fullText);
+   
+       // 获取当前行的范围
+       const { range, bookmark } = this.utils.getRangy();
+   
+       // 调整范围
+       bookmark.start = 0;
+       bookmark.end += this.inputs.textAfter.length;
+   
+       // 删除原有内容
+       range.moveToBookmark(bookmark);
+       range.deleteContents();
+   
+       // 插入新内容
+       this.utils.insertText(null, cnt, false);
    }
    """
    
@@ -148,13 +166,31 @@ https://github.com/obgnail/typora_plugin
    keyword = "ArrowDown"
    callback = """
    (text) => {
-       const cnt = '↓↓ *@* ↓↓'.replace(/@/g, this.inputs.textAfter)
-       const { range, bookmark } = this.utils.getRangy()
-       bookmark.start = 0
-       bookmark.end += this.inputs.textAfter.length
-       range.moveToBookmark(bookmark)
-       range.deleteContents()
-       this.utils.insertText(null, cnt, false)
+       // 去掉 textBefore 中最后一个斜杠及其之后的所有字符
+       const lastSlashIndex = this.inputs.textBefore.lastIndexOf('/');
+       const textBefore = lastSlashIndex !== -1
+           ? this.inputs.textBefore.slice(0, lastSlashIndex)
+           : this.inputs.textBefore;
+   
+       // 获取斜杠前后的内容，拼接成整行内容
+       const fullText = textBefore + this.inputs.textAfter;
+   
+       // 构造替换后的内容，支持多次替换
+       const cnt = '↓↓ *@* ↓↓'.replace(/@/g, fullText);
+   
+       // 获取当前行的范围
+       const { range, bookmark } = this.utils.getRangy();
+   
+       // 调整范围
+       bookmark.start = 0;
+       bookmark.end += this.inputs.textAfter.length;
+   
+       // 删除原有内容
+       range.moveToBookmark(bookmark);
+       range.deleteContents();
+   
+       // 插入新内容
+       this.utils.insertText(null, cnt, false);
    }
    """
    
