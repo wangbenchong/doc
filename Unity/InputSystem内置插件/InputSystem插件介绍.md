@@ -1,9 +1,9 @@
 # 先看这些文章
 
 - [【推荐先看】Unity Input System Step-By-Step 最简教程 | 三叔的数字花园](https://tuncle.blog/input_system_minimum_tutorial/index.html)
-- [基础教程——Unity官方开发者社区](https://developer.unity.cn/projects/64ce58b4edbc2a10dd1e49b8)
+- [基础教程——Unity 官方开发者社区](https://developer.unity.cn/projects/64ce58b4edbc2a10dd1e49b8)
 - [Quickstart Guide | Input System | 1.10.0 (unity3d.com)](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.10/manual/QuickStartGuide.html)
-- [更好上手的Unity Input System教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1VCNdeSER3/)
+- [更好上手的 Unity Input System 教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1VCNdeSER3/)
 
 # 摘抄：Unity Input System Step-By-Step 最简教程
 
@@ -22,13 +22,13 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 
 ### 安装 Input System
 
-首先通过 Unity Package Manager 安装 Input System。之后会自动弹出如下窗口，提示`Input System` 启用后需要重启 Editor Backend 才能正常使用，点击 `Yes` 启用 Input System 并重启 Unity：
+首先通过 Unity Package Manager 安装 Input System。之后会自动弹出如下窗口，提示 `Input System` 启用后需要重启 Editor Backend 才能正常使用，点击 `Yes` 启用 Input System 并重启 Unity：
 
  ![启用 Input System](./img/2023-11-16-15-54-50.jpg)
 
 **启用 Input System**
 
-当 Unity 重启后，根据 Unity 版本的不同，可能内置的 `Input Manager` 会被关闭，如果要重新启用，可以在 `Edit` -> `Project Settings` -> `Player` -> `Other Settings` -> `Active Input Handling` 中选择 `Both`来切换输入方式：
+当 Unity 重启后，根据 Unity 版本的不同，可能内置的 `Input Manager` 会被关闭，如果要重新启用，可以在 `Edit` -> `Project Settings` -> `Player` -> `Other Settings` -> `Active Input Handling` 中选择 `Both` 来切换输入方式：
  ![Player Settings 中切换输出方式](./img/2023-11-16-15-59-49.jpg)
 
 至此 Input System 已经被正确安装。
@@ -40,7 +40,7 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 
 ### 创建 Input System SettingAssets
 
-推荐先创建全局Settings Asset（非必需，有默认设置），你需要在 `Project Settings` -> `Input System Package` 中创建相关资源：
+推荐先创建全局 Settings Asset（非必需，有默认设置），你需要在 `Project Settings` -> `Input System Package` 中创建相关资源：
 
 ![Create Input System](./img/2023-11-16-16-01-18.jpg)
 
@@ -82,14 +82,14 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 具体查看 Input Action Asset 中的 Move Action，定义了键盘的 `WASD` 和 `上下左右` 触发：
  ![img](./img/2023-11-16-16-33-04.jpg)
 
-此时按下 `WASD` 或 `上下左右`，会发现小球还 **不能** 移动，因为PlayerInput 只负责获取输入信息，但还是没有 *处理* 这些输入信息。
+此时按下 `WASD` 或 `上下左右`，会发现小球还 **不能** 移动，因为 PlayerInput 只负责获取输入信息，但还是没有 *处理* 这些输入信息。
 
 此时工程状态见：
  [xuejiaW/InputSystemSample at ed81... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/ed81be6f2efcf89c72f287240c9b56ea80a24094)
 
 
 
-### 附插件原生PlayerInput脚本（简略版）
+### 附插件原生 PlayerInput 脚本（简略版）
 
 插件原生脚本不可编辑，仅供查看和使用，我翻译了一下代码开头的注释：
 
@@ -97,9 +97,12 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 /*
 表示游戏中的一个独立玩家，包含一组该玩家独有的操作和一组配对的设备。
 PlayerInput 是输入系统功能的高级封装，旨在帮助快速设置新的输入系统。它负责 InputAction 的管理，并提供了一个自定义的 UI（需要 "Unity UI" 包）来帮助设置输入。
+
 该组件隐式支持本地多人游戏。每个 PlayerInput 实例代表一个独立的用户，拥有自己的设备和操作集。要协调玩家管理并促进诸如通过设备活动加入等机制，请使用 UnityEngine.InputSystem.PlayerInputManager。
+
 PlayerInput 通知脚本代码事件的方式由 notificationBehavior 决定。默认情况下，它设置为 UnityEngine.InputSystem.PlayerNotifications.SendMessages，这将使用GameObject.SendMessage(string,object) 向 PlayerInput 所在的 GameObject 发送消息。
-启用时，PlayerInput 将创建一个 <see cref="InputUser"/> 并将设备与该用户配对，这些设备随后专属于该玩家。设备集可以在实例化 PlayerInput 时通过 <see cref="Instantiate(GameObject,int,string,int,InputDevice[])"/> 或 <see cref="Instantiate(GameObject,int,string,int,InputDevice)"/> 显式控制。这也使得可以将同一设备分配给两个不同的玩家，例如用于分屏键盘游戏。
+
+启用时，PlayerInput 将创建一个 InputUser 并将设备与该用户配对，这些设备随后专属于该玩家。设备集可以在实例化 PlayerInput 时通过 Instantiate(GameObject,int,string,int,InputDevice[]) 或 Instantiate(GameObject,int,string,int,InputDevice)显式控制。这也使得可以将同一设备分配给两个不同的玩家，例如用于分屏键盘游戏。
 */
 //示例：
 var p1 = PlayerInput.Instantiate(playerPrefab,
@@ -107,14 +110,23 @@ var p1 = PlayerInput.Instantiate(playerPrefab,
 var p2 = PlayerInput.Instantiate(playerPrefab,
      controlScheme: "KeyboardRight", device: Keyboard.current);
 /*
-如果没有为 PlayerInput 指定特定设备，该组件将查找系统中存在的兼容设备并自动将它们与自己配对。如果 PlayerInput 的 <see cref="actions"/> 定义了控制方案，PlayerInput 将查找一个所有所需设备都可用且未与其他玩家配对的方案。它将首先尝试 <see cref="defaultControlScheme"/>（如果已设置），然后回退到按顺序尝试所有可用方案。一旦找到一个所有所需设备都可用的方案，PlayerInput 将把这些设备与自己配对并选择该方案。
-如果没有定义控制方案，PlayerInput 将尝试将尽可能多的未配对设备与自己绑定，只要这些设备与 <see cref="actions"/> 中的绑定匹配。这意味着，例如，如果有一个键盘和两个游戏手柄可用，并且 PlayerInput 启用时存在键盘和游戏手柄的绑定，所有三个设备都将与该玩家配对。
-请注意，当使用 <see cref="PlayerInputManager"/> 时，设备与玩家的配对由加入逻辑控制。在这种情况下，PlayerInput 将自动配对玩家加入时使用的设备。如果 <see cref="actions"/> 中存在控制方案，则选择与该设备兼容的第一个方案。如果需要其他设备，这些设备将从当前未配对的设备池中配对。
-设备配对可以随时通过手动控制配对来更改，使用 PlayerInput 分配的 <see cref="user"/> 的 <see cref="InputUser.PerformPairingWithDevice"/>（及相关方法），或者通过切换控制方案（例如使用 <see cref="SwitchCurrentControlScheme(string,InputDevice[])"/>），如果 PlayerInput 的 <see cref="actions"/> 中存在控制方案。
-当玩家失去与其配对的设备时（例如，当设备被拔出或断电时），<see cref="InputUser"/> 将发出 <see cref="InputUserChange.DeviceLost"/> 信号，该信号也会作为消息、<see cref="deviceLostEvent"/> 或 <see cref="onDeviceLost"/> 传递（取决于 <see cref="notificationBehavior"/>）。当设备重新连接时，<see cref="InputUser"/> 将发出 <see cref="InputUserChange.DeviceRegained"/> 信号，该信号也会作为消息、<see cref="deviceRegainedEvent"/> 或 <see cref="onDeviceRegained"/> 传递（取决于 <see cref="notificationBehavior"/>）。
-当游戏中只有一个活动的 PlayerInput 时，加入未启用（参见 <see cref="PlayerInputManager.joiningEnabled"/>），并且 <see cref="neverAutoSwitchControlSchemes"/> 未设置为 <c>true</c>，玩家的设备配对也会根据设备使用情况自动更新。
-如果 <see cref="actions"/> 中存在控制方案，那么如果使用了一个设备（不仅仅是插入设备，而是在非噪声、非合成控件上接收输入）且该设备与当前使用的方案不同的控制方案兼容，PlayerInput 将尝试切换到该控制方案。成功与否取决于该方案的所有设备要求是否从可用设备集中得到满足。如果控制方案发生变化，<see cref="InputUser"/> 会在 <see cref="InputUser.onChange"/> 上发出 <see cref="InputUserChange.ControlSchemeChanged"/> 信号。
-如果 <see cref="actions"/> 中不存在控制方案，PlayerInput 将自动将任何新可用的设备与自己配对，只要该设备有任何可用的绑定。
+如果没有为 PlayerInput 指定特定设备，该组件将查找系统中存在的兼容设备并自动将它们与自己配对。如果 PlayerInput 的 actions 定义了控制方案，PlayerInput 将查找一个所有所需设备都可用且未与其他玩家配对的方案。它将首先尝试 defaultControlScheme（如果已设置），然后回退到按顺序尝试所有可用方案。一旦找到一个所有所需设备都可用的方案，PlayerInput 将把这些设备与自己配对并选择该方案。
+
+如果没有定义控制方案，PlayerInput 将尝试将尽可能多的未配对设备与自己绑定，只要这些设备与 actions 中的绑定匹配。这意味着，例如，如果有一个键盘和两个游戏手柄可用，并且 PlayerInput 启用时存在键盘和游戏手柄的绑定，所有三个设备都将与该玩家配对。
+
+请注意，当使用 PlayerInputManager 时，设备与玩家的配对由加入逻辑控制。在这种情况下，PlayerInput 将自动配对玩家加入时使用的设备。如果 actions 中存在控制方案，则选择与该设备兼容的第一个方案。如果需要其他设备，这些设备将从当前未配对的设备池中配对。
+
+设备配对可以随时通过手动控制配对来更改，使用 PlayerInput 分配的 user 的 InputUser.PerformPairingWithDevice（及相关方法），或者通过切换控制方案（例如使用 SwitchCurrentControlScheme(string,InputDevice[])），如果 PlayerInput 的 actions 中存在控制方案。
+
+当玩家失去与其配对的设备时（例如，当设备被拔出或断电时），InputUser 将发出 InputUserChange.DeviceLost 信号，该信号也会作为消息、deviceLostEvent 或 onDeviceLost 传递（取决于 notificationBehavior）。
+
+当设备重新连接时，InputUser 将发出 InputUserChange.DeviceRegained 信号，该信号也会作为消息、deviceRegainedEvent 或 onDeviceRegained 传递（取决于 notificationBehavior）。
+
+当游戏中只有一个活动的 PlayerInput 时，加入未启用（参见 PlayerInputManager.joiningEnabled），并且 neverAutoSwitchControlSchemes 未设置为true，玩家的设备配对也会根据设备使用情况自动更新。
+
+如果 actions 中存在控制方案，那么如果使用了一个设备（不仅仅是插入设备，而是在非噪声、非合成控件上接收输入）且该设备与当前使用的方案不同的控制方案兼容，PlayerInput 将尝试切换到该控制方案。成功与否取决于该方案的所有设备要求是否从可用设备集中得到满足。如果控制方案发生变化，InputUser 会在 InputUser.onChange 上发出 InputUserChange.ControlSchemeChanged 信号。
+
+如果 actions 中不存在控制方案，PlayerInput 将自动将任何新可用的设备与自己配对，只要该设备有任何可用的绑定。
 如果多个 PlayerInput 处于活动状态，则上述两种行为将自动禁用。
 */
 //示例：
@@ -154,7 +166,7 @@ public class MyPlayerLogic : MonoBehaviour
      }
  }
 /*
-也可以使用 <see cref="InputAction"/> 的轮询 API（参见 <see cref="InputAction.triggered"/> 和 <see cref="InputAction.ReadValue{TValue}"/>）与 PlayerInput 结合使用。
+也可以使用 InputAction 的轮询 API（参见 InputAction.triggered 和 InputAction.ReadValue{TValue}）与 PlayerInput 结合使用。
 */
 //示例：
 using UnityEngine;
@@ -176,7 +188,7 @@ public class MyPlayerLogic : MonoBehaviour
          // 注意：我们不在 OnEnable 中执行此操作，因为 PlayerInput 本身在 OnEnable 中执行一些初始化工作。
          if (m_PlayerInput == null)
          {
-             m_PlayerInput = GetComponent&lt;PlayerInput&gt;();
+             m_PlayerInput = GetComponent<PlayerInput>();
              m_FireAction = m_PlayerInput.actions["fire"];
              m_LookAction = m_PlayerInput.actions["look"];
              m_MoveAction = m_PlayerInput.actions["move"];
@@ -185,9 +197,9 @@ public class MyPlayerLogic : MonoBehaviour
          if (m_FireAction.triggered)
              /* 开火逻辑... */;
 
-         var move = m_MoveAction.ReadValue&lt;Vector2&gt;();
-         var look = m_LookAction.ReadValue&lt;Vector2&gt;();
-         /* 根据 move&amp;look 更新变换... */
+         var move = m_MoveAction.ReadValue<Vector2>();
+         var look = m_LookAction.ReadValue<Vector2>();
+         /* 根据 move和look 更新变换... */
      }
  }
 // <seealso cref="UnityEngine.InputSystem.PlayerInputManager"/>
@@ -201,7 +213,7 @@ public const string DeviceRegainedMessage = "OnDeviceRegained";
 public const string ControlsChangedMessage = "OnControlsChanged";
 /// <summary>
 /// 玩家的输入是否处于激活状态。如果为 true，表示玩家正在接收输入。
-/// 要激活或停用输入，请使用 <see cref="ActivateInput"/> 或 <see cref="DeactivateInput"/>。
+/// 要激活或停用输入，请使用 ActivateInput 或 DeactivateInput。
 /// </summary>
 public bool inputIsActive => m_InputActive;
 public int playerIndex => m_PlayerIndex;
@@ -240,9 +252,9 @@ public TDevice GetDevice<TDevice>()
 }
 /// <summary>
 /// 通过启用当前操作映射来启用玩家的输入。
-/// 当 PlayerInput 组件启用时，输入会自动激活。然而，可以通过调用此方法在使用 <see cref="DeactivateInput"/> 停用输入后重新激活输入。
-/// 注意，激活输入只会激活当前操作映射（参见 <see cref="currentActionMap"/>）。
-/// 可以通过 <see cref="inputIsActive"/> 检查当前状态。
+/// 当 PlayerInput 组件启用时，输入会自动激活。然而，可以通过调用此方法在使用 DeactivateInput 停用输入后重新激活输入。
+/// 注意，激活输入只会激活当前操作映射（参见 currentActionMap）。
+/// 可以通过 inputIsActive 检查当前状态。
 /// </summary>
 /// <example>
 /// PlayerInput.all[0].ActivateInput();
@@ -261,12 +273,10 @@ public void ActivateInput()
 /// <summary>
 /// 通过禁用当前操作映射来禁用玩家的输入。
 /// 当 PlayerInput 组件启用时，输入会自动激活。此方法可用于手动停用输入。
-/// 注意，停用输入只会禁用当前操作映射（参见 <see cref="currentActionMap"/>）。
+/// 注意，停用输入只会禁用当前操作映射（参见 "currentActionMap"）。
 /// </summary>
 /// <example>
-/// <code>
 /// PlayerInput.all[0].DeactivateInput();
-/// </code>
 /// </example>
 /// <seealso cref="ActivateInput"/>
 /// <seealso cref="inputIsActive"/>
@@ -278,19 +288,15 @@ public void DeactivateInput()
 
 /// <summary>
 /// 将当前控制方案切换为适合给定设备集的方案。
+/// 玩家当前配对的设备（参见 devices）将被取消配对。
 /// </summary>
 /// <param name="devices">输入设备列表。注意，如果任何设备已经与其他玩家配对，则该设备将同时与两个玩家配对。</param>
-/// <returns>如果切换成功则返回 true，否则返回 false。例如，如果 <see cref="actions"/> 没有适合给定设备集的控制方案，则可能返回 false。</returns>
-/// <exception cref="ArgumentNullException"><paramref name="devices"/> 为 <c>null</c>。</exception>
-/// <exception cref="InvalidOperationException"><see cref="actions"/> 未分配。</exception>
-/// <remarks>
-/// 玩家当前配对的设备（参见 <see cref="devices"/>）将被取消配对。
-/// </remarks>
+/// <returns>如果切换成功则返回 true，否则返回 false。例如，如果 actions 没有适合给定设备集的控制方案，则可能返回 false。</returns>
+/// <exception cref="ArgumentNullException"><paramref name="devices"/> 为 null。</exception>
+/// <exception cref="InvalidOperationException">actions 未分配。</exception>
 /// <example>
-/// <code>
 /// // 将第一个玩家切换到键盘和鼠标。
 /// PlayerInput.all[0].SwitchCurrentControlScheme(Keyboard.current, Mouse.current);
-/// </code>
 /// </example>
 /// <seealso cref="currentControlScheme"/>
 /// <seealso cref="InputActionAsset.controlSchemes"/>
@@ -315,15 +321,13 @@ public bool SwitchCurrentControlScheme(params InputDevice[] devices)
 /// <summary>
 /// 将玩家切换到使用给定的控制方案和指定的设备集。
 /// 此方法可用于显式强制组合控制方案和特定设备集。
-/// 玩家当前配对的设备（参见 <see cref="devices"/>）将被取消配对。
+/// 玩家当前配对的设备（参见 devices）将被取消配对。
 /// </summary>
 /// <example>
-/// <code>
 /// // 将玩家 1 切换到 "Gamepad" 控制方案，并使用第二个游戏手柄。
 /// PlayerInput.all[0].SwitchCurrentControlScheme(
 ///     "Gamepad",
 ///     Gamepad.all[1]);
-/// </code>
 /// </example>
 /// <seealso cref="InputActionAsset.controlSchemes"/>
 /// <seealso cref="currentControlScheme"/>
@@ -382,7 +386,7 @@ public void SwitchCurrentActionMap(string mapNameOrId)
 /// 返回具有指定玩家索引的玩家。
 /// </summary>
 /// <param name="playerIndex">活动玩家列表中的索引。</param>
-/// <returns>具有给定玩家索引的玩家，如果不存在则返回 <c>null</c>。</returns>
+/// <returns>具有给定玩家索引的玩家，如果不存在则返回 null。</returns>
 /// <example>
 /// PlayerInput player = PlayerInput.GetPlayerByIndex(0);
 /// </example>
@@ -419,17 +423,14 @@ public static PlayerInput FindFirstPairedToDevice(InputDevice device)
 /// 实例化一个玩家对象，设置并启用其输入。
 /// </summary>
 /// <param name="prefab">要克隆的预制体。必须在层次结构中的某处包含一个 PlayerInput 组件。</param>
-/// <param name="playerIndex">要分配给玩家的玩家索引。参见 <see cref="PlayerInput.playerIndex"/>。
-/// 默认情况下，将根据 <see cref="all"/> 中的玩家数量自动分配。</param>
+/// <param name="playerIndex">要分配给玩家的玩家索引。参见PlayerInput.playerIndex。
+/// 默认情况下，将根据 all 中的玩家数量自动分配。</param>
 /// <param name="controlScheme">要激活的控制方案。</param>
 /// <param name="splitScreenIndex">要在哪个分屏上实例化。</param>
-/// <param name="pairWithDevice">要与用户配对的设备。默认情况下，此值为 <c>null</c>，这意味着
-/// PlayerInput 将根据控制方案（如果有）自动与可用且未配对的设备配对，或者根据 <see cref="actions"/> 中的绑定（如果没有控制方案）进行配对。</param>
+/// <param name="pairWithDevice">要与用户配对的设备。默认情况下，此值为 null，这意味着
+/// PlayerInput 将根据控制方案（如果有）自动与可用且未配对的设备配对，或者根据 actions 中的绑定（如果没有控制方案）进行配对。</param>
 /// <returns>新创建的 PlayerInput 组件。</returns>
-/// <exception cref="ArgumentNullException"><paramref name="prefab"/> 为 <c>null</c>。</exception>
-/// <remarks>
-/// 实例化一个玩家对象，设置并启用其输入。
-/// </remarks>
+/// <exception cref="ArgumentNullException"><paramref name="prefab"/> 为 null。</exception>
 /// <example>
 /// var p1 = PlayerInput.Instantiate(playerPrefab, controlScheme: "KeyboardLeft", device: Keyboard.current);
 /// </example>
@@ -448,22 +449,18 @@ public static PlayerInput Instantiate(GameObject prefab, int playerIndex = -1, s
 }
 
 /// <summary>
-/// <see cref="Object.Instantiate(Object)"/> 的封装方法，允许实例化一个玩家预制体并自动将一个或多个特定设备与新创建的玩家配对。
+/// Object.Instantiate(Object) 的封装方法，允许实例化一个玩家预制体并自动将一个或多个特定设备与新创建的玩家配对。
+/// 注意，与 Object.Instantiate(Object) 不同，此方法将始终激活生成的 GameObject 及其组件。
 /// </summary>
-/// <param name="prefab">一个包含 <see cref="PlayerInput"/> 组件的玩家预制体。</param>
+/// <param name="prefab">一个包含 PlayerInput 组件的玩家预制体。</param>
 /// <param name="playerIndex">要实例化的玩家索引。</param>
 /// <param name="controlScheme">要激活的控制方案。</param>
 /// <param name="splitScreenIndex">要在哪个分屏上实例化。</param>
 /// <param name="pairWithDevices">限制配对的设备。</param>
 /// <returns>新创建的 PlayerInput 组件。</returns>
-/// <remarks>
-/// 注意，与 <see cref="Object.Instantiate(Object)"/> 不同，此方法将始终激活生成的 <see cref="GameObject"/> 及其组件。
-/// </remarks>
 /// <example>
-/// <code>
 /// var devices = new InputDevice[] { Gamepad.all[0], Gamepad.all[1] };
 /// var p1 = PlayerInput.Instantiate(playerPrefab, controlScheme: "Gamepad", pairWithDevices: devices);
-/// </code>
 /// </example>
 public static PlayerInput Instantiate(GameObject prefab, int playerIndex = -1, string controlScheme = null,
     int splitScreenIndex = -1, params InputDevice[] pairWithDevices)
@@ -579,7 +576,7 @@ private void CacheMessageNames()
     }
 }
 /// <summary>
-/// Initialize <see cref="user"/> and <see cref="devices"/>.
+/// Initialize user and devices.
 /// </summary>
 private void AssignUserAndDevices(){}//内部略
 
@@ -861,29 +858,29 @@ public class ActionEvent : UnityEvent<InputAction.CallbackContext>
     }
 }
 /// <summary>
-/// 当与 <see cref="PlayerInput"/> 配对的 <see cref="InputDevice"/> 断开连接时触发的事件。
-/// 可以通过 <see cref="deviceLostEvent"/> 设置设备丢失事件。
+/// 当与 PlayerInput 配对的 InputDevice 断开连接时触发的事件。
+/// 可以通过 deviceLostEvent 设置设备丢失事件。
 /// </summary>
 [Serializable]
 public class DeviceLostEvent : UnityEvent<PlayerInput>{}
 
 /// <summary>
-/// 当 <see cref="PlayerInput"/> 重新获得之前丢失的 <see cref="InputDevice"/> 时触发的事件。
-/// 可以通过 <see cref="deviceRegainedEvent"/> 设置设备重新获得事件。
+/// 当 PlayerInput 重新获得之前丢失的 InputDevice 时触发的事件。
+/// 可以通过 deviceRegainedEvent 设置设备重新获得事件。
 /// </summary>
 [Serializable]
 public class DeviceRegainedEvent : UnityEvent<PlayerInput>{}
 
 /// <summary>
-/// 当 <see cref="PlayerInput"/> 使用的控件集发生变化时触发的事件。
-/// 可以通过 <see cref="controlsChangedEvent"/> 设置控件变化事件。
+/// 当 PlayerInput 使用的控件集发生变化时触发的事件。
+/// 可以通过 controlsChangedEvent 设置控件变化事件。
 /// </summary>
 [Serializable]
 public class ControlsChangedEvent : UnityEvent<PlayerInput>{}
 ```
 
 
-可以看到代码量很大，所以尽量使用PlayerInput吧，功能强大不是轻易能用自定义代码取代的。
+可以看到代码量很大，所以尽量使用 PlayerInput 吧，功能强大不是轻易能用自定义代码取代的。
 
 
 
@@ -973,7 +970,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-也可以将键盘上的按键通过 组合绑定（Composite Bindings） 至 `Move` Input Action，如下所示，其逻辑为使用四个按键分别表示 `Vector2` 四个方向（+x,−x,+y,−y+x,-x,+y,-y+x,−x,+y,−y）：
+也可以将键盘上的按键通过 组合绑定（Composite Bindings） 至 `Move` Input Action，如下所示，其逻辑为使用四个按键分别表示 `Vector2` 四个方向（+x, −x,+y, −y+x,-x,+y,-y+x, −x,+y, −y）：
 ![四按键组合绑定](./img/2023-11-17-16-17-41.jpg)
 
 ↑↑ *四按键组合绑定* ↑↑
@@ -996,7 +993,7 @@ public class PlayerController : MonoBehaviour
 
 此时运行游戏，可以发现通过手柄的左摇杆和 `HJKL` 都可以控制小球的移动，而 `WASD` 则不行了。
 
-这是因为 `PlayerController` 脚本监听的 `Motion` 事件在 `BallControls.inputactions` 中也存在，因此我们定义的左摇杆和 `HJKL` 四个按键都能响应，即使不修改 `PlayerController` 也可以正常运行。而原 `PlayerInput.inputactions` 中的 `WASD` 我们并没有绑定，所以无法相应。
+这是因为 `PlayerController` 脚本监听的 `Motion` 事件在 `BallControls.inputactions` 中也存在，因此我们定义的左摇杆和 `HJKL` 四个按键都能响应，即使不修改 `PlayerController` 也可以正常运行。而原 `PlayerInput.inputactions` 中的 `WASD` 我们并没有绑定，所以无法响应。
 
 此时的工程状态见：
  [xuejiaW/InputSystemSample at 8d9... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/8d994e47fbf7c766c87aa62ce517e7e5bdda031b)
@@ -1005,7 +1002,7 @@ public class PlayerController : MonoBehaviour
 
 ### 创建自定义 Player Input
 
-PlayerInput是内置组件，只管解析inputactions文件以及接收输入信号，不管控制移动等行为。下面将演示如何一步一步用自定义脚本替代它。
+PlayerInput 是内置组件，只管解析 inputactions 文件以及接收输入信号，不管控制移动等行为。下面将演示如何一步一步用自定义脚本替代它。
 
 #### 手动解析 Actions Asset
 
@@ -1061,7 +1058,7 @@ public class BallController : MonoBehaviour
 
 另外脚本中通过 [InputActionMap.FindAction](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.InputActionMap.html#UnityEngine_InputSystem_InputActionMap_FindAction_System_String_System_Boolean_) 找寻之前创建的 `Buttons` 和 `Move` Action，并监听了 Input Action 的 `performed` 事件，触发对应的回调函数 `OnButton` 和 `OnMove`。
 
-**取代PlayerInput**
+**取代 PlayerInput**
 
 至此 `BallController` 脚本已经完全实现了之前 `PlayerInput` + `PlayerController` 的功能，因此在 `Player` 游戏物体上仅需要 `BallController` 脚本即可，注意要将之前创建的 `BallControls.inputactions` 挂载至脚本中：
 ![img](./img/2023-11-17-17-30-55.jpg)
@@ -1085,7 +1082,7 @@ public class BallController : MonoBehaviour
 
 ↑↑ *Automated Create Script* ↑↑
 
-自动创建的BallControls代码如下：
+自动创建的 BallControls 代码如下：
 
 ```csharp
 //------------------------------------------------------------------------------
@@ -1234,12 +1231,12 @@ public partial class @BallControls: IInputActionCollection2, IDisposable
 
 ```c#
 using UnityEngine;
-
-public class BallController_AutoScripts : MonoBehaviour
+//不推荐另起名字，既然自动生成的代码是partial class，那么自己写的应该也是partial class
+public class BallController_AutoScripts : MonoBehaviour//最好改成public partial class BallControls
 {
     [SerializeField] private float m_Speed = 10;
 
-    private BallControls m_Controls;
+    private BallControls m_Controls;//用partial class就不需要再记这个
 
     private Rigidbody m_Rb;
     private Vector2 m_Move;
@@ -1283,15 +1280,15 @@ public class BallController_AutoScripts : MonoBehaviour
 
 
 
-# 摘抄：基础教程——Unity官方开发者社区
+# 摘抄：基础教程——Unity 官方开发者社区
 
-随着Unity的不断发展，开发者们对Unity的项目输入系统要求也越来越高，经常会有项目在做多平台适配和跨平台移植时对变更输入系统而感到烦恼。而InputSystem这款插件正是Unity官方为了解决广大开发者而推出的一款新的输入方式。
+随着 Unity 的不断发展，开发者们对 Unity 的项目输入系统要求也越来越高，经常会有项目在做多平台适配和跨平台移植时对变更输入系统而感到烦恼。而 InputSystem 这款插件正是 Unity 官方为了解决广大开发者而推出的一款新的输入方式。
 
 ## 基础概念
 
 ### 前言
 
-相较于旧版的InputManager，能更好**应对跨平台项目**。  [附视频教程](https://blog.csdn.net/JavaD0g/article/details/131027152)
+相较于旧版的 InputManager，能更好 **应对跨平台项目**。  [附视频教程](https://blog.csdn.net/JavaD0g/article/details/131027152)
 
 ## 基础操作
 
@@ -1299,11 +1296,11 @@ public class BallController_AutoScripts : MonoBehaviour
 
 `Package Manager` 的 `Unity Registry` 分类下，搜索 `InputSystem` 插件并安装。
 
-### 如何创建InputActions
+### 如何创建 InputActions
 
-安装插件后，如果发现  `Project右键 > Creater > InputActions`，证明插件安装成功，点击创建扩展名为inputactions的文件，双击可打开编辑。
+安装插件后，如果发现  `Project右键 > Creater > InputActions`，证明插件安装成功，点击创建扩展名为 inputactions 的文件，双击可打开编辑。
 
-### InputActions概念及结构关系
+### InputActions 概念及结构关系
 
 结构关系为 ：
 
@@ -1315,11 +1312,11 @@ public class BallController_AutoScripts : MonoBehaviour
 
 ### ActionProperties 细则说明
 
-在Actions中也有许多参数，其中ActionType则是我们最常用到。其概念为我们该动作输入映射的类型，有以下三种类型:
+在 Actions 中也有许多参数，其中 ActionType 则是我们最常用到。其概念为我们该动作输入映射的类型，有以下三种类型:
 
-- Button 默认设置，包括按钮或者按键触发的一次性动作，适合攻击或者点击UI
+- Button 默认设置，包括按钮或者按键触发的一次性动作，适合攻击或者点击 UI
 - Value 提供一种连续状态变化事件，适合角色移动。如果设置了多个输入，就会切换到最主要的一个。
-- Pass Through 和 Value 很相似，但它不会像Value一样（如果有多个输入时，会同时参考这些输入值）
+- Pass Through 和 Value 很相似，但它不会像 Value 一样（如果有多个输入时，会同时参考这些输入值）
 
  ![img](./img/013f975b-0ba0-4c96-a9f4-36c68fa1d3fa_image.jpg)
 
@@ -1329,19 +1326,19 @@ public class BallController_AutoScripts : MonoBehaviour
 
 ## 动作映射调用
 
-### 官方PlayerInput组件调用
+### 官方 PlayerInput 组件调用
 
-我们需要在场景中在我们需要的对象上添加PlayerInput组件，填入我们刚刚创建好的InputActions，选择想要使用的ActionMap输入映射集，再选择 Behavior 调用方式（有四种方式）
+我们需要在场景中在我们需要的对象上添加 PlayerInput 组件，填入我们刚刚创建好的 InputActions，选择想要使用的 ActionMap 输入映射集，再选择 Behavior 调用方式（有四种方式）
 
 ![](./img/9e7b10fb-869f-4429-9b84-5084ceea053f_image.jpg)
 
 #### Send Message 方式
 
-使用Send Message时，每次的触发会调用一个对应的函数（就是在对应的Actions名前面加个On-）正如下图所示在我们PlayerInput组件当中我们将BehaviorType选择Send Message后我们的输入参数将会通过Send Message方法发送到我们对应生成的函数中。比如Input Action 名为 Jump，那么对应的函数即为 OnJump
+使用 Send Message 时，每次的触发会调用一个对应的函数（就是在对应的 Actions 名前面加个 On-）正如下图所示在我们 PlayerInput 组件当中我们将 BehaviorType 选择 Send Message 后我们的输入参数将会通过 Send Message 方法发送到我们对应生成的函数中。比如 Input Action 名为 Jump，那么对应的函数即为 OnJump
 
 ![img](./img/2704d399-a15e-4bc5-a0d7-745919379f81_image.jpg)
 
-获取输入时的数据，我们可以写一个输入控制类，在该类中调用我们上述说到的Actions生成函数 可以通过isPressed获取设置了ActionType为Button类型的动作是否点击 可以通过Get 获取设置了ActionType为Value对应类型的数据
+获取输入时的数据，我们可以写一个输入控制类，在该类中调用我们上述说到的 Actions 生成函数 可以通过 isPressed 获取设置了 ActionType 为 Button 类型的动作是否点击 可以通过 Get 获取设置了 ActionType 为 Value 对应类型的数据
 
 ```csharp
 public class PlayerController : MonoBehaviour
@@ -1370,7 +1367,7 @@ Broadcast Messages 与 send Message 很相似（但目前我还没有搞懂具�
 
 #### Invoke Unity Events 方式
 
-区别于上述两种BehaviorType不同的是，在我们选择该方法后会出现Events的选项，我们需要自己写好动作方法后将其挂载到我们对应的ActionMaps中对应的ActionEvents上才能触发对应的动作事件。
+区别于上述两种 BehaviorType 不同的是，在我们选择该方法后会出现 Events 的选项，我们需要自己写好动作方法后将其挂载到我们对应的 ActionMaps 中对应的 ActionEvents 上才能触发对应的动作事件。
 
  ![img](./img/e1734733-f4a9-4756-86af-b7e4e50ded8f_image.jpg)
 
@@ -1389,7 +1386,7 @@ public class PlayerController : MonoBehaviour
 
 #### Invoke CSharp Events 方式
 
-与Invoke Unity Events方式其实大致相同，需要我们自己先写好一个带有InputAction.CallbackContext类型入参的动作方法，不同的是我们挂载方式变成了脚本事件加载而不是在Unity界面上的可视化挂载
+与 Invoke Unity Events 方式其实大致相同，需要我们自己先写好一个带有 InputAction.CallbackContext 类型入参的动作方法，不同的是我们挂载方式变成了脚本事件加载而不是在 Unity 界面上的可视化挂载
 
 ```csharp
 using UnityEngine;
@@ -1412,13 +1409,13 @@ public class CSharpEvent : MonoBehaviour
 }
 ```
 
-提示：在我自己尝试下发现上述四种的官方组件调用方式都只在输入发生时触发时发送一次输入返回，并不会持续发送，**所以不适合做移动，只适合做跳跃或UI点击**。
+提示：在我自己尝试下发现上述四种的官方组件调用方式都只在输入发生时触发时发送一次输入返回，并不会持续发送，**所以不适合做移动，只适合做跳跃或 UI 点击**。
 
-### 自定义脚本代替PlayerInput
+### 自定义脚本代替 PlayerInput
 
-基于上述提示，所以官方PlayerInput组件调用动作事件函数时并不能满足我们所有的场景需求（也可能是我在持续返回信号上没找到解决方案），所以我们还需要学习一下不借助官方PlayerInput组件的事件调用。我们直接在我们的脚本中调用InputSystem中的动作事件。
+基于上述提示，所以官方 PlayerInput 组件调用动作事件函数时并不能满足我们所有的场景需求（也可能是我在持续返回信号上没找到解决方案），所以我们还需要学习一下不借助官方 PlayerInput 组件的事件调用。我们直接在我们的脚本中调用 InputSystem 中的动作事件。
 
-在我们使用脚本调用之前我们需要做一件事情，在我们创建好的InputActions属性面板中找到Generate C# Class并勾选,随后点击Apply生成对应的脚本，之后我们就可以在我们自己写的PlayerController 类中调用该脚本了
+在我们使用脚本调用之前我们需要做一件事情，在我们创建好的 InputActions 属性面板中找到 Generate C# Class 并勾选, 随后点击 Apply 生成对应的脚本，之后我们就可以在我们自己写的 PlayerController 类中调用该脚本了
 
  ![img](./img/51f7753c-7a53-4257-8cda-2fdf8a9e4654_image.jpg)
 
@@ -1463,32 +1460,32 @@ public class CSharpEvent : MonoBehaviour
 
 ## 引用文献
 
-- [Unity InputSystem官方使用手册](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.4/manual/Installation.html)
+- [Unity InputSystem 官方使用手册](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.4/manual/Installation.html)
 - [Unity input system 使用记录（实例版）- 作者 : xkxsxkx](https://blog.csdn.net/qq_38836770/article/details/125240140)
 - [Unity New Input System 作者 : 小虫儿飞到花丛中](https://blog.csdn.net/weixin_44542069/article/details/124122792)
-- [B站视频版教学](https://space.bilibili.com/347855339/channel/collectiondetail?sid=1434940)
-- [InputSystem进阶：实现角色移动跳跃](https://blog.csdn.net/JavaD0g/article/details/131217718)
+- [B 站视频版教学](https://space.bilibili.com/347855339/channel/collectiondetail?sid=1434940)
+- [InputSystem 进阶：实现角色移动跳跃](https://blog.csdn.net/JavaD0g/article/details/131217718)
 
 
 
 # Unity 6 中 `.inputsettings` 文件的行为
 
-我用Unity6新工程验证了一下，.inputsstings文件依然有用，但不是初始自动生成的，初始就是一个inputactions文件。unity会检测项目内所有的.inputsettings文件，如果一个都没检测到，playerSettings会显示一个按钮，点击按钮会创建第一个inputsettings文件。当我手动复制出多个inputsettings文件，那些后出现的inputsettings文件的inspector属性面板会提示当前未在使用，可以点击切换成当前使用的。
+我用 Unity6 新工程验证了一下，.inputsstings 文件依然有用，但不是初始自动生成的，初始就是一个 inputactions 文件。unity 会检测项目内所有的.inputsettings 文件，如果一个都没检测到，playerSettings 会显示一个按钮，点击按钮会创建第一个 inputsettings 文件。当我手动复制出多个 inputsettings 文件，那些后出现的 inputsettings 文件的 inspector 属性面板会提示当前未在使用，可以点击切换成当前使用的。
 
 ------
 
-## 如何使用多个`.inputsettings`文件
+## 如何使用多个 `.inputsettings` 文件
 
-根据验证结果，以下是如何使用多个`.inputsettings`文件的建议：
+根据验证结果，以下是如何使用多个 `.inputsettings` 文件的建议：
 
 1. **创建多个配置文件**：
 
-   - 复制现有的`.inputsettings`文件，重命名并根据需要修改配置。
-   - 例如，可以创建一个`PC.inputsettings`和一个`Mobile.inputsettings`。
+   - 复制现有的 `.inputsettings` 文件，重命名并根据需要修改配置。
+   - 例如，可以创建一个 `PC.inputsettings` 和一个 `Mobile.inputsettings`。
 
 2. **切换配置文件**：
 
-   - 在Unity Editor中，选择需要使用的`.inputsettings`文件，然后在Inspector面板中点击“切换”按钮。
+   - 在 Unity Editor 中，选择需要使用的 `.inputsettings` 文件，然后在 Inspector 面板中点击“切换”按钮。
 
    - 在运行时，也可以通过代码动态切换：
 
@@ -1498,12 +1495,168 @@ public class CSharpEvent : MonoBehaviour
 
 3. **为不同平台配置**：
 
-   - 在`Player Settings`中，结合`Platform Settings`和不同的`.inputsettings`文件，为不同平台定制输入行为。
+   - 在 `Player Settings` 中，结合 `Platform Settings` 和不同的 `.inputsettings` 文件，为不同平台定制输入行为。
 
 ------
 
 ## 总结
 
-- Unity 6中，`.inputsettings`文件仍然有用，但不会在初始状态下自动生成。
-- 你可以手动创建多个`.inputsettings`文件，并通过Inspector面板或代码切换使用。
+- Unity 6 中，`.inputsettings` 文件仍然有用，但不会在初始状态下自动生成。
+- 你可以手动创建多个 `.inputsettings` 文件，并通过 Inspector 面板或代码切换使用。
 - 这种设计提供了更高的灵活性和可管理性，特别适合需要多套输入配置的项目。
+
+
+
+# 关于我的 Dance Club 游戏
+
+如果游戏有两种状态，状态 1 是控制角色移动，WASD 是位移;状态 2 是跳舞，WASD 不再控制位移，而是和 GHJK 键一起控制跳舞动作，该怎么设计？
+
+可以通过两个 `ActionMap` 来分别处理角色移动和跳舞状态。并且使用两个不同的 `ActionMap` 可以确保在跳舞时按下 `WASD` 不会触发角色移动。这是因为 `ActionMap` 是独立的输入上下文，切换 `ActionMap` 后，只有当前激活的 `ActionMap` 中的输入绑定会生效。以下是具体步骤：
+
+## 创建与定义ActionMap
+
+1. 在 Unity 中创建一个 `Input Action Asset`，并定义两个 `ActionMap`：`Movement` 和 `Dance`。
+2. 定义 ActionMap:
+   - **Movement ActionMap**:
+     - 添加一个 `Move` Action，绑定 `WASD` 键，用于控制角色移动。
+   - **Dance ActionMap**:
+     - 添加多个 Action，如 `DanceMove1`、`DanceMove2` 等，分别绑定 `WASD` 和 `GHJK` 键，用于控制跳舞动作。
+
+## 编写脚本切换 ActionMap
+
+在脚本中根据游戏状态切换 `ActionMap`：
+
+```c#
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public PlayerInput playerInput;
+
+    private void Start()
+    {
+        // 初始状态为Movement
+        SwitchToMovement();
+    }
+
+    public void SwitchToMovement()
+    {
+        playerInput.SwitchCurrentActionMap("Movement");
+    }
+
+    public void SwitchToDance()
+    {
+        playerInput.SwitchCurrentActionMap("Dance");
+    }
+
+    private void OnMove(InputValue value)
+    {
+        // 处理移动逻辑
+        Vector2 moveInput = value.Get<Vector2>();
+        // 移动角色
+    }
+
+    private void OnDanceMove1(InputValue value)
+    {
+        // 处理跳舞动作1
+    }
+
+    private void OnDanceMove2(InputValue value)
+    {
+        // 处理跳舞动作2
+    }
+}
+```
+
+## 绑定输入事件
+
+在 `Input Action Asset` 中，将 `Movement` ActionMap 的 `Move` Action 绑定到 `OnMove` 方法，将 `Dance` ActionMap 的 `DanceMove1` 和 `DanceMove2` Action 分别绑定到 `OnDanceMove1` 和 `OnDanceMove2` 方法。
+
+## 切换状态
+
+在需要切换状态时调用 `SwitchToMovement` 或 `SwitchToDance` 方法。
+
+```c#
+// 切换到跳舞状态
+playerController.SwitchToDance();
+
+// 切换回移动状态
+playerController.SwitchToMovement();
+```
+
+## 总结
+
+通过两个 `ActionMap` 分别处理移动和跳舞状态，可以确保输入逻辑清晰且互不干扰。
+
+
+
+## ActionMap互斥性
+
+- 当你切换到 `Dance` ActionMap 时，`Movement` ActionMap 中的 `WASD` 绑定会被禁用，只有 `Dance` ActionMap 中的 `WASD` 绑定会生效。
+- 同理，当你切换回 `Movement` ActionMap 时，`Dance` ActionMap 中的 `WASD` 绑定会被禁用，只有 `Movement` ActionMap 中的 `WASD` 绑定会生效。
+
+### 示例代码验证
+
+以下是一个简单的验证脚本，确保在跳舞时按下 `WASD` 不会触发移动逻辑：
+
+```c#
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public PlayerInput playerInput;
+
+    private void Start()
+    {
+        // 初始状态为Movement
+        SwitchToMovement();
+    }
+
+    public void SwitchToMovement()
+    {
+        playerInput.SwitchCurrentActionMap("Movement");
+        Debug.Log("切换到Movement状态");
+    }
+
+    public void SwitchToDance()
+    {
+        playerInput.SwitchCurrentActionMap("Dance");
+        Debug.Log("切换到Dance状态");
+    }
+
+    private void OnMove(InputValue value)
+    {
+        // 处理移动逻辑
+        Vector2 moveInput = value.Get<Vector2>();
+        Debug.Log($"移动输入: {moveInput}");
+    }
+
+    private void OnDanceMove1(InputValue value)
+    {
+        // 处理跳舞动作1
+        Debug.Log("触发跳舞动作1");
+    }
+
+    private void OnDanceMove2(InputValue value)
+    {
+        // 处理跳舞动作2
+        Debug.Log("触发跳舞动作2");
+    }
+}
+```
+
+### 测试步骤
+
+1. 在 Unity 中创建一个 `Input Action Asset`，定义两个 `ActionMap`：`Movement` 和 `Dance`。
+   - `Movement` ActionMap 中，添加一个 `Move` Action，绑定 `WASD` 键。
+   - `Dance` ActionMap 中，添加两个 Action：`DanceMove1`（绑定 `W` 键）和 `DanceMove2`（绑定 `A` 键）。
+2. 将 `PlayerController` 脚本挂载到游戏对象上，并将 `PlayerInput` 组件绑定到该脚本。
+3. 运行游戏，初始状态为 `Movement`，按下 `WASD` 会触发 `OnMove` 方法，输出移动输入。
+4. 调用 `SwitchToDance` 方法切换到跳舞状态，按下 `W` 键会触发 `OnDanceMove1` 方法，按下 `A` 键会触发 `OnDanceMove2` 方法，而不会触发 `OnMove` 方法。
+5. 调用 `SwitchToMovement` 方法切换回移动状态，按下 `WASD` 会重新触发 `OnMove` 方法。
+
+### 总结
+
+通过切换 `ActionMap`，可以确保在跳舞时按下 `WASD` 不会触发角色移动逻辑。这是因为 `ActionMap` 的切换会完全隔离不同状态下的输入绑定，确保只有当前激活的 `ActionMap` 中的输入会生效。
