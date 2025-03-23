@@ -1,9 +1,11 @@
-# 先看这些文章
+# 参考了这些链接
 
 - [【推荐先看】Unity Input System Step-By-Step 最简教程 | 三叔的数字花园](https://tuncle.blog/input_system_minimum_tutorial/index.html)
 - [基础教程——Unity 官方开发者社区](https://developer.unity.cn/projects/64ce58b4edbc2a10dd1e49b8)
 - [Quickstart Guide | Input System | 1.10.0 (unity3d.com)](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.10/manual/QuickStartGuide.html)
 - [更好上手的 Unity Input System 教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1VCNdeSER3/)
+
+在阅读了以上链接的文章、视频后，结合我目前用的新版Unity6，我将文章编辑如下：
 
 # 摘抄：Unity Input System Step-By-Step 最简教程
 
@@ -16,7 +18,7 @@ Unity 有内建的 `Input Manager` 机制，这一套机制存在了非常久的
 `Input System` 是 Unity 为了解决 `Input Manager` 的上述问题，提供的高可拓展性，高自由配置的新输入解决方案。
 
 对于新工程，Unity 官方都推荐使用 `Input System` 作为输入的解决方案，但 `Input Manager` 并不会短期内被废弃，因为历史包袱过重 。
-Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f1 + Input System 1.7 编写
+Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f1 + Input System 1.7 编写**（我在摘抄的同时已按照新的Unity6版本做了校正）**
 
 
 
@@ -33,7 +35,7 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 
 至此 Input System 已经被正确安装。
 
-为方便后续的调试，Demo 工程中预先引入了 URP 和一个最简的测试场景，此时的工程的见：
+为方便后续的调试，Demo 工程中预先引入了 URP 和一个最简的测试场景，此时的工程的见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at 7d04... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/7d041a5604c71096b0147cd0ae672557eee517c8)
 
 
@@ -57,7 +59,7 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 > 你可以随意修改 `InputSystem.inputsettings` 的位置，并不要求该文件必须在工程根目录下。
 >
 
-此时的工程状态见：
+此时的工程状态见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at 62a... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/62aff15fcf5c3479e5a3073af7646a6c2775e043)
 
 
@@ -84,7 +86,7 @@ Input System 依赖 Unity 2019.1 及以上版本，以下基于 Unity 2022.3.15f
 
 此时按下 `WASD` 或 `上下左右`，会发现小球还 **不能** 移动，因为 PlayerInput 只负责获取输入信息，但还是没有 *处理* 这些输入信息。
 
-此时工程状态见：
+此时工程状态见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at ed81... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/ed81be6f2efcf89c72f287240c9b56ea80a24094)
 
 
@@ -151,13 +153,13 @@ public class MyPlayerLogic : MonoBehaviour
      // 'Move' 输入操作已触发。
      public void OnMove(InputValue value)
      {
-         m_Move = value.Get&lt;Vector2&gt;();
+         m_Move = value.Get<Vector2>();
      }
 
      // 'Look' 输入操作已触发。
      public void OnLook(InputValue value)
      {
-         m_Look = value.Get&lt;Vector2&gt;();
+         m_Look = value.Get<Vector2>();
      }
 
      public void OnUpdate()
@@ -205,7 +207,7 @@ public class MyPlayerLogic : MonoBehaviour
 // <seealso cref="UnityEngine.InputSystem.PlayerInputManager"/>
 ```
 
-代码主体部分也做了翻译和缩略（为了压缩篇幅，部分逻辑这里就不列出了）：
+代码主体部分也做了翻译和缩略（为了压缩篇幅，部分逻辑这里就不列出了，不过还是太长，也可以先跳过这段代码不看）：
 
 ```csharp
 public const string DeviceLostMessage = "OnDeviceLost";
@@ -929,7 +931,7 @@ public class PlayerController : MonoBehaviour
 
 此时小球就可以通过键盘的 `WASD` 和 `上下左右` 移动。
 
-此时的工程状态见：
+此时的工程状态见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at 9cb75b9a8719cc8e695ac32ad786adcc007494d8 (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/9cb75b9a8719cc8e695ac32ad786adcc007494d8)
 
 
@@ -995,12 +997,12 @@ public class PlayerController : MonoBehaviour
 
 这是因为 `PlayerController` 脚本监听的 `Motion` 事件在 `BallControls.inputactions` 中也存在，因此我们定义的左摇杆和 `HJKL` 四个按键都能响应，即使不修改 `PlayerController` 也可以正常运行。而原 `PlayerInput.inputactions` 中的 `WASD` 我们并没有绑定，所以无法响应。
 
-此时的工程状态见：
+此时的工程状态见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at 8d9... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/8d994e47fbf7c766c87aa62ce517e7e5bdda031b)
 
 
 
-### 创建自定义 Player Input
+### PlayerInput也可以被替代
 
 PlayerInput 是内置组件，只管解析 inputactions 文件以及接收输入信号，不管控制移动等行为。下面将演示如何一步一步用自定义脚本替代它。
 
@@ -1058,17 +1060,19 @@ public class BallController : MonoBehaviour
 
 另外脚本中通过 [InputActionMap.FindAction](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.InputActionMap.html#UnityEngine_InputSystem_InputActionMap_FindAction_System_String_System_Boolean_) 找寻之前创建的 `Buttons` 和 `Move` Action，并监听了 Input Action 的 `performed` 事件，触发对应的回调函数 `OnButton` 和 `OnMove`。
 
-**取代 PlayerInput**
+**省略 PlayerInput**
 
-至此 `BallController` 脚本已经完全实现了之前 `PlayerInput` + `PlayerController` 的功能，因此在 `Player` 游戏物体上仅需要 `BallController` 脚本即可，注意要将之前创建的 `BallControls.inputactions` 挂载至脚本中：
+至此 `BallController` 脚本已经基本的实现了之前 `PlayerInput` + `PlayerController` 的功能，因此在 `Player` 游戏物体上仅需要 `BallController` 脚本即可，注意要将之前创建的 `BallControls.inputactions` 挂载至脚本中：
 ![img](./img/2023-11-17-17-30-55.jpg)
 
 此时小球可以如同之前一样的通过手柄和键盘控制移动。
 
-此时工程状态见：
+此时工程状态见（基于旧版Unity 2022，仅供参考）：
  [xuejiaW/InputSystemSample at f070... (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/f070c14f0671d7c1c702b270f3751aed8c003692)
 
-#### 基于 Actions Asset 自动生成对应类
+
+
+### 基于 Actions Asset 自动生成对应类
 
 在 [手动解析 Actions Asset](#手动解析 Actions Asset) 中需要手动管理 `Actions Asset` 并从中读取 Input Action Map 和 Input Action。
 
@@ -1082,14 +1086,14 @@ public class BallController : MonoBehaviour
 
 ↑↑ *Automated Create Script* ↑↑
 
-自动创建的 BallControls 代码如下：
+#### 自动创建的 BallControls 代码（已基于新的Unity6版本）
 
 ```csharp
 //------------------------------------------------------------------------------
 // <auto-generated>
 //     This code was auto-generated by com.unity.inputsystem:InputActionCodeGenerator
-//     version 1.7.0
-//     from Assets/Input/BallControls.inputactions
+//     version 1.13.0
+//     from Assets/Custom/InputSystem/BallControls.inputactions
 //
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
@@ -1102,63 +1106,293 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
+/// <summary>
+/// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/Custom/InputSystem/BallControls.inputactions".
+/// </summary>
+/// <remarks>
+/// This class is source generated and any manual edits will be discarded if the associated asset is reimported or modified.
+/// </remarks>
+/// <example>
+/// <code>
+/// using namespace UnityEngine;
+/// using UnityEngine.InputSystem;
+///
+/// // Example of using an InputActionMap named "Player" from a UnityEngine.MonoBehaviour implementing callback interface.
+/// public class Example : MonoBehaviour, MyActions.IPlayerActions
+/// {
+///     private MyActions_Actions m_Actions;                  // Source code representation of asset.
+///     private MyActions_Actions.PlayerActions m_Player;     // Source code representation of action map.
+///
+///     void Awake()
+///     {
+///         m_Actions = new MyActions_Actions();              // Create asset object.
+///         m_Player = m_Actions.Player;                      // Extract action map object.
+///         m_Player.AddCallbacks(this);                      // Register callback interface IPlayerActions.
+///     }
+///
+///     void OnDestroy()
+///     {
+///         m_Actions.Dispose();                              // Destroy asset object.
+///     }
+///
+///     void OnEnable()
+///     {
+///         m_Player.Enable();                                // Enable all actions within map.
+///     }
+///
+///     void OnDisable()
+///     {
+///         m_Player.Disable();                               // Disable all actions within map.
+///     }
+///
+///     #region Interface implementation of MyActions.IPlayerActions
+///
+///     // Invoked when "Move" action is either started, performed or canceled.
+///     public void OnMove(InputAction.CallbackContext context)
+///     {
+///         Debug.Log($"OnMove: {context.ReadValue&lt;Vector2&gt;()}");
+///     }
+///
+///     // Invoked when "Attack" action is either started, performed or canceled.
+///     public void OnAttack(InputAction.CallbackContext context)
+///     {
+///         Debug.Log($"OnAttack: {context.ReadValue&lt;float&gt;()}");
+///     }
+///
+///     #endregion
+/// }
+/// </code>
+/// </example>
 public partial class @BallControls: IInputActionCollection2, IDisposable
 {
+    /// <summary>
+    /// Provides access to the underlying asset instance.
+    /// </summary>
     public InputActionAsset asset { get; }
+
+    /// <summary>
+    /// Constructs a new instance.
+    /// </summary>
     public @BallControls()
+    {
+        asset = InputActionAsset.FromJson(@"{
+    ""name"": ""BallControls"",
+    ""maps"": [
+        {
+            ""name"": ""BallPlayer"",
+            ""id"": ""a8e921ca-9664-4773-aa8a-e8f07b931f8e"",
+            ""actions"": [
+                {
+                    ""name"": ""Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed867724-3fa5-4d64-9dba-84a81bffa03f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""385d6c02-ab3e-4a1b-9eeb-1878593ceb97"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e208811a-e3a2-411d-8684-61ead5b6c5e4"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3338e937-cc54-4c94-ae64-38132cde5090"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""765eb4b6-e88c-4647-8d7d-8b7674dfa6bf"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e052ae9-5ad1-40b6-a0de-04de710af518"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb485172-a5ab-4aaf-8a3c-f4ae189db478"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""5761fb56-855d-47e4-b52d-e482d97abf59"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""199f0d0a-6369-4086-840f-e9c3867cf66c"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b7330026-d83e-4982-8c2f-4c9f0def1451"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ccf97183-f41f-47a0-9acd-2b51fef21e51"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c100aaf8-fd10-4d7d-9d17-77d26c6b655a"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        }
+    ],
+    ""controlSchemes"": []
+}");
+        // BallPlayer
+        m_BallPlayer = asset.FindActionMap("BallPlayer", throwIfNotFound: true);
+        m_BallPlayer_Button = m_BallPlayer.FindAction("Button", throwIfNotFound: true);
+        m_BallPlayer_Move = m_BallPlayer.FindAction("Move", throwIfNotFound: true);
     }
 
+    ~@BallControls()
+    {
+        UnityEngine.Debug.Assert(!m_BallPlayer.enabled, "This will cause a leak and performance issues, BallControls.BallPlayer.Disable() has not been called.");
+    }
+
+    /// <summary>
+    /// Destroys this asset and all associated <see cref="InputAction"/> instances.
+    /// </summary>
     public void Dispose()
     {
         UnityEngine.Object.Destroy(asset);
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindingMask" />
     public InputBinding? bindingMask
     {
         get => asset.bindingMask;
         set => asset.bindingMask = value;
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.devices" />
     public ReadOnlyArray<InputDevice>? devices
     {
         get => asset.devices;
         set => asset.devices = value;
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.controlSchemes" />
     public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Contains(InputAction)" />
     public bool Contains(InputAction action)
     {
         return asset.Contains(action);
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.GetEnumerator()" />
     public IEnumerator<InputAction> GetEnumerator()
     {
         return asset.GetEnumerator();
     }
 
+    /// <inheritdoc cref="IEnumerable.GetEnumerator()" />
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Enable()" />
     public void Enable()
     {
         asset.Enable();
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Disable()" />
     public void Disable()
     {
         asset.Disable();
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindings" />
     public IEnumerable<InputBinding> bindings => asset.bindings;
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindAction(string, bool)" />
     public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
     {
         return asset.FindAction(actionNameOrId, throwIfNotFound);
     }
 
+    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindBinding(InputBinding, out InputAction)" />
     public int FindBinding(InputBinding bindingMask, out InputAction action)
     {
         return asset.FindBinding(bindingMask, out action);
@@ -1169,17 +1403,47 @@ public partial class @BallControls: IInputActionCollection2, IDisposable
     private List<IBallPlayerActions> m_BallPlayerActionsCallbackInterfaces = new List<IBallPlayerActions>();
     private readonly InputAction m_BallPlayer_Button;
     private readonly InputAction m_BallPlayer_Move;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "BallPlayer".
+    /// </summary>
     public struct BallPlayerActions
     {
         private @BallControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
         public BallPlayerActions(@BallControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "BallPlayer/Button".
+        /// </summary>
         public InputAction @Button => m_Wrapper.m_BallPlayer_Button;
+        /// <summary>
+        /// Provides access to the underlying input action "BallPlayer/Move".
+        /// </summary>
         public InputAction @Move => m_Wrapper.m_BallPlayer_Move;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_BallPlayer; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
         public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="BallPlayerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
         public static implicit operator InputActionMap(BallPlayerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="BallPlayerActions" />
         public void AddCallbacks(IBallPlayerActions instance)
         {
             if (instance == null || m_Wrapper.m_BallPlayerActionsCallbackInterfaces.Contains(instance)) return;
@@ -1192,6 +1456,13 @@ public partial class @BallControls: IInputActionCollection2, IDisposable
             @Move.canceled += instance.OnMove;
         }
 
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="BallPlayerActions" />
         private void UnregisterCallbacks(IBallPlayerActions instance)
         {
             @Button.started -= instance.OnButton;
@@ -1202,12 +1473,25 @@ public partial class @BallControls: IInputActionCollection2, IDisposable
             @Move.canceled -= instance.OnMove;
         }
 
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="BallPlayerActions.UnregisterCallbacks(IBallPlayerActions)" />.
+        /// </summary>
+        /// <seealso cref="BallPlayerActions.UnregisterCallbacks(IBallPlayerActions)" />
         public void RemoveCallbacks(IBallPlayerActions instance)
         {
             if (m_Wrapper.m_BallPlayerActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="BallPlayerActions.AddCallbacks(IBallPlayerActions)" />
+        /// <seealso cref="BallPlayerActions.RemoveCallbacks(IBallPlayerActions)" />
+        /// <seealso cref="BallPlayerActions.UnregisterCallbacks(IBallPlayerActions)" />
         public void SetCallbacks(IBallPlayerActions instance)
         {
             foreach (var item in m_Wrapper.m_BallPlayerActionsCallbackInterfaces)
@@ -1216,66 +1500,156 @@ public partial class @BallControls: IInputActionCollection2, IDisposable
             AddCallbacks(instance);
         }
     }
+    /// <summary>
+    /// Provides a new <see cref="BallPlayerActions" /> instance referencing this action map.
+    /// </summary>
     public BallPlayerActions @BallPlayer => new BallPlayerActions(this);
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BallPlayer" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="BallPlayerActions.AddCallbacks(IBallPlayerActions)" />
+    /// <seealso cref="BallPlayerActions.RemoveCallbacks(IBallPlayerActions)" />
     public interface IBallPlayerActions
     {
+        /// <summary>
+        /// Method invoked when associated input action "Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
     }
 }
+
 ```
 
 
 
-修改之前的 `BallController` 脚本，以适配自动生成的 `BallControls`，如下：
+重做之前的 `BallController` 脚本，新建一个空的mono脚本，继承自动生成脚本 `BallControls` 的一个接口：
 
-```c#
+```csharp
 using UnityEngine;
-//不推荐另起名字，既然自动生成的代码是partial class，那么自己写的应该也是partial class
-public class BallController_AutoScripts : MonoBehaviour//最好改成public partial class BallControls
+using System;
+using UnityEngine.InputSystem;
+
+public class BallController : MonoBehaviour, BallControls.IBallPlayerActions
+{
+}
+```
+
+让IDE（VSCode、VS、Rider随便哪款）来自动填充接口实现：
+
+```csharp
+using UnityEngine;
+using System;
+using UnityEngine.InputSystem;
+
+public class BallController : MonoBehaviour, BallControls.IBallPlayerActions
+{
+    public void OnButton(InputAction.CallbackContext context)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        throw new NotImplementedException();
+    }
+}
+```
+
+再把之前的 `BallController` 逻辑补全一下
+
+#### 最终BallController代码
+
+```csharp
+using UnityEngine;
+using System;
+using UnityEngine.InputSystem;
+
+public class BallController : MonoBehaviour, BallControls.IBallPlayerActions
 {
     [SerializeField] private float m_Speed = 10;
-
-    private BallControls m_Controls;//用partial class就不需要再记这个
-
     private Rigidbody m_Rb;
     private Vector2 m_Move;
-
-    private void Awake()
+    //---以下都是固定写法---
+    private BallControls m_Actions;
+    private BallControls.BallPlayerActions m_Player;
+    void Awake()
     {
-        m_Controls = new BallControls();
+        m_Actions = new BallControls();
+        m_Player = m_Actions.BallPlayer;
+        m_Player.AddCallbacks(this);
+        //此时不再需要手动获取 Input Action Map 和 Input Action
+        //只需要使用 <ActionControls>.<ActionMapName>.<Action>的风格直接访问即可。
+        //如本代码中就是：m_Actions.BallPlayer.Move
+        //-----以上都是固定写法------
+        //定制内容
         m_Rb = GetComponent<Rigidbody>();
-
-        m_Controls.BallPlayer.Button.performed += _ => OnButton();
-        m_Controls.BallPlayer.Move.performed += ctx => OnMove(ctx.ReadValue<Vector2>());
-        m_Controls.BallPlayer.Move.canceled += _ => OnMove(Vector2.zero);
     }
-
-    private void OnEnable() { m_Controls.BallPlayer.Enable(); }
-
-    private void OnButton() { Debug.Log("On Buttons clicked triggered"); }
-
-    private void OnMove(Vector2 coordinates)
-    {
-        Debug.Log($"On move clicked triggered {coordinates.ToString("f4")}");
-        m_Move = coordinates;
-    }
-
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         Vector3 movement = new(m_Move.x, 0.0f, m_Move.y);
         m_Rb.AddForce(movement * m_Speed);
     }
+    //---以下都是固定写法---
+    void Oestroy()
+    {
+        m_Actions.Dispose();
+    }
+    void OnEnable() { m_Player.Enable(); }
+    void OnDisable() { m_Player.Disable(); }
+    //-----以上都是固定写法------
+    #region 接口实现
+    public void OnButton(InputAction.CallbackContext context)
+    {
+/*因为事件绑的太全了，要自己根据以下状态进行过滤
+Debug.Log($"phase:{context.phase}, started:{context.started}, performed:{context.performed}, canceled:{context.canceled}, time:{DateTime.Now.Millisecond}");
+基本可以只靠context.phase来判断回调来源
+对于键盘按键来说，【正常情况】是键盘按下立刻先后触发两个回调：
+1.phase:Started, started:True, performed:False, canceled:False
+2.phase:Performed, started:False, performed:True, canceled:False
+键盘抬起触发一个回调：
+3.phase:Canceled, started:False, performed:False, canceled:True
+但也有【异常情况】，比如左shift键, 没有Started和Canceled状态，按下和抬起都是触发的Performed
+需要做以下设置：
+在Input Action Editor面板里，右边Binding Properties中有个Interactions设置，默认是空的
+给它添加了一个press，Trigger Behavior设为PressOnly就好了。
+再次测试，三个回调已经是【正常情况】。
+确定回调执行顺序正常之后，通常的过滤方案：
+遇到Started：可以直接return
+遇到Performed：处理按下逻辑
+遇到Canceled：处理抬起逻辑
+*/
+        Debug.Log("我会执行三次");
+        if(context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("按下");
+        }
+        else if(context.phase == InputActionPhase.Canceled)
+        {
+            Debug.Log("抬起");
+        }
+    }
 
-    private void OnDisable() { m_Controls.BallPlayer.Disable(); }
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        m_Move = context.ReadValue<Vector2>();       
+    }
+    #endregion 接口实现
 }
 ```
 
-此时不再需要手动获取 Input Action Map 和 Input Action，只需要使用 `<ActionControls>.<ActionMapName>.<Action>` 的风格直接访问即可。
+用这个新的 `BallController` 脚本替换老的脚本，并运行，可以看到效果与之前的效果无差别。
 
-此时将之前挂载在 `Player` 上的的 `BallController` 脚本换为 `BallController_AutoScripts` 脚本，并运行，可以看到效果与之前的效果无差别。
-
-此时工程状态见：
+此时工程状态见（代码没有本文的新，本文的已经是Unity6）：
  [xuejiaW/InputSystemSample at a92af1df6ccfb22f2747548d2abf1a08c43a3407 (github.com)](https://github.com/xuejiaW/InputSystemSample/tree/a92af1df6ccfb22f2747548d2abf1a08c43a3407)
 
 
@@ -1411,60 +1785,9 @@ public class CSharpEvent : MonoBehaviour
 
 提示：在我自己尝试下发现上述四种的官方组件调用方式都只在输入发生时触发时发送一次输入返回，并不会持续发送，**所以不适合做移动，只适合做跳跃或 UI 点击**。
 
-### 自定义脚本代替 PlayerInput
+### 自动化脚本
 
-基于上述提示，所以官方 PlayerInput 组件调用动作事件函数时并不能满足我们所有的场景需求（也可能是我在持续返回信号上没找到解决方案），所以我们还需要学习一下不借助官方 PlayerInput 组件的事件调用。我们直接在我们的脚本中调用 InputSystem 中的动作事件。
-
-在我们使用脚本调用之前我们需要做一件事情，在我们创建好的 InputActions 属性面板中找到 Generate C# Class 并勾选, 随后点击 Apply 生成对应的脚本，之后我们就可以在我们自己写的 PlayerController 类中调用该脚本了
-
- ![img](./img/51f7753c-7a53-4257-8cda-2fdf8a9e4654_image.jpg)
-
-在此就不做过多的说明了，直接上代码（自己看注释理解）
-
-```csharp
-using UnityEngine;
-using UnityEngine.InputSystem;
-public class CSharpEvent : MonoBehaviour
-{
-    private PlayerInputActions playerInputActions;
-    //将对应的ActionMaps中对应的Action进行传址引用
-    public Vector2 keyboardMoveAxes => playerInputActions.keyboard.moveControl.ReadValue<Vector2>();
-
-    void Awake() {
-        //实例化InputActions脚本
-        playerInputActions = new PlayerInputActions();
-    }
-    private void OnEnable(){
-        //将要使用的ActionMap开启
-        playerInputActions.keyboard.Enable();
-    }
-    private void OnDisable()
-    {
-        //上述同理
-        playerInputActions.keyboard.Disable();
-    }
-    private void Update()
-    {
-        //在帧更新方法中调用所写的动作方法
-        movePlayer();
-    }
-    private void movePlayer(){
-        //因为要在Update方法中使用，需要需要先判断是否有输入对应的Input操作
-        if(keyboardMoveAxes != Vector2.zero){
-            //判断有输入后便执行对应方法
-            Debug.Log(keyboardMoveAxes);
-        }
-    }
-}
-```
-
-## 引用文献
-
-- [Unity InputSystem 官方使用手册](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.4/manual/Installation.html)
-- [Unity input system 使用记录（实例版）- 作者 : xkxsxkx](https://blog.csdn.net/qq_38836770/article/details/125240140)
-- [Unity New Input System 作者 : 小虫儿飞到花丛中](https://blog.csdn.net/weixin_44542069/article/details/124122792)
-- [B 站视频版教学](https://space.bilibili.com/347855339/channel/collectiondetail?sid=1434940)
-- [InputSystem 进阶：实现角色移动跳跃](https://blog.csdn.net/JavaD0g/article/details/131217718)
+参见上文[基于 Actions Asset 自动生成对应类](#基于 Actions Asset 自动生成对应类)
 
 
 
@@ -1507,98 +1830,53 @@ public class CSharpEvent : MonoBehaviour
 
 
 
-# 关于我的 Dance Club 游戏
+# 关于我的 Dance Club 游戏，分阶段按键映射方案
 
-如果游戏有两种状态，状态 1 是控制角色移动，WASD 是位移;状态 2 是跳舞，WASD 不再控制位移，而是和 GHJK 键一起控制跳舞动作，该怎么设计？
+> 关于Unity的InputSystem的使用，我想实现ESC键持续监听，WASD四个键只在角色行走模式监听，JKIL四个键只在角色跳舞模式监听，应该如何设计InputAction的map分布？
 
-可以通过两个 `ActionMap` 来分别处理角色移动和跳舞状态。并且使用两个不同的 `ActionMap` 可以确保在跳舞时按下 `WASD` 不会触发角色移动。这是因为 `ActionMap` 是独立的输入上下文，切换 `ActionMap` 后，只有当前激活的 `ActionMap` 中的输入绑定会生效。以下是具体步骤：
+在Unity的Input System中，你可以通过设计多个`InputActionMap`来实现不同模式下按键的监听。以下是实现你需求的具体步骤：
 
-## 创建与定义ActionMap
+------
 
-1. 在 Unity 中创建一个 `Input Action Asset`，并定义两个 `ActionMap`：`Movement` 和 `Dance`。
-2. 定义 ActionMap:
-   - **Movement ActionMap**:
-     - 添加一个 `Move` Action，绑定 `WASD` 键，用于控制角色移动。
-   - **Dance ActionMap**:
-     - 添加多个 Action，如 `DanceMove1`、`DanceMove2` 等，分别绑定 `WASD` 和 `GHJK` 键，用于控制跳舞动作。
+##  创建Input Action Asset
 
-## 编写脚本切换 ActionMap
+- 在Unity中创建一个`Input Action Asset`（右键 -> Create -> Input Actions）。
+- 打开该Asset，进入编辑界面。
 
-在脚本中根据游戏状态切换 `ActionMap`：
+------
 
-```c#
-using UnityEngine;
-using UnityEngine.InputSystem;
+##  设计InputActionMap
 
-public class PlayerController : MonoBehaviour
-{
-    public PlayerInput playerInput;
+- 创建多个`InputActionMap`，分别对应不同的模式：
+  - **GlobalMap**：用于监听全局按键（如ESC键）。
+  - **WalkMap**：用于监听角色行走模式的按键（如WASD）。
+  - **DanceMap**：用于监听角色跳舞模式的按键（如JKIL）。
 
-    private void Start()
-    {
-        // 初始状态为Movement
-        SwitchToMovement();
-    }
+------
 
-    public void SwitchToMovement()
-    {
-        playerInput.SwitchCurrentActionMap("Movement");
-    }
+## 定义InputAction
 
-    public void SwitchToDance()
-    {
-        playerInput.SwitchCurrentActionMap("Dance");
-    }
+- 在每个`InputActionMap`中定义对应的`InputAction`：
+  - **GlobalMap**：
+    - 添加一个`InputAction`，命名为`Escape`，绑定到`ESC`键。
+  - **WalkMap**：
+    - 添加四个`InputAction`，分别命名为`MoveForward`、`MoveBackward`、`MoveLeft`、`MoveRight`，绑定到`W`、`S`、`A`、`D`键。
+  - **DanceMap**：
+    - 添加四个`InputAction`，分别命名为`Dance1`、`Dance2`、`Dance3`、`Dance4`，绑定到`J`、`K`、`I`、`L`键。
 
-    private void OnMove(InputValue value)
-    {
-        // 处理移动逻辑
-        Vector2 moveInput = value.Get<Vector2>();
-        // 移动角色
-    }
+------
 
-    private void OnDanceMove1(InputValue value)
-    {
-        // 处理跳舞动作1
-    }
+###  设置Action的触发方式
 
-    private void OnDanceMove2(InputValue value)
-    {
-        // 处理跳舞动作2
-    }
-}
-```
+- 对于`GlobalMap`中的`Escape`，设置为 `Performed`（按下时触发，而不是Continuous按下时每帧连续触发）。
+- 对于`WalkMap`和`DanceMap`中的按键，设置为 `Performed`（按下时触发）。
 
-## 绑定输入事件
+------
 
-在 `Input Action Asset` 中，将 `Movement` ActionMap 的 `Move` Action 绑定到 `OnMove` 方法，将 `Dance` ActionMap 的 `DanceMove1` 和 `DanceMove2` Action 分别绑定到 `OnDanceMove1` 和 `OnDanceMove2` 方法。
+##  编写脚本控制InputActionMap的启用与禁用
 
-## 切换状态
-
-在需要切换状态时调用 `SwitchToMovement` 或 `SwitchToDance` 方法。
-
-```c#
-// 切换到跳舞状态
-playerController.SwitchToDance();
-
-// 切换回移动状态
-playerController.SwitchToMovement();
-```
-
-## 总结
-
-通过两个 `ActionMap` 分别处理移动和跳舞状态，可以确保输入逻辑清晰且互不干扰。
-
-
-
-## ActionMap互斥性
-
-- 当你切换到 `Dance` ActionMap 时，`Movement` ActionMap 中的 `WASD` 绑定会被禁用，只有 `Dance` ActionMap 中的 `WASD` 绑定会生效。
-- 同理，当你切换回 `Movement` ActionMap 时，`Dance` ActionMap 中的 `WASD` 绑定会被禁用，只有 `Movement` ActionMap 中的 `WASD` 绑定会生效。
-
-### 示例代码验证
-
-以下是一个简单的验证脚本，确保在跳舞时按下 `WASD` 不会触发移动逻辑：
+- 在脚本中动态启用或禁用`InputActionMap`，以切换不同的模式。
+- 示例代码：
 
 ```c#
 using UnityEngine;
@@ -1606,57 +1884,84 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerInput playerInput;
+    private InputActionMap globalMap;
+    private InputActionMap walkMap;
+    private InputActionMap danceMap;
 
-    private void Start()
+    private void Awake()
     {
-        // 初始状态为Movement
-        SwitchToMovement();
+        // 获取Input Action Asset
+        var inputActions = new PlayerInputActions();
+        globalMap = inputActions.GlobalMap;
+        walkMap = inputActions.WalkMap;
+        danceMap = inputActions.DanceMap;
+
+        // 绑定事件
+        globalMap["Escape"].performed += OnEscapePressed;
+        walkMap["MoveForward"].performed += OnMoveForward;
+        danceMap["Dance1"].performed += OnDance1;
     }
 
-    public void SwitchToMovement()
+    private void OnEnable()
     {
-        playerInput.SwitchCurrentActionMap("Movement");
-        Debug.Log("切换到Movement状态");
+        // 默认启用全局Map
+        globalMap.Enable();
     }
 
-    public void SwitchToDance()
+    private void OnDisable()
     {
-        playerInput.SwitchCurrentActionMap("Dance");
-        Debug.Log("切换到Dance状态");
+        globalMap.Disable();
+        walkMap.Disable();
+        danceMap.Disable();
     }
 
-    private void OnMove(InputValue value)
+    // 切换模式
+    public void SwitchToWalkMode()
     {
-        // 处理移动逻辑
-        Vector2 moveInput = value.Get<Vector2>();
-        Debug.Log($"移动输入: {moveInput}");
+        walkMap.Enable();
+        danceMap.Disable();
     }
 
-    private void OnDanceMove1(InputValue value)
+    public void SwitchToDanceMode()
     {
-        // 处理跳舞动作1
-        Debug.Log("触发跳舞动作1");
+        danceMap.Enable();
+        walkMap.Disable();
     }
 
-    private void OnDanceMove2(InputValue value)
+    // 事件处理
+    private void OnEscapePressed(InputAction.CallbackContext context)
     {
-        // 处理跳舞动作2
-        Debug.Log("触发跳舞动作2");
+        Debug.Log("ESC键被按下");
+    }
+
+    private void OnMoveForward(InputAction.CallbackContext context)
+    {
+        Debug.Log("W键被按下，角色向前移动");
+    }
+
+    private void OnDance1(InputAction.CallbackContext context)
+    {
+        Debug.Log("J键被按下，角色跳舞动作1");
     }
 }
 ```
 
-### 测试步骤
+------
 
-1. 在 Unity 中创建一个 `Input Action Asset`，定义两个 `ActionMap`：`Movement` 和 `Dance`。
-   - `Movement` ActionMap 中，添加一个 `Move` Action，绑定 `WASD` 键。
-   - `Dance` ActionMap 中，添加两个 Action：`DanceMove1`（绑定 `W` 键）和 `DanceMove2`（绑定 `A` 键）。
-2. 将 `PlayerController` 脚本挂载到游戏对象上，并将 `PlayerInput` 组件绑定到该脚本。
-3. 运行游戏，初始状态为 `Movement`，按下 `WASD` 会触发 `OnMove` 方法，输出移动输入。
-4. 调用 `SwitchToDance` 方法切换到跳舞状态，按下 `W` 键会触发 `OnDanceMove1` 方法，按下 `A` 键会触发 `OnDanceMove2` 方法，而不会触发 `OnMove` 方法。
-5. 调用 `SwitchToMovement` 方法切换回移动状态，按下 `WASD` 会重新触发 `OnMove` 方法。
+## 切换模式
 
-### 总结
+- 在游戏中通过调用`SwitchToWalkMode`或`SwitchToDanceMode`来切换不同的模式。
+- 例如：
+  - 当角色进入行走模式时，调用`SwitchToWalkMode`。
+  - 当角色进入跳舞模式时，调用`SwitchToDanceMode`。
 
-通过切换 `ActionMap`，可以确保在跳舞时按下 `WASD` 不会触发角色移动逻辑。这是因为 `ActionMap` 的切换会完全隔离不同状态下的输入绑定，确保只有当前激活的 `ActionMap` 中的输入会生效。
+------
+
+## 注意事项
+
+- 确保在切换模式时，禁用不需要的`InputActionMap`，以避免按键冲突。
+- 如果需要更复杂的逻辑（如组合键或长按检测），可以在`InputAction`的回调中进一步处理。
+
+------
+
+通过以上设计，你可以实现ESC键的持续监听，以及在不同模式下对WASD和JKIL按键的监听。
