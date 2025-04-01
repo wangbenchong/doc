@@ -7,7 +7,7 @@ public class DNATweenTransformEditor : DNATweenerEditor
     SerializedProperty from;
     SerializedProperty to;
     SerializedProperty parentWhenFinished;
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
         if (null == from)
             from = serializedObject.FindProperty("from");
@@ -16,7 +16,6 @@ public class DNATweenTransformEditor : DNATweenerEditor
         if (null == parentWhenFinished)
             parentWhenFinished = serializedObject.FindProperty("parentWhenFinished");
 
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(130f);
 
         serializedObject.Update();
@@ -29,7 +28,5 @@ public class DNATweenTransformEditor : DNATweenerEditor
 
         if (EditorGUI.EndChangeCheck())
             serializedObject.ApplyModifiedProperties();
-
-        DrawCommonProperties();
     }
 }

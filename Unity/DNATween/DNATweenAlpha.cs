@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 
 [AddComponentMenu("DNA/Tween/DNATweenAlpha")]
 public class DNATweenAlpha : DNATweener

@@ -1,3 +1,9 @@
+# Unity6 ShaderGraph 实现UI效果
+
+[【油管】Shader Graph: UGUI Shaders Sample](https://www.youtube.com/watch?v=LuS-TDTI8mU)
+
+How it works: Update to Unity 6000.0.40f1 (or newer) Now under window-> package manager -> shader graph  In Version (17.0.4) The entry "UGUI Shaders" exists and can be clicked.
+
 # UIEffect
 
 将UI相关的效果实现的非常完整，应有尽有（UI软遮罩看我另一篇文章 [UI软遮罩](../Unity/Unity知识外链.md)）

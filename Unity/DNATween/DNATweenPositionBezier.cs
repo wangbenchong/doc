@@ -1,11 +1,22 @@
 ﻿using UnityEngine;
-
+#if BEZIER_SOLUTION
 using BezierSolution;//Need install "Bezier Solution" from Unity Asset Store
-
+#endif
 
 [AddComponentMenu("DNA/Tween/DNATweenPositionBezier")]
 public class DNATweenPositionBezier : DNATweener
 {
+#if UNITY_EDITOR
+    public override string DEFINE_SYMBOL =>
+        #if BEZIER_SOLUTION
+        string.Empty;
+        #else
+        "BEZIER_SOLUTION";
+        #endif
+    public override string DEFINE_DEPEND_PACKAGE => "Bezier Solution";
+#endif
+
+#if BEZIER_SOLUTION
 	[Range(0f,1f)]
     public float from = 0f;
 	[Range(0f,1f)]
@@ -77,4 +88,7 @@ public class DNATweenPositionBezier : DNATweener
     public override void SetStartByCurrentValue() { from = value; }
 
     public override void SetEndByCurrentValue() { to = value; }
+#else
+    protected override void OnUpdate(float factor, bool isFinished){}
+#endif
 }

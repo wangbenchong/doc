@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System;
 
 public class DNATweenTweener : DNATweener
 {
@@ -65,35 +63,9 @@ public class DNATweenTweener : DNATweener
     }
 
     /// <summary>
-    /// 播放所有的动画;
-    /// </summary>
-    public void PlayAll(bool bForward = true)
-    {
-        // 播放的时候会重置所有动画;
-        ResetAll();
-        // 播放动画;
-        if (null != tweenList)
-        {
-            for (int i = 0; i < tweenList.Count; i++)
-            {
-                if (tweenList[i] != null)
-                {
-                    if (bForward)
-                    {
-                        tweenList[i].PlayForwardForce();
-                    }
-                    else
-                    {
-                        tweenList[i].PlayReverseForce();
-                    }
-                }
-            }
-        }
-    }
-    /// <summary>
     /// 重置所有的动画;
     /// </summary>
-    public void ResetAll(bool bForward = true)
+    public void ResetTweenList(bool bForward = true)
     {
         // 设置到当前位置;
         if (null == tweenList) return;

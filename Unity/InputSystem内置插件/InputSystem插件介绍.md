@@ -1613,16 +1613,17 @@ public class BallController : MonoBehaviour, BallControls.IBallPlayerActions
 /*因为事件绑的太全了，要自己根据以下状态进行过滤
 Debug.Log($"phase:{context.phase}, started:{context.started}, performed:{context.performed}, canceled:{context.canceled}, time:{DateTime.Now.Millisecond}");
 基本可以只靠context.phase来判断回调来源
-对于键盘按键来说，【正常情况】是键盘按下立刻先后触发两个回调：
+对于键盘按键来说，【通常情况】是键盘按下立刻先后触发两个回调：
 1.phase:Started, started:True, performed:False, canceled:False
 2.phase:Performed, started:False, performed:True, canceled:False
 键盘抬起触发一个回调：
 3.phase:Canceled, started:False, performed:False, canceled:True
-但也有【异常情况】，比如左shift键, 没有Started和Canceled状态，按下和抬起都是触发的Performed
+但也有【其常情况】，比如左shift键，ActionType用的不是Button而是Pass Through
+没有Started和Canceled状态，按下和抬起都是触发的Performed
 需要做以下设置：
 在Input Action Editor面板里，右边Binding Properties中有个Interactions设置，默认是空的
 给它添加了一个press，Trigger Behavior设为PressOnly就好了。
-再次测试，三个回调已经是【正常情况】。
+再次测试，三个回调已经是【通常情况】。
 确定回调执行顺序正常之后，通常的过滤方案：
 遇到Started：可以直接return
 遇到Performed：处理按下逻辑

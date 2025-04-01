@@ -4,9 +4,8 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenVolume))]
 public class DNATweenVolumeEditor : DNATweenerEditor
 {
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenVolume tw = target as DNATweenVolume;
@@ -22,7 +21,5 @@ public class DNATweenVolumeEditor : DNATweenerEditor
             tw.to = to;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

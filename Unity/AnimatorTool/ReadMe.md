@@ -32,11 +32,9 @@ Unity的Animator窗口虽然可以直观地编辑动画状态机。但是面对�
 
  ![](./img/animtool_04.jpg)
 
-之后会弹窗提示连线处理完毕，需要手动切一下Animator窗口的当前Layer或状态机来触发界面刷新（我试了在代码中自动刷新界面，目前试过SetDirty、AssetDatabase.SaveAssets都不好使），弹窗提示如下图：
+此时连线处理完毕，界面会自动刷新。PS：之前试了用SetDirty、AssetDatabase.SaveAssets都无法刷新界面，后来通过升级Unity到 6000.0.f1 改好了。不过加上一句 `UnityEditorInternal.InternalEditorUtility.RepaintAllViews()` 总是更稳妥的。
 
- ![](./img/animtool_05.jpg)
-
-按照弹窗提示刷新一下Animator窗口，即可看到所有节点都自动加了连线，如下图：
+即可看到所有节点都自动加了连线，如下图：
 
  ![](./img/animtool_06.jpg)
 

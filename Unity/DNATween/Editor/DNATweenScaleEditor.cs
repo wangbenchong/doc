@@ -4,10 +4,8 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenScale))]
 public class DNATweenScaleEditor : DNATweenerEditor
 {
-    //Transform tempTran;
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenScale tw = target as DNATweenScale;
@@ -23,7 +21,5 @@ public class DNATweenScaleEditor : DNATweenerEditor
             tw.to = to;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

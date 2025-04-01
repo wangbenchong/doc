@@ -409,6 +409,182 @@ void OnGUI()
  displayIndex1   Display index. display索引
  displayIndexList  Display index list.display索引列表
 
+## FormerlySerializedAs 序列化数据迁移
+
+在Unity中，直接修改变量名称会导致旧的序列化数据丢失，因为Unity的序列化系统是通过变量名来匹配数据的。好在可以通过 `FormerlySerializedAs` 属性明确告诉序列化系统：“这个变量曾经用另一个名字存储数据”。
+
+1. **添加命名空间**：
+
+   ```c#
+   using UnityEngine.Serialization;
+   ```
+
+2. **标记旧变量名**：
+
+   ```c#
+   [FormerlySerializedAs("oldVariableName")]
+   public float newVariableName;
+   ```
+3. **下一次保存**：
+
+   ```c#
+   //[FormerlySerializedAs("oldVariableName")]  下一次保存后该行可删除，因为数据已迁移
+   public float newVariableName;
+   ```
+
+
+
+# Cinemachine插件常用Attribute
+
+以下是两个自定义 Attribute 的使用示例，分别展示 `FoldoutWithEnabledButtonAttribute` 和 `EnabledPropertyAttribute` 的实际应用场景：
+
+------
+
+## `FoldoutWithEnabledButtonAttribute` 示例
+
+**功能**：为嵌套类/结构体添加带复选框的折叠面板，复选框控制整体启用状态。
+
+### 定义数据结构
+
+```c#
+using UnityEngine;
+using Unity.Cinemachine;
+
+[System.Serializable]
+public class AdvancedSettings 
+{
+    public bool Enabled = true; // 必须有一个bool字段作为启用开关
+    public float Sensitivity = 1.0f;
+    public int MaxIterations = 10;
+    public Vector3 Offset = Vector3.zero;
+}
+
+public class CameraController : MonoBehaviour 
+{
+    // 使用FoldoutWithEnabledButtonAttribute绑定到"Enabled"字段
+    [FoldoutWithEnabledButton("Enabled", "高级设置")] 
+    public AdvancedSettings Settings = new AdvancedSettings();
+}
+```
+
+### Inspector 效果：
+
+```
+[✓] 高级设置
+    ├─ Sensitivity: 1.0
+    ├─ MaxIterations: 10
+    └─ Offset: (0, 0, 0)
+```
+
+- 点击标题栏的复选框会切换 `AdvancedSettings.Enabled` 的值
+- 展开/折叠面板会显示/隐藏所有子属性
+
+------
+
+##  `EnabledPropertyAttribute` 示例
+
+**功能**：为单个属性添加启用开关，禁用时显示替代文本。
+
+### 定义类
+
+```c#
+using UnityEngine;
+using Unity.Cinemachine;
+
+public class PostProcessingSettings : MonoBehaviour 
+{
+    [Serializable]
+    public class BloomEffect 
+    {
+        public bool Active = true;
+        public float Intensity = 0.8f;
+        public float Threshold = 1.0f;
+    }
+
+    // 普通嵌套属性（对比用）
+    public BloomEffect DefaultBloom = new BloomEffect();
+
+    // 使用EnabledPropertyAttribute绑定到"Active"字段
+    [EnabledProperty("Active", ToggleDisabledText = "Bloom已禁用")] 
+    public BloomEffect ControlledBloom = new BloomEffect();
+}
+```
+
+### Inspector 效果对比：
+
+**普通嵌套属性**：
+
+```
+Bloom Effect
+  ├─ Active: [✓]
+  ├─ Intensity: 0.8
+  └─ Threshold: 1.0
+```
+
+**启用Attribute后的效果**：
+
+```
+[✓] Bloom Effect: 
+    Intensity: 0.8
+    Threshold: 1.0
+```
+
+或当禁用时：
+
+```
+[ ] Bloom Effect: Bloom已禁用
+```
+
+- 标题行显示紧凑的开关+名称
+- 禁用时隐藏子属性并显示`ToggleDisabledText`
+- 启用时显示所有子属性
+
+------
+
+## 特殊场景示例
+
+### 组合使用（嵌套+单属性控制）
+
+```c#
+[FoldoutWithEnabledButton("Enabled", "特效设置")]
+public class VFXSettings 
+{
+    public bool Enabled = true;
+    
+    [EnabledProperty("Active", ToggleDisabledText = "OFF")]
+    public BloomEffect Bloom = new BloomEffect();
+    
+    [EnabledProperty("IsActive")]
+    public MotionBlur Blur = new MotionBlur();
+}
+```
+
+### Inspector 效果：
+
+```
+[✓] 特效设置
+    ├─ [✓] Bloom: 
+    |     Intensity: 0.8
+    |     Threshold: 1.0
+    └─ [ ] Blur: OFF
+```
+
+------
+
+## 关键点说明
+
+1. **字段命名要求**：
+   - `FoldoutWithEnabledButtonAttribute` 需要类中存在指定的 `bool` 字段（如`Enabled`）
+   - `EnabledPropertyAttribute` 需要绑定到目标属性的子 `bool` 字段（如`Active`）
+2. **UI 特性**：
+   - 两者都自动处理属性间的联动（无需手动同步值）
+   - 支持工具提示（`tooltip`）透传
+3. **适用场景**：
+   - `FoldoutWithEnabledButton`：管理复杂嵌套数据
+   - `EnabledProperty`：简化单个功能的启用/禁用交互
+
+这些示例展示了如何在Unity编辑器中实现更直观的属性控制，适合需要精细化管理的配置系统（如相机、特效、AI行为等）。
+
 # 经典自定义Attribute
 
 ## 在Transform变量下面加三个按钮
@@ -521,6 +697,176 @@ namespace DNATools
     }
     #endif
 }
+```
+
+
+
+
+
+## 最简易的EditorPrefs开关
+
+要借一个可序列化变量当壳子的Attribute，使其显示定制内容，可以按照以下步骤实现：
+
+###  创建EditorPrefsBoolAttribute
+
+```csharp
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public class EditorPrefsBoolAttribute : PropertyAttribute
+{
+    public string editorPrefsKey;
+    public string label;
+    
+    public EditorPrefsBoolAttribute(string editorPrefsKey, string label)
+    {
+        this.editorPrefsKey = editorPrefsKey;
+        this.label = label;
+    }
+}
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(EditorPrefsBoolAttribute))]
+public class EditorPrefsBoolAttributeDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        EditorPrefsBoolAttribute attr = (EditorPrefsBoolAttribute)attribute;
+        bool currentValue = EditorPrefs.GetBool(attr.editorPrefsKey, true);
+        EditorGUI.BeginChangeCheck();
+        bool newValue = 
+        EditorGUI.Toggle(position, attr.label, currentValue);
+        if (EditorGUI.EndChangeCheck())
+        {
+            EditorPrefs.SetBool(attr.editorPrefsKey, newValue);
+            // Force scene views to repaint
+            UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+        }
+    }
+}
+#endif
+```
+
+### 使用示例
+
+```c#
+[EditorPrefsBool("SpotManagerGizmos","显示Gizmos")]
+public bool aboutGizmos;//只是个壳子，它的序列化内容没意义
+#if UNITY_EDITOR
+void OnDrawGizmos()
+{
+    if(!(UnityEditor.EditorPrefs.GetBool("SpotManagerGizmos",true)))return;
+    //TODO：Gizmos绘制
+}
+#endif
+```
+
+
+
+## 最大最小值 MinMaxRange
+
+```csharp
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public class MinMaxRangeAttribute : PropertyAttribute
+{
+    public readonly float Min;
+    public readonly float Max;
+
+    public MinMaxRangeAttribute(float min, float max)
+    {
+        Min = min;
+        Max = max;
+    }
+}
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
+public class MinMaxRangeAttributeDrawer : PropertyDrawer
+{
+    private const float TextFieldWidth = 45f;
+    private const float Spacing = 5f;
+    private const float SliderPadding = 2f; // 防止滑块与输入框紧贴
+
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        // 验证属性类型
+        if (property.propertyType != SerializedPropertyType.Vector2)
+        {
+            EditorGUI.HelpBox(position, $"{label.text} 必须使用 Vector2 类型", MessageType.Error);
+            return;
+        }
+
+        MinMaxRangeAttribute range = (MinMaxRangeAttribute)attribute;
+        
+        // 获取属性值
+        Vector2 value = property.vector2Value;
+        float minValue = Mathf.Clamp(value.x, range.Min, range.Max);
+        float maxValue = Mathf.Clamp(value.y, range.Min, range.Max);
+        
+        // 计算布局
+        position = EditorGUI.PrefixLabel(position, label);
+        
+        Rect minRect = new Rect(position) { 
+            width = TextFieldWidth 
+        };
+        
+        Rect maxRect = new Rect(position) { 
+            x = position.xMax - TextFieldWidth,
+            width = TextFieldWidth 
+        };
+        
+        Rect sliderRect = new Rect(position) {
+            x = minRect.xMax + Spacing,
+            xMax = maxRect.x - Spacing,
+            y = position.y + SliderPadding,
+            height = position.height - SliderPadding * 2
+        };
+
+        EditorGUI.BeginProperty(position, label, property);
+        
+        // 绘制最小值和最大值输入框
+        EditorGUI.BeginChangeCheck();
+        minValue = EditorGUI.FloatField(minRect, minValue);
+        if (EditorGUI.EndChangeCheck())
+        {
+            minValue = Mathf.Clamp(minValue, range.Min, maxValue);
+            property.vector2Value = new Vector2(minValue, maxValue);
+        }
+
+        // 绘制范围滑块
+        EditorGUI.BeginChangeCheck();
+        EditorGUI.MinMaxSlider(sliderRect, ref minValue, ref maxValue, range.Min, range.Max);
+        if (EditorGUI.EndChangeCheck())
+        {
+            property.vector2Value = new Vector2(minValue, maxValue);
+        }
+
+        // 绘制最大值输入框
+        EditorGUI.BeginChangeCheck();
+        maxValue = EditorGUI.FloatField(maxRect, maxValue);
+        if (EditorGUI.EndChangeCheck())
+        {
+            maxValue = Mathf.Clamp(maxValue, minValue, range.Max);
+            property.vector2Value = new Vector2(minValue, maxValue);
+        }
+
+        EditorGUI.EndProperty();
+    }
+}
+#endif
+```
+
+### 使用示例
+
+```csharp
+[MinMaxRange(0,1f)]
+public Vector2 rangeValue;
 ```
 
 

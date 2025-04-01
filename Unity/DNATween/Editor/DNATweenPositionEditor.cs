@@ -4,10 +4,8 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenPosition))]
 public class DNATweenPositionEditor : DNATweenerEditor
 {
-    //Transform tempTran;
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenPosition tw = target as DNATweenPosition;
@@ -31,7 +29,5 @@ public class DNATweenPositionEditor : DNATweenerEditor
             tw.worldSpace = isWorld;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

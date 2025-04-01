@@ -4,10 +4,8 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenRotation))]
 public class DNATweenRotationEditor : DNATweenerEditor
 {
-    //Transform tempTran;
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenRotation tw = target as DNATweenRotation;
@@ -23,7 +21,5 @@ public class DNATweenRotationEditor : DNATweenerEditor
             tw.to = to;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

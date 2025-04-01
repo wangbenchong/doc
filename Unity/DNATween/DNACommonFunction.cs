@@ -22,6 +22,11 @@ public static class DNACommonFunction
     {
         UnityEngine.Debug.LogError(s);
     }
+    [Conditional("UNITY_EDITOR")]
+    public static void WarningDialog(string s)
+    {
+        UnityEditor.EditorUtility.DisplayDialog("⚠️警告", s, "好的");
+    }
 
     public static bool IsApproximately(double a, double b)
 	{

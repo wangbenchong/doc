@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using UnityEditor;
 
-public abstract class DNATweener : MonoBehaviour
+public abstract class DNATweener : DNABaseMono
 {
     //单帧最长时间限制
     public const float MAX_DELTA_TIME = 0.034f;//极限情况，每秒29帧
@@ -23,6 +24,12 @@ public abstract class DNATweener : MonoBehaviour
         Once,
         Loop,
         PingPong,
+    }
+    public enum UpdateType
+    {
+        Update,
+        LateUpdate,
+        FixedUpdate,
     }
     //事件触发的条件（动画正、反向触发）
     public enum EDirection
@@ -49,6 +56,8 @@ public abstract class DNATweener : MonoBehaviour
 
     [HideInInspector]
     public Style style = Style.Once;
+    [HideInInspector]
+    public UpdateType updateType = UpdateType.Update;
     [HideInInspector]
     public ECurveType curveType = ECurveType.Default;
     [HideInInspector]
@@ -79,11 +88,10 @@ public abstract class DNATweener : MonoBehaviour
     /// </summary>
     private Action onDelayFinishedAction = null;
     #endregion
-
-    protected bool bReuse = true;
-
+    //-----For Delay------
     bool mStarted = false;
     float mStartTime = 0f;
+    //---------------------
     float mDuration = 0f;
     float mAmountPerDelta = 1000f;
     float mFactor = 0f;
@@ -147,12 +155,39 @@ public abstract class DNATweener : MonoBehaviour
         //}
         //Update();
     }
-
     /// <summary>
     /// Update the tweening factor and call the virtual update function.
     /// </summary>
+    
 
-    void Update()
+    // void Update()
+    // {
+    //     if(updateType == UpdateType.Update
+    //     #if UNITY_EDITOR
+    //     || !Application.isPlaying
+    //     #endif
+    //     )
+    //         LogicUpdate(UpdateType.Update);
+    // }
+    void LateUpdate()
+    {
+        if(updateType == UpdateType.Update || updateType == UpdateType.LateUpdate
+        #if UNITY_EDITOR
+        && Application.isPlaying
+        #endif
+        )
+            LogicUpdate(UpdateType.LateUpdate);
+    }
+    void FixedUpdate()
+    {
+        if(updateType == UpdateType.FixedUpdate
+        #if UNITY_EDITOR
+        && Application.isPlaying
+        #endif
+        )
+            LogicUpdate(UpdateType.FixedUpdate);
+    }
+    private void LogicUpdate(UpdateType updateType)
     {
 #if UNITY_EDITOR
         if (this == null)
@@ -163,30 +198,46 @@ public abstract class DNATweener : MonoBehaviour
         }
 #endif
 
-        //UnityEngine.Profiling.Profiler.BeginSample("DNATweener-Update", gameObject);
-        //#if UNITY_EDITOR
-        float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-        //#else
-        //       float delta = ApplicationTimer.Instance.GetDeltaTimeS();
-        //#endif
+        float delta = 0f;
+        float time = 0f;
+        switch(updateType)
+        {
+            case UpdateType.FixedUpdate:
+                delta = ignoreTimeScale ? Time.fixedUnscaledDeltaTime : Time.fixedDeltaTime;
+                time = ignoreTimeScale ? Time.fixedUnscaledTime : Time.fixedTime;
+                break;
+            case UpdateType.Update:
+            case UpdateType.LateUpdate:
+            default:
+                delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+                time = ignoreTimeScale ? Time.unscaledTime : Time.time;
+                break;
+            
+        }
         if (delta > MAX_DELTA_TIME)
         {
             delta = MAX_DELTA_TIME;
         }
-        float time = ignoreTimeScale ? Time.unscaledTime : Time.time;
-
-        if (!mStarted)
+        if(delay > 0)
         {
-            mStarted = true;
-            mStartTime = time + delay;
-        }
+            if (!mStarted)
+            {
+                if(mFactor <= 0)
+                {
+                    Sample(0f, false);
+                    mStartTime = time + delay;
+                }
+                mStarted = true;
+            }
 
-        if (time < mStartTime)
-            return;
+            if (time < mStartTime)
+                return;
 
-        if (delay > 0)
-        {
-            if (null != onDelayFinishedAction)
+            if (
+            #if UNITY_EDITOR
+                Application.isPlaying &&
+            #endif
+                null != onDelayFinishedAction)
             {
                 System.Action dele = onDelayFinishedAction;
                 onDelayFinishedAction = null;
@@ -224,29 +275,32 @@ public abstract class DNATweener : MonoBehaviour
             }
         }
 
-        HandleUunityEventWePoint();
+        HandleTimePointEvent();
 
         if ((style == Style.Once) && (duration == 0f || mFactor > 1f || mFactor < 0f))
         {
             ResetTimePoint();
             mFactor = Mathf.Clamp01(mFactor);
             Sample(mFactor, true);
+
             //Tween just Finish Now, first step set enabled to False
             enabled = false;
 
-            #region UnityEvent
+            #if UNITY_EDITOR
+            if (IsEditorUpdate)
+            {
+                RemoveUpdateEditor();
+            }
+            if(!Application.isPlaying)return;
+            #endif
+
+            //--------- UnityEvent ------------
             if (null != OnFinishedList)
             {
                 for (int i = 0; i < OnFinishedList.Count; ++i)
                     OnFinishedList[i].Invoke();
             }
-            #endregion
-#if UNITY_EDITOR
-            if (IsEditorUpdate)
-            {
-                RemoveUpdateEditor();
-            }
-#endif
+            //------------------------------
 
             if (onFinishedActions != null)
             {
@@ -256,23 +310,20 @@ public abstract class DNATweener : MonoBehaviour
                     ed.Invoke();
                 }
             }
-
-            if (!bReuse)
-            {
-                GameObject.Destroy(this);
-            }
         }
         else
         {
             Sample(mFactor, false);
         }
-
-        //UnityEngine.Profiling.Profiler.EndSample();
     }
 
-    void HandleUunityEventWePoint()
+    private void HandleTimePointEvent()
     {
-        if (null != TimePointList)
+        if (
+            #if UNITY_EDITOR
+            Application.isPlaying &&
+            #endif
+            null != TimePointList)
         {
             for (int i = 0; i < TimePointList.Count; ++i)
             {
@@ -340,7 +391,10 @@ public abstract class DNATweener : MonoBehaviour
 
     public void SetDelayFinishedAction(Action action)
     {
-        onDelayFinishedAction = action;
+        if(Application.isPlaying)
+        {
+            onDelayFinishedAction = action;
+        }
     }
 
     /// <summary>
@@ -466,6 +520,15 @@ public abstract class DNATweener : MonoBehaviour
         this.style = (Style)style;
     }
 
+    public virtual void Play(bool forward)
+    {
+        mAmountPerDelta = Mathf.Abs(AmountPerDelta);
+        if (!forward)
+            mAmountPerDelta = -mAmountPerDelta;
+        enabled = true;
+        LogicUpdate(updateType);
+    }
+
     /// <summary>
     /// Play the tween forward.
     /// </summary>
@@ -485,57 +548,28 @@ public abstract class DNATweener : MonoBehaviour
     }
 
     /// <summary>
-    /// 从头开始播放,true正向播放,false反向播放
-    /// </summary>
-    /// <param name="bDirection"></param>
-    public void PlayToBeginningForce(bool bDirection)
-    {
-        ResetToBeginningForce(bDirection);
-        PlayForce(bDirection);
-    }
-
-    /// <summary>
-    /// 开始播放,true正向播放,false反向播放
-    /// </summary>
-    /// <param name="bDirection"></param>
-    public void PlayForce(bool bDirection)
-    {
-        if (bDirection)
-        {
-            PlayForwardForce();
-        }
-        else
-        {
-            PlayReverseForce();
-        }
-    }
-
-    /// <summary>
-    /// （不要修改函数签名）强制正向播放tween，从0开始
-    /// </summary>
-    public void PlayForwardForce()
-    {
-        PlayForwardForce(0);
-    }
-
-    /// <summary>
     /// 强制正向播放tween，可指定进度值，默认是0
     /// </summary>
     /// <param name="spcifyFactor"></param>
     public void PlayForwardForce(float spcifyFactor)
     {
         mFactor = spcifyFactor;
+        if(mFactor <= 0)
+        {
+            mStarted = false;
+        }
         ResetTimePoint();
-
         PlayForward();
     }
+
     /// <summary>
-    /// （不要修改函数签名）强制反向播放tween，从0开始
+    /// 强制正向播放tween，从0开始
     /// </summary>
-    public void PlayReverseForce()
+    public void PlayForwardForce()
     {
-        PlayReverseForce(1);
+        PlayForwardForce(0);
     }
+
     /// <summary>
     /// 强制反向播放tween，可指定进度值，默认是1
     /// </summary>
@@ -544,24 +578,15 @@ public abstract class DNATweener : MonoBehaviour
     {
         mFactor = spcifyFactor;
         ResetTimePoint();
-
         PlayReverse();
     }
-
-
+ 
     /// <summary>
-    /// 与之前方向相反方向从头完整播放
+    /// 强制反向播放tween，从1开始
     /// </summary>
-    public void PlayOtherSideForce()
+    public void PlayReverseForce()
     {
-        if (mFactor > 0.5f)
-        {
-            PlayReverseForce();
-        }
-        else
-        {
-            PlayForwardForce();
-        }
+        PlayReverseForce(1);
     }
 
     /// <summary>
@@ -569,38 +594,31 @@ public abstract class DNATweener : MonoBehaviour
     /// </summary>
     public void ResetTimePoint()
     {
-        if (null == TimePointList) return;
+        if (
+            #if UNITY_EDITOR
+            !Application.isPlaying ||
+            #endif
+            null == TimePointList) return;
         for (int i = 0; i < TimePointList.Count; ++i)
             TimePointList[i].isPointDone = false;
     }
 
-    public virtual void Play(bool forward)
-    {
-
-        mAmountPerDelta = Mathf.Abs(AmountPerDelta);
-        if (!forward)
-            mAmountPerDelta = -mAmountPerDelta;
-        enabled = true;
-        Update();
-    }
+    
     /// <summary>
     /// 重置到初始位置（会根据进度曲线做变换）
     /// </summary>
     public void ResetToBeginning()
     {
-        mFactor = (AmountPerDelta < 0f) ? 1f : 0f;
-        Sample(mFactor, false);
-        enabled = false;
-        mStarted = false;
+        ResetToBeginningForce(true);
     }
 
     /// <summary>
     /// 重置到初始位置（会根据进度曲线做变换）
     /// </summary>
-    /// <param name="bDirection">true是正方向</param>
-    public void ResetToBeginningForce(bool bDirection)
+    /// <param name="isForward">true是正方向</param>
+    public void ResetToBeginningForce(bool isForward)
     {
-        mFactor = bDirection ? 0f : 1f;
+        mFactor = isForward ? 0f : 1f;
         Sample(mFactor, false);
         enabled = false;
         mStarted = false;
@@ -613,6 +631,7 @@ public abstract class DNATweener : MonoBehaviour
 
     public void ResetToBound(bool boundIsStart)
     {
+        mFactor = boundIsStart ? 0f : 1f;
         if (boundIsStart)
         {
             OnUpdate(0f, false);
@@ -643,9 +662,9 @@ public abstract class DNATweener : MonoBehaviour
     /// <summary>
     /// just set its direction without playing it.
     /// </summary>
-    public void ToggleByBool(bool forceForward)
+    public void ToggleForce(bool isForward)
     {
-        if (forceForward)
+        if (isForward)
         {
             mAmountPerDelta = Mathf.Abs(AmountPerDelta);
         }
@@ -680,6 +699,13 @@ public abstract class DNATweener : MonoBehaviour
     {
     }
 
+    /// <summary>
+    /// 动态创建Tween组件之后会调用，不是常用的做法，除非你知道你在做什么。
+    /// </summary>
+    /// <param name="eLoopType"></param>
+    /// <param name="fDuration"></param>
+    /// <param name="cbFinish"></param>
+    /// <param name="reuse">设为false会在动画结束时销毁Tween组件，慎用</param>
     protected void DoTween(Style eLoopType, float fDuration, Action cbFinish, bool reuse)
     {
         style = eLoopType;
@@ -688,11 +714,19 @@ public abstract class DNATweener : MonoBehaviour
         {
             AddOnFinishedAction(cbFinish);
         }
-        bReuse = reuse;
-
+        if(!reuse)
+        {
+            AddOnFinishedAction(()=>{Destroy(this);});
+        }
         PlayForward();
     }
 
+    /// <summary>
+    /// 动态创建Tween组件，不是常用的做法，除非你知道你在做什么。
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="targetObj"></param>
+    /// <returns></returns>
     protected static T CreateTween<T>(GameObject targetObj) where T : DNATweener
     {
         T tweenCOM = targetObj.GetComponent<T>();
@@ -754,14 +788,14 @@ public abstract class DNATweener : MonoBehaviour
         if (!IsEditorUpdate)
         {
             IsEditorUpdate = true;
-            UnityEditor.EditorApplication.update += Update;
+            EditorApplication.update += LateUpdate;
         }
     }
 
     public void RemoveUpdateEditor()
     {
         IsEditorUpdate = false;
-        UnityEditor.EditorApplication.update -= Update;
+        EditorApplication.update -= LateUpdate;
     }
 
     private static string _animCurveFolder = "";
@@ -774,7 +808,7 @@ public abstract class DNATweener : MonoBehaviour
         {
             if (string.IsNullOrEmpty(_animCurveFolder))
             {
-                _animCurveFolder = UnityEditor.EditorPrefs.GetString("DNATween_AnimCurveFolder", "Assets/AnimationCurveData");
+                _animCurveFolder = EditorPrefs.GetString("DNATween_AnimCurveFolder", "Assets/AnimationCurveData");
             }
             return _animCurveFolder;
         }
@@ -782,7 +816,7 @@ public abstract class DNATweener : MonoBehaviour
         {
             if(_animCurveFolder != value)
             {
-                UnityEditor.EditorPrefs.SetString("DNATween_AnimCurveFolder", value);
+                EditorPrefs.SetString("DNATween_AnimCurveFolder", value);
                 _animCurveFolder = value;
             }
         }
@@ -798,14 +832,14 @@ public abstract class DNATweener : MonoBehaviour
     {
         string path = AnimCurveFolder + "/Curve_XXX.asset";
         AnimationCurveData asset = ScriptableObject.CreateInstance<AnimationCurveData>();
-        UnityEditor.AssetDatabase.CreateAsset(asset, path);
-        UnityEditor.AssetDatabase.ImportAsset(path, UnityEditor.ImportAssetOptions.ForceSynchronousImport);
-        asset = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path) as AnimationCurveData;
+        AssetDatabase.CreateAsset(asset, path);
+        AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+        asset = AssetDatabase.LoadMainAssetAtPath(path) as AnimationCurveData;
         asset.Curve = new AnimationCurve(new Keyframe(0f, 0f, 1f, 1f), new Keyframe(1f, 1f, 1f, 1f));
-        UnityEditor.EditorUtility.SetDirty(asset);
-        UnityEditor.AssetDatabase.SaveAssets();
-        UnityEditor.AssetDatabase.Refresh();
-        UnityEditor.Selection.activeObject = asset;
+        EditorUtility.SetDirty(asset);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Selection.activeObject = asset;
     }
     [ContextMenu("曲线存储路径")]
     public void _SelectCurveFolder()
@@ -822,13 +856,13 @@ public abstract class DNATweener : MonoBehaviour
             System.IO.FileInfo[] finfo = dinfo.GetFiles("*.asset");
             if (finfo != null && finfo.Length > 0)
             {
-                var obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(AnimCurveFolder + "/" + finfo[0].Name);
-                UnityEditor.Selection.activeObject = obj;
-                UnityEditor.EditorGUIUtility.PingObject(obj);
+                var obj = AssetDatabase.LoadMainAssetAtPath(AnimCurveFolder + "/" + finfo[0].Name);
+                Selection.activeObject = obj;
+                EditorGUIUtility.PingObject(obj);
                 return;
             }
         }
-        UnityEditor.EditorUtility.DisplayDialog("Error", "Not Find Path " + AnimCurveFolder, "ok");
+        EditorUtility.DisplayDialog("Error", "Not Find Path " + AnimCurveFolder, "ok");
     }
 #endif//编辑器函数
 }

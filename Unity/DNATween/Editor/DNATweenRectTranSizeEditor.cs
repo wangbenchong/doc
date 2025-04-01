@@ -4,15 +4,13 @@ using UnityEditor;
 public class DNATweenRectTranSizeEditor : DNATweenerEditor
 {
     RectTransform tempTran;
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
         RectTransform from = null, to = null;
         bool UseTransform;
         float f_from = 0f, f_to = 0f;
         RectTransform.Axis axis = RectTransform.Axis.Horizontal;
 
-
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenRectTranSize tw = target as DNATweenRectTranSize;
@@ -50,7 +48,5 @@ public class DNATweenRectTranSizeEditor : DNATweenerEditor
             tw.mTrans = tempTran;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

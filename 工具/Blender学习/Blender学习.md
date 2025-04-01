@@ -10,7 +10,7 @@
 
 官方文档：[Blender 4.2 Manual](https://docs.blender.org/manual/zh-hans/4.2/)
 
-贴图网站：[All Assets • Poly Haven](https://polyhaven.com/all)
+贴图网站（快照贴图，需要翻墙）：[All Assets • Poly Haven](https://polyhaven.com/all) [快照贴图备份](./快照贴图.rar)
 
 快捷键参考：[【Blender】快捷键大全（超级详细，应有尽有） - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv27243284/)
 

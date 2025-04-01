@@ -4,7 +4,7 @@
 
 
 
-# 游戏解包
+# 黑神话悟空解包
 
 ## 官网
 
@@ -641,3 +641,9 @@ end)
 # C++代码检查工具——Clang-Tidy
 
 [C++排名第一的代码质量检测工具](https://mp.weixin.qq.com/s/y7TIxULPPgcJas7CRSl0gw)
+
+
+
+# 怪猎崛起资源解包并导入UE5
+
+[UE5动画-战斗教程-导出《怪物猎人崛起》资源并导入到UE5中使用_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1RwZvYrEHe)

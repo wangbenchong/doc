@@ -2,6 +2,11 @@
 
 编写一个 **Extension 组件**，用于动态修改 `CinemachineCamera` 的近裁面（Near Clip Plane）以及相机的LayerMask。这个组件会在相机由于避障功能过于贴近角色时增大近裁面或者干脆把角色整体从相机中剔除，确保角色被完全裁剪，避免玩家看到被裁剪一半的角色。
 
+参考文章：
+
+- [Can Cinemachine Virtual Cameras have their own culling masks? - Unity Engine - Unity Discussions](https://discussions.unity.com/t/can-cinemachine-virtual-cameras-have-their-own-culling-masks/750325)
+- [Unity社区（需要翻墙否则会重定向到国内）](https://discussions.unity.com)
+
 以下是完整的代码实现：
 
 ------
@@ -2368,4 +2373,34 @@ public abstract class CinemachineExtension : MonoBehaviour
     }
 }
 ```
+
+
+
+## Cinemachine中的属性Attribute
+
+```csharp
+using UnityEngine;
+
+namespace Unity.Cinemachine
+{
+    /// <summary>
+    /// 为类启用游戏模式保存功能。退出游戏模式时，将扫描该类的字段，并将其属性值应用到场景对象。
+    /// 这是临时解决方案，待Unity实现更通用的游戏模式保存功能后将会淘汰。
+    /// </summary>
+    public sealed class SaveDuringPlayAttribute : System.Attribute {}
+
+    /// <summary>
+    /// 禁止字段的游戏模式保存功能。当类标记了[SaveDuringPlay]特性，但其中某些字段不需要保存时使用。
+    /// </summary>
+    public sealed class NoSaveDuringPlayAttribute : PropertyAttribute {}
+}
+```
+
+
+
+# 如何设计左右分屏游戏
+
+1. 两个Camera各自挂Cinemachine Brain，分配不同的Channel Mask（比如左半屏为Channel 1，右半屏Channel 2）。
+2. 所有Cinemachine Camera，也要分配不同的Channel与Brain对应。
+3. 左半屏Camera的Output中，Viewport Rect设置为：X(0) Y(0) W(0.5) H(1)；右半屏X(0.5) Y(0) W(0.5) H(1)。
 

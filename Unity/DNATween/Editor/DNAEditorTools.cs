@@ -1,7 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Reflection;
 
 /// <summary>
 /// Tools for the editor
@@ -14,7 +12,7 @@ public static class DNAEditorTools
     /// Unity 4.3 changed the way LookLikeControls works.
     /// </summary>
 
-    static public void SetLabelWidth(float width)
+    public static void SetLabelWidth(float width)
     {
         EditorGUIUtility.labelWidth = width;
     }
@@ -23,25 +21,25 @@ public static class DNAEditorTools
     /// Draw a distinctly different looking header label
     /// </summary>
 
-    static public bool DrawHeader(string text) { return DrawHeader(text, text, false, minimalisticLook); }
+    public static bool DrawHeader(string text) { return DrawHeader(text, text, false, minimalisticLook); }
 
     /// <summary>
     /// Draw a distinctly different looking header label
     /// </summary>
 
-    static public bool DrawHeader(string text, string key) { return DrawHeader(text, key, false, minimalisticLook); }
+    public static bool DrawHeader(string text, string key) { return DrawHeader(text, key, false, minimalisticLook); }
 
     /// <summary>
     /// Draw a distinctly different looking header label
     /// </summary>
 
-    static public bool DrawHeader(string text, bool detailed) { return DrawHeader(text, text, detailed, !detailed); }
+    public static bool DrawHeader(string text, bool detailed) { return DrawHeader(text, text, detailed, !detailed); }
 
     /// <summary>
     /// Draw a distinctly different looking header label
     /// </summary>
 
-    static public bool DrawHeader(string text, string key, bool forceOn, bool minimalistic)
+    public static bool DrawHeader(string text, string key, bool forceOn, bool minimalistic)
     {
         bool state = EditorPrefs.GetBool(key, true);
 
@@ -82,7 +80,7 @@ public static class DNAEditorTools
     /// Begin drawing the content area.
     /// </summary>
 
-    static public void BeginContents() { BeginContents(minimalisticLook); }
+    public static void BeginContents() { BeginContents(minimalisticLook); }
 
     static bool mEndHorizontal = false;
 
@@ -90,7 +88,7 @@ public static class DNAEditorTools
     /// Begin drawing the content area.
     /// </summary>
 
-    static public void BeginContents(bool minimalistic)
+    public static void BeginContents(bool minimalistic)
     {
         if (!minimalistic)
         {
@@ -116,7 +114,7 @@ public static class DNAEditorTools
     /// Create an undo point for the specified objects.
     /// </summary>
 
-    static public void RegisterUndo(string name, params Object[] objects)
+    public static void RegisterUndo(string name, params Object[] objects)
     {
         if (objects != null && objects.Length > 0)
         {
@@ -134,7 +132,7 @@ public static class DNAEditorTools
     /// End drawing the content area.
     /// </summary>
 
-    static public void EndContents()
+    public static void EndContents()
     {
         GUILayout.Space(3f);
         GUILayout.EndVertical();
@@ -149,7 +147,7 @@ public static class DNAEditorTools
         GUILayout.Space(3f);
     }
 
-    static public void ShowPropertyField(SerializedProperty property)
+    public static void ShowPropertyField(SerializedProperty property)
     {
         if (null != property)
             EditorGUILayout.PropertyField(property, true);
@@ -159,77 +157,11 @@ public static class DNAEditorTools
     /// Convenience function that marks the specified object as dirty in the Unity Editor.
     /// </summary>
 
-    static public void SetDirty(UnityEngine.Object obj)
+    public static void SetDirty(UnityEngine.Object obj)
     {
-#if UNITY_EDITOR
         if (obj)
         {
-            //if (obj is Component) LogHelper.Log(NGUITools.GetHierarchy((obj as Component).gameObject), obj);
-            //else if (obj is GameObject) LogHelper.Log(NGUITools.GetHierarchy(obj as GameObject), obj);
-            //else LogHelper.Log("Hmm... " + obj.GetType(), obj);
-            UnityEditor.EditorUtility.SetDirty(obj);
-        }
-#endif
-    }
-
-#if UNITY_2018_3_OR_NEWER
-    [SettingsProvider]
-    public static SettingsProvider CreatePreferencesGUI()
-    {
-        return new SettingsProvider( "Project/DNATween", SettingsScope.Project )
-        {
-            guiHandler = ( searchContext ) => PreferencesGUI(),
-            keywords = new System.Collections.Generic.HashSet<string>() { "DNATween", "Curve"}
-        };
-    }
-#endif
-
-    [MenuItem( "CONTEXT/DNATween/Open Settings" )]
-    private static void OpenPreferencesWindow( MenuCommand command )
-    {
-#if UNITY_2018_3_OR_NEWER
-        SettingsService.OpenProjectSettings( "Project/DNATween" );
-#else
-        System.Type preferencesWindowType = typeof( EditorWindow ).Assembly.GetType( "UnityEditor.PreferencesWindow" );
-        preferencesWindowType.GetMethod( "ShowPreferencesWindow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ).Invoke( null, null );
-
-        EditorWindow preferencesWindow = EditorWindow.GetWindow( preferencesWindowType );
-        if( (bool) preferencesWindowType.GetField( "m_RefreshCustomPreferences", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( preferencesWindow ) )
-        {
-            preferencesWindowType.GetMethod( "AddCustomSections", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).Invoke( preferencesWindow, null );
-            preferencesWindowType.GetField( "m_RefreshCustomPreferences", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).SetValue( preferencesWindow, false );
-        }
-
-        int targetSectionIndex = -1;
-        System.Collections.IList sections = (System.Collections.IList) preferencesWindowType.GetField( "m_Sections", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( preferencesWindow );
-        for( int i = 0; i < sections.Count; i++ )
-        {
-            if( ( (GUIContent) sections[i].GetType().GetField( "content", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).GetValue( sections[i] ) ).text == "DNATween" )
-            {
-                targetSectionIndex = i;
-                break;
-            }
-        }
-
-        if( targetSectionIndex >= 0 )
-            preferencesWindowType.GetProperty( "selectedSectionIndex", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).SetValue( preferencesWindow, targetSectionIndex, null );
-#endif
-    }
-
-#if !UNITY_2018_3_OR_NEWER
-    [PreferenceItem( "DNATween" )]
-#endif
-    public static void PreferencesGUI()
-    {
-        EditorGUILayout.LabelField( "CurveAssets Folder", DNATweener.AnimCurveFolder );
-        if(GUILayout.Button("Select Folder" ))
-        {
-            string folderPath = EditorUtility.OpenFolderPanel("Select Folder", DNATweener.AnimCurveFolder, "");
-            if(!string.IsNullOrEmpty(folderPath))
-            {
-                folderPath = folderPath.Replace(Application.dataPath, "Assets");
-                DNATweener.AnimCurveFolder = folderPath;
-            }
+            EditorUtility.SetDirty(obj);
         }
     }
 

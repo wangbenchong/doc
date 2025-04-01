@@ -1,3 +1,19 @@
+# Unity6打包的新方式
+
+油管教学：[Everything you need to know about Build Profiles in Unity 6 | Unite 2024](https://www.youtube.com/watch?v=BlVsi2cSJ88)
+
+摘要：
+
+- 菜单栏File > Build Profiles (Ctrl+Shift+B)
+- 切换不同BuildProfile配置文件可以进行不同平台、宏定义、预设的打包
+- 命令行示例（项目目录下执行）：
+
+```bat
+"c:\Program Files\Unity 6\Editor\Unity.exe" -activeBuildProfile "Asset/Settings/BuildProfile/WindowsRelease.asset" -Build "Output/build.exe"
+```
+
+
+
 # Unity打安卓包卡在Gradle怎么办
 
 ## Unity2022~Unity6

@@ -2,19 +2,26 @@
 using UnityEditor;
 
 [CustomEditor(typeof(DNATweener), true)]
-public class DNATweenerEditor : Editor
+public class DNATweenerEditor : DNABaseEditor
 {
-    public override void OnInspectorGUI()
+    /// <summary>
+    /// 子类通常不应重写该方法，而是在BeforeDrawCommonProperties中扩展绘制内容。
+    /// </summary>
+    protected override void AfterOnInspectorGUI()
     {
-        GUILayout.Space(6f);
-        DNAEditorTools.SetLabelWidth(110f);
+        BeforeDrawCommonProperties();
         DrawCommonProperties();
+    }
+    protected virtual void BeforeDrawCommonProperties()
+    {
+        DNAEditorTools.SetLabelWidth(110f);
+        // 留给子类扩展
     }
 
     DNATweener tw;
     SerializedProperty curveData;
 
-    void OnEnable()
+    protected override void OnAfterEnable()
     {
         tw = target as DNATweener;
         curveData = serializedObject.FindProperty("curveData");
@@ -56,7 +63,6 @@ public class DNATweenerEditor : Editor
                 if (GUILayout.Button("停止（非运行）"))
                 {
                     tw.ResetToBeginEditor();
-                    ScrollValue = 0f;
                 }
             }
         }
@@ -71,15 +77,13 @@ public class DNATweenerEditor : Editor
                 tw.PlayReverseForce();
             }
         }
-        if (GUILayout.Button("初始位置", GUILayout.MinWidth(50)))
+        if (GUILayout.Button("初始状态", GUILayout.MinWidth(50)))
         {
             tw.ResetToBeginEditor();
-            ScrollValue = 0f;
         }
-        if (GUILayout.Button("结束位置", GUILayout.MinWidth(50)))
+        if (GUILayout.Button("结束状态", GUILayout.MinWidth(50)))
         {
             tw.ResetToEndEditor();
-            ScrollValue = 1f;
         }
         EditorGUILayout.EndHorizontal();
 
@@ -89,7 +93,7 @@ public class DNATweenerEditor : Editor
         bool isPlaying = tw.IsEditorUpdate || (EditorApplication.isPlaying && tw.enabled);
         GUILayout.Label("预览",GUILayout.Width(30));
         GUI.enabled = !isPlaying;
-        ScrollValue = EditorGUILayout.Slider(ScrollValue, 0, 1);
+        ScrollValue = EditorGUILayout.Slider(tw.TweenFactor, 0, 1);
         GUI.enabled = true;
         EditorGUILayout.EndHorizontal();
         if(!isPlaying)
@@ -97,24 +101,23 @@ public class DNATweenerEditor : Editor
             if (GUI.changed)
             {
                 tw.RemoveUpdateEditor();
-                tw.ToggleByBool(true);
+                tw.ToggleForce(true);
                 tw.Sample(ScrollValue, false);
             }
         }
         else
         {
-            ScrollValue = tw.TweenFactor;
             //下面这两句可以让Inspector强制逐帧刷新，否则预览进度条只在鼠标晃到上面的时候才会刷新，导致进度条不流畅。
             EditorApplication.QueuePlayerLoopUpdate();
             Repaint();
         }
         GUI.changed = false;
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置From值为当前"))
+        if (GUILayout.Button("设置初始状态为当前"))
         {
             tw.SetStartByCurrentValue();
         }
-        if (GUILayout.Button("设置To值为当前"))
+        if (GUILayout.Button("设置结束状态为当前"))
         {
             tw.SetEndByCurrentValue();
         }
@@ -127,6 +130,7 @@ public class DNATweenerEditor : Editor
             GUI.changed = false;
 
             DNATweener.Style style = (DNATweener.Style)EditorGUILayout.EnumPopup("Play Style", tw.style);
+            DNATweener.UpdateType updateType = (DNATweener.UpdateType)EditorGUILayout.EnumPopup("Update Type", tw.updateType);
 
             DNATweener.ECurveType curveType = (DNATweener.ECurveType)EditorGUILayout.EnumPopup("Curve Type", tw.curveType);
 
@@ -153,13 +157,14 @@ public class DNATweenerEditor : Editor
             }
 
             GUILayout.BeginHorizontal();
-
-            float dur = EditorGUILayout.FloatField("Duration", tw.duration, GUILayout.Width(170f));
+            GUIContent durationContent = new GUIContent("Duration", "执行动画总时长（不含延迟时间）");
+            float dur = EditorGUILayout.FloatField(durationContent, tw.duration, GUILayout.Width(170f));
             GUILayout.Label("seconds");
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            float del = EditorGUILayout.FloatField("Start Delay", tw.delay, GUILayout.Width(170f));
+            GUIContent delayContent = new GUIContent("Start Delay", "执行前的延迟时间，仅用于正向播放");
+            float del = EditorGUILayout.FloatField(delayContent, tw.delay, GUILayout.Width(170f));
             GUILayout.Label("seconds");
             GUILayout.EndHorizontal();
 
@@ -172,6 +177,7 @@ public class DNATweenerEditor : Editor
                 DNAEditorTools.RegisterUndo("Tween Change", tw);
                 tw.curveType = curveType;
                 tw.style = style;
+                tw.updateType = updateType;
                 tw.ignoreTimeScale = ts;
                 tw.tweenGroup = tg;
                 tw.duration = dur;

@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 namespace DNA.UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class UGUISimpleBar : MonoBehaviour
+    public class DnaSimpleBar : MonoBehaviour
     {
         public RectTransform.Axis mDirection = RectTransform.Axis.Horizontal;
         public bool mirror = false;//镜像

@@ -145,8 +145,8 @@ public class AnimatorToolEditor : EditorWindow
                             }                            
                         }
                     }
-                    EditorUtility.DisplayDialog("连线处理完毕", "界面没有刷新的话, 切换Layer或者其他状态机视图再切回来即可。", "OK");
-
+                    // Force scene views to repaint
+                    UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
                 }
                 else
                 {

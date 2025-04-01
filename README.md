@@ -63,7 +63,7 @@ svn仓库：svn://git.oschina.net/wangbenchong/doc
 
 ----------两者不定期手动镜像，优先国内---------------
 
-手动镜像方法：[文件夹软链接+拷贝文件](./工具/软链接技巧.md)
+手动镜像方法：[文件夹软链接+拷贝文件](./工具/批处理技巧.md)
 
 github网页：https://github.com/wangbenchong/doc
 

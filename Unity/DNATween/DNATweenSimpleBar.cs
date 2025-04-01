@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DNA.UI;
-[RequireComponent(typeof(UGUISimpleBar))]
+[RequireComponent(typeof(DnaSimpleBar))]
 public class DNATweenSimpleBar : DNATweener
 {
     [HideInInspector]
@@ -12,12 +11,12 @@ public class DNATweenSimpleBar : DNATweener
     public float to = 1f;
 
     bool mCached = false;
-    UGUISimpleBar simpleBar = null;
+    DnaSimpleBar simpleBar = null;
 
     void Cache()
     {
         mCached = true;
-        simpleBar = GetComponent<UGUISimpleBar>();
+        simpleBar = GetComponent<DnaSimpleBar>();
     }
 
     /// <summary>

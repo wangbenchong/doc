@@ -5,7 +5,7 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenNumber_Float))]
 public class DNATweenNumber_FloatEditor : DNATweenerEditor
 {
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
         DNATweenNumber_Float tw = target as DNATweenNumber_Float;
 
@@ -15,7 +15,5 @@ public class DNATweenNumber_FloatEditor : DNATweenerEditor
         tw.IsStringUS = EditorGUILayout.Toggle("IsStringUS", tw.IsStringUS);
         tw.DotNum = EditorGUILayout.IntField("DotNum", tw.DotNum);
         tw.RoundToInt = EditorGUILayout.Toggle("RoundToInt", tw.RoundToInt);
-     
-        DrawCommonProperties();
     }
 }

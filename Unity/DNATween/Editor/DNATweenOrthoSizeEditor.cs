@@ -4,9 +4,8 @@ using UnityEditor;
 [CustomEditor(typeof(DNATweenOrthoSize))]
 public class DNATweenOrthoSizeEditor : DNATweenerEditor
 {
-    public override void OnInspectorGUI()
+    protected override void BeforeDrawCommonProperties()
     {
-        GUILayout.Space(6f);
         DNAEditorTools.SetLabelWidth(120f);
 
         DNATweenOrthoSize tw = target as DNATweenOrthoSize;
@@ -25,7 +24,5 @@ public class DNATweenOrthoSizeEditor : DNATweenerEditor
             tw.to = to;
             DNAEditorTools.SetDirty(tw);
         }
-
-        DrawCommonProperties();
     }
 }

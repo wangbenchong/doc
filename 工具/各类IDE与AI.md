@@ -73,6 +73,8 @@ C:\Users\用户名\AppData\Roaming\JetBrains\Rider2024.1\plugins
 
 *免费、最佳的AI工具试验田*
 
+### AI插件
+
 常用AI插件：Comate、通义灵码
 
 集成DeepSeek方面，目前有Continue、Cline等插件：
@@ -80,7 +82,15 @@ C:\Users\用户名\AppData\Roaming\JetBrains\Rider2024.1\plugins
 - [使用 DeepSeek API 配合 Continue 插件代替 Copilot - ccruiの博客](https://blog.ccrui.cn/archives/shi-yong-deepseek-api-pei-he-continue-cha-jian-dai-ti-copilot)
 - [VScode+Cline+Deepseek实现媲美cursor的代码自动生成_星星猫的技术博客_51CTO博客](https://blog.51cto.com/u_14249042/13045983)
 
-代码格式化方面，推荐安装**Prettier**插件，可以把没有换行的js脚本格式化成带换行缩进的方式（右键菜单：使用...格式化文档）。
+### 代码格式化
+
+推荐安装**Prettier**插件，可以把没有换行的js脚本格式化成带换行缩进的方式（右键菜单：使用...格式化文档）。
+
+### 大纲预览
+
+推荐安装**Outline Map**插件，类似于VA插件的VA Outline功能。
+
+
 
 ## VS
 
