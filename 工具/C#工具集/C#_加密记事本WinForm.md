@@ -1306,3 +1306,215 @@ namespace EncryptedNotepad
 }
 ```
 
+
+
+
+
+# 跨平台安卓版
+
+为了多端可用，再用Unity做一个安卓简易版 [网盘下载apk](https://pan.baidu.com/s/1E4XlZS5TX0dGFUf-RnCpjw?pwd=m3zu)，以下是代码部分：
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.Text;
+using System.Security.Cryptography;
+using System.IO;
+
+public class Main : MonoBehaviour
+{
+    [Tooltip("文本输入框")]
+    public InputField inputContent;
+    [Tooltip("密码输入窗口，默认显示，直到输入有效密码")]
+    public GameObject RootPassword;
+    [Tooltip("密码输入框")]
+    public InputField inputPassword;
+    private string password = string.Empty;
+
+    void OnEnable()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //Application.targetFrameRate = 26;
+        password = PlayerPrefs.GetString("password");
+        if(string.IsNullOrEmpty(password))
+        {
+            RootPassword.SetActive(true);
+        }
+        else
+        {
+            RootPassword.SetActive(false);
+        }
+    }
+
+    #region UnityEvent序列化绑定事件
+    public void OnClickOpenPassword()
+    {
+        RootPassword.SetActive(true);
+        inputPassword.text = password;
+    }
+    public void OnClickClosePassword()
+    {
+        string passwordStr = inputPassword.text.Trim(' ');
+        if(string.IsNullOrEmpty(passwordStr))
+        {
+            return;
+        }
+        RootPassword.SetActive(false);
+        password = passwordStr;
+        PlayerPrefs.SetString("password", password);
+    }
+    public void OnClickEncrypt()
+    {
+        string str = EncryptText(inputContent.text, password);
+        inputContent.text = str;
+    }
+    public void OnClickDecrypt()
+    {
+        string str = string.Empty;
+        try
+        {
+            str = DecryptText(inputContent.text, password);
+            inputContent.text = str;
+        }
+        catch
+        {
+            RootPassword.SetActive(true);
+        }
+    }
+    public void OnClickQuit()
+    {
+        Application.Quit();
+    }
+    #endregion
+
+    #region 加密算法
+    //单独\r的情况只在老版Mac上存在，可忽略
+    private static string[] LINE_END = new[] { "\r\n", "\n" };
+    static string EncryptText(string plainText, string password)
+    {
+        // 按行拆分文本
+        string[] lines = plainText.Split(LINE_END, StringSplitOptions.None);
+
+        // 对每一行单独加密
+        StringBuilder encryptedText = new StringBuilder();
+        for (int i = 0; i < lines.Length; i++)
+        {
+            byte[] encryptedData = EncryptStringToBytes(lines[i], password);
+            string encryptedLine = Convert.ToBase64String(encryptedData); // 使用 Base64 编码
+            encryptedText.Append(encryptedLine);
+
+            // 如果不是最后一行，则添加换行符
+            if (i < lines.Length - 1)
+            {
+                encryptedText.Append(Environment.NewLine);
+            }
+        }
+
+        return encryptedText.ToString();
+    }
+
+    static string DecryptText(string encryptedText, string password)
+    {
+        // 按行拆分加密文本
+        string[] lines = encryptedText.Split(LINE_END, StringSplitOptions.None);
+
+        // 对每一行单独解密
+        StringBuilder decryptedText = new StringBuilder();
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (string.IsNullOrEmpty(lines[i])) continue;
+
+            byte[] encryptedData = Convert.FromBase64String(lines[i]); // 使用 Base64 解码
+            string decryptedLine = DecryptStringFromBytes(encryptedData, password);
+            decryptedText.Append(decryptedLine);
+
+            // 如果不是最后一行，则添加换行符
+            if (i < lines.Length - 1)
+            {
+                decryptedText.Append(Environment.NewLine);
+            }
+        }
+
+        return decryptedText.ToString();
+    }
+
+    static byte[] EncryptStringToBytes(string plainText, string password)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            // 使用密码生成密钥和IV
+            byte[] key = GenerateKey(password, aes.KeySize / 8);
+            byte[] iv = GenerateIV(password, aes.BlockSize / 8);
+
+            aes.Key = key;
+            aes.IV = iv;
+
+            // 创建加密器
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+            // 加密数据
+            using (var ms = new MemoryStream())
+            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+            {
+                byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                cs.Write(plainBytes, 0, plainBytes.Length);
+                cs.FlushFinalBlock();
+                return ms.ToArray();
+            }
+        }
+    }
+
+    static string DecryptStringFromBytes(byte[] cipherText, string password)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            // 使用密码生成密钥和IV
+            byte[] key = GenerateKey(password, aes.KeySize / 8);
+            byte[] iv = GenerateIV(password, aes.BlockSize / 8);
+
+            aes.Key = key;
+            aes.IV = iv;
+
+            // 创建解密器
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            // 解密数据
+            using (var ms = new MemoryStream(cipherText))
+            using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+            using (var sr = new StreamReader(cs))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+    }
+
+    static byte[] GenerateKey(string password, int keySize)
+    {
+        // 使用 SHA256 哈希算法从密码生成密钥
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            byte[] hash = sha256.ComputeHash(passwordBytes);
+            byte[] key = new byte[keySize];
+            Array.Copy(hash, key, keySize);
+            return key;
+        }
+    }
+
+    static byte[] GenerateIV(string password, int ivSize)
+    {
+        // 使用 MD5 哈希算法从密码生成 IV
+        using (var md5 = MD5.Create())
+        {
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            byte[] hash = md5.ComputeHash(passwordBytes);
+            byte[] iv = new byte[ivSize];
+            Array.Copy(hash, iv, ivSize);
+            return iv;
+        }
+    }
+    #endregion
+}
+```
+

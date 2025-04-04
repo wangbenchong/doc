@@ -2,10 +2,7 @@
 
 # 图压
 
-链接: https://pan.baidu.com/s/1424f9Bemtjk9gnigIbn5tw?pwd=h7h4 提取码: h7h4 
---来自百度网盘超级会员v7的分享
-
-解压直接运行，无需安装
+[度盘链接](https://pan.baidu.com/s/1424f9Bemtjk9gnigIbn5tw?pwd=h7h4)，解压直接运行，无需安装
 先用原尺寸做压缩，否则画面损失会很多。压缩数值到9基本是极限。
 
 # GIF动态图压缩
@@ -26,13 +23,13 @@
 
 UleadGIF无法处理尺寸超过2000的大图，此时需要用Photoshop打开，每帧对应Photoshop每个图层。
 
-### 批量导出图层为文件的Photoshop脚本
+### 批量导出图层为文件的 Photoshop 插件
 
 - 下载：[github](https://github.com/antipalindrome/Photoshop-Export-Layers-to-Files-Fast)，[度盘备份](https://pan.baidu.com/s/1qHYwS1XUiLHXazqEaUou4Q?pwd=pa66)
 - 安装：把文件夹丢到PS安装目录下的`Presets\Scripts`目录中即可
 - 使用：菜单栏，文件 > 脚本 > Export Layers To Files (Fast)
 
-### 再次导回UleadGIFAnimator
+### 再次导回 UleadGIFAnimator
 
 - 可以通过菜单栏 `文件 > 动画向导` 按照指引导入文件；也可以通过 `文件 > 打开图像` 先导入第一帧（这样尺寸会自动设定好），再通过 `文件 > 添加图像` 插入后续帧。
 

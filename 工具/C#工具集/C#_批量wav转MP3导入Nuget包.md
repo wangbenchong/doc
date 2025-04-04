@@ -188,3 +188,32 @@ ILMerge 是一个将多个程序集合并为一个程序集的工具。
 
 
 
+# 批量转换MP3之后...
+
+可能有极个别wav还是转换失败了，这其中原因可能是wav文件并没有记录声音只是静音。这会导致生成了无意义的MP3但是也没有删除原本的wav。这种情况可以再做一次批处理：
+
+```bat
+@echo off
+setlocal enabledelayedexpansion
+chcp 65001
+echo 正在扫描并删除与WAV文件同名的mp3文件...
+echo.
+
+:: 遍历所有WAV文件
+for /r %%W in (*.wav) do (
+    set "wav_name=%%~nW"
+    set "wav_dir=%%~dpW"
+    
+    :: 检查是否存在同名的mp3文件
+    if exist "!wav_dir!!wav_name!.mp3" (
+        del "!wav_dir!!wav_name!.mp3"
+        del "!wav_dir!!wav_name!.wav"
+        echo Deleted: "!wav_dir!!wav_name!.mp3 and wav"
+    )
+)
+chcp 65001
+echo.
+echo 操作完成！
+pause
+```
+

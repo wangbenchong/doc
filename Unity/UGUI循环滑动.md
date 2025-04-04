@@ -14,8 +14,7 @@ Github上开源：
 
 [（2.2.3无本体仅示例）GitHub - baba-s/ugui-super-scrollview-example: Sample project that summarizes usage examples of "UGUI Super ScrollView".](https://github.com/baba-s/ugui-super-scrollview-example)
 
-最新版2.5.4：https://pan.baidu.com/s/1FjOApLXdAg8JdUR_qN2N8g 
-提取码：6666 
+[【度盘】最新版2.5.4](https://pan.baidu.com/s/1FjOApLXdAg8JdUR_qN2N8g?pwd=6666)
 
 ## FancyScrollView
 
