@@ -2,7 +2,12 @@
 
 [【油管】Shader Graph: UGUI Shaders Sample](https://www.youtube.com/watch?v=LuS-TDTI8mU)
 
-How it works: Update to Unity 6000.0.40f1 (or newer) Now under window-> package manager -> shader graph  In Version (17.0.4) The entry "UGUI Shaders" exists and can be clicked.
+使用方法：升级到 Unity 6000.0.40f1 (或更高版本) 然后在 window > package manager  > shader graph（版本 17.0.4及以上）中载入Sample："UGUI Shaders"。其中包含了超过50种UI常用效果，并且不会增加图片内存开销。
+
+其中毛玻璃效果需要开启 `Render Pipeline Asset`（管线配置文件）设置里的 `Opaque Texture`
+关于 Opaque Texture 的介绍：[通用渲染管线资源 | Universal RP | 12.1.1](https://docs.unity3d.com/cn/Packages/com.unity.render-pipelines.universal@12.1/manual/universalrp-asset.html)
+
+另外，在编辑器运行时为了避免污染原始材质文件，可搭配 [ **UGUIMatFixInEditor 组件**](./防止Unity运行时修改材质球文件.md) 使用
 
 # UIEffect
 
