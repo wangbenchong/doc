@@ -646,4 +646,6 @@ end)
 
 # 怪猎崛起资源解包并导入UE5
 
+> 虽然《怪猎》不是UE5游戏，而是使用了RE引擎。但该教程是基于提取资源后如何在UE5使用，故记录于此。
+
 [UE5动画-战斗教程-导出《怪物猎人崛起》资源并导入到UE5中使用_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1RwZvYrEHe)

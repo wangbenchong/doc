@@ -38,9 +38,9 @@ if (result == System.Windows.Forms.DialogResult.Yes)
 
 # SVNNotifyer
 
-exe文件下载：[ SVNNotifyer.exe ](./SVNNotifyer.exe)
+exe 文件下载：[ SVNNotifyer.exe ](./SVNNotifyer.exe)
 
-使用方法：可放到任意位置（比如桌面），可做快捷方式到桌面，支持设参（可设0到2个参数，第一个参数为分支路径，第二个参数为监听谁的提交，空格可用#代替），正确运行后，会不定期收到其他人向svn提交的气泡提醒。
+使用方法：可放到任意位置（比如桌面），可做快捷方式到桌面，支持设参（可设 0 到 2 个参数，第一个参数为分支路径，第二个参数为监听谁的提交，空格可用#代替），正确运行后，会不定期收到其他人向 svn 提交的气泡提醒。
 
 C#控制台代码：
 
@@ -382,9 +382,9 @@ namespace SVNNotifyer
 
 # GitNotifyer
 
-exe文件下载：[ GitNotifyer.exe ](./GitNotifyer.exe)
+exe 文件下载：[ GitNotifyer.exe ](./GitNotifyer.exe)
 
-使用方法：必须放到git工程根目录，但可做快捷方式到桌面，支持设参（可设0到2个参数，第一个参数为分支路径，第二个参数为监听谁的提交，空格可用#代替），正确运行后，会不定期收到其他人向git提交的气泡提醒。
+使用方法：必须放到 git 工程根目录，但可做快捷方式到桌面，支持设参（可设 0 到 2 个参数，第一个参数为分支路径，第二个参数为监听谁的提交，空格可用#代替），正确运行后，会不定期收到其他人向 git 提交的气泡提醒。
 
 C#控制台代码：
 
@@ -755,6 +755,17 @@ namespace GitNotifyer
         }
     }
 }
-
 ```
+
+# Git 小常识
+
+因为这篇文章和 git 关系比较密切，所以平时一些 git 的用法心得也记在这里吧：
+
+## Git的两种仓库类型
+
+1. 有remote配置：从remote克隆（带origin）
+
+2. 无remote配置：git init（纯本地仓库）
+
+   相当于执行了 `git init git add . git commit -m "Initial"`，全程无需remote端，只有一个 .git 隐藏文件夹。该仓库特性验证： git -C "具体路径" remote -v 将显示无remote配置
 

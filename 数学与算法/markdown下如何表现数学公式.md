@@ -66,6 +66,31 @@ x=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
 开n次方:\sqrt[n]{3}
 $$
 
+## 其他公式
+
+$$
+\begin{bmatrix}
+a & b & c \\
+d & e & f \\
+g & h & i \\
+\end{bmatrix}
+\xrightarrow{\text{转置}}
+\begin{bmatrix}
+a & d & g \\
+b & e & h \\
+c & f & i \\
+\end{bmatrix}
+$$
+
+$$
+\text{Output}_\text{R} = \begin{cases}  
+\text{Input}_\text{R} & (\text{若R被选中}) \\  
+0 & (\text{否则})  
+\end{cases}
+$$
+
+
+
 ## SVG绘图
 
 官网：[入门 - SVG：可缩放矢量图形 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Getting_Started)
