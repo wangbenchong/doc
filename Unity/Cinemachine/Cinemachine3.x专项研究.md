@@ -2404,3 +2404,8 @@ namespace Unity.Cinemachine
 2. 所有Cinemachine Camera，也要分配不同的Channel与Brain对应。
 3. 左半屏Camera的Output中，Viewport Rect设置为：X(0) Y(0) W(0.5) H(1)；右半屏X(0.5) Y(0) W(0.5) H(1)。
 
+# 设计镜头随鼠标旋转
+
+Target可以是相机附近的一个空物体，相机会围绕它旋转，并且保持固定距离的坐标跟随。
+
+ ![](./img/FreeRotate.jpg)

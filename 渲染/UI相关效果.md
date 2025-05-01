@@ -1,19 +1,28 @@
 # Unity6 ShaderGraph 实现 UI 效果
 
+## 前言
+
+### 相关链接
+
 - [【油管】Shader Graph: UGUI Shaders Sample](https://www.youtube.com/watch?v=LuS-TDTI8mU)
+- [【官方社区讨论】Announcing the Shader Graph UGUI Shaders Sample - Unity Engine - Unity Discussions](https://discussions.unity.com/t/announcing-the-shader-graph-ugui-shaders-sample/1602836)
 - [网盘备份：油管Unity官方教学](https://pan.baidu.com/s/1uHQO1zUSWdwCyRB_LYcFmg?pwd=at8k)
 - **官方文档**：[UGUI Shader Graph |17.0.4](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Shader-Graph-Sample-UGUI-Shaders-Getting-Started.html)
 - **官方文档2**：[Create Custom UI Effects With Shader Graph | Unity UI | 2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/HOWTO-ShaderGraph.html)
 - [Unity Shader Graph：为UI组件编写自定义shader graph - 知乎](https://zhuanlan.zhihu.com/p/374188097)
 - [【Unity教程】使用ShaderGraph让贴图中指定部分发光, 做出炫酷的效果_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV17x4y1d7om)
+- 我的另一篇文章大量记录了这方面示例：[Shader Graph示例汇总](./Shader Graph示例汇总/Shader Graph示例汇总.md)
 
+### 使用方法
 
 使用方法：升级到 Unity 6000.0.40f1 (或更高版本) 然后在 window > package manager  > shader graph（版本 17.0.4 及以上）中载入 Sample："UGUI Shaders"。其中包含了超过 50 种 UI 常用效果，并且不会增加图片内存开销。
 
-其中毛玻璃效果需要开启 `Render Pipeline Asset`（管线配置文件）设置里的 `Opaque Texture`
-关于 Opaque Texture 的介绍：[通用渲染管线资源 | Universal RP | 12.1.1](https://docs.unity3d.com/cn/Packages/com.unity.render-pipelines.universal@12.1/manual/universalrp-asset.html)
+### 注意事项
 
-另外，在编辑器运行时为了避免污染原始材质文件，可搭配 [ **UGUIMatFixInEditor 组件**](./防止Unity运行时修改材质球文件.md) 使用。
+- 其中毛玻璃效果需要开启 `Render Pipeline Asset`（管线配置文件）设置里的 `Opaque Texture`
+  关于 Opaque Texture 的介绍：[通用渲染管线资源 | Universal RP | 12.1.1](https://docs.unity3d.com/cn/Packages/com.unity.render-pipelines.universal@12.1/manual/universalrp-asset.html)
+- 另外，在编辑器运行时为了避免污染原始材质文件，可搭配 [ **MatFixInEditor 组件**](./防止Unity运行时修改材质球文件.md#最终，制作组件：防编辑器运行时污染材质球) 使用。
+
 
 ## 官方文档摘抄翻译
 
@@ -950,13 +959,18 @@ Raw （原始） 输出以从 -1 到 1 再返回的平滑曲线流动。Normaliz
 
 将 UI 相关的效果实现的非常完整，应有尽有（UI 软遮罩看我另一篇文章 [UI 软遮罩](../Unity/插件汇总.md)）
 
-github 版本：[wangbenchong/UIEffect: UIEffect is an effect component for uGUI element in Unity. Let's decorate your UI with effects! (github.com)](https://github.com/wangbenchong/UIEffect)
+以下两版本是我从原作者那里改的：
 
-gittee 仓库备份：[UIEffect: 在 github 上看到一个日本人写的各种 ui 效果，我把它从 built-in 扩展到支持 urp，并在最新版 Unity6 上测试运行通过 (gitee.com)](https://gitee.com/wangbenchong/uieffect)
+> 我的改动本意是想URP管线使用URP专属的写法，但是发现原作者的 BuiltIn 管线写法完全适用于URP管线，即便新版Unity6也没问题。并且我的改动没有彻底改掉builtIn管线写法，导致打包的时候报编译错误而打包失败（因为打包时候要求的语法规则更严）。
+>
+> URP要求使用 `TEXTURE2D(textureName)` 和 `SAMPLER(samplerName)` 宏声明纹理和采样器，而不是直接使用 `Texture2D` 和 `SamplerStat`。
 
-原作者：[https://github.com/mob-sakai/UIEffect](https://github.com/mob-sakai/UIEffect)
+- github 版本：[wangbenchong/UIEffect: UIEffect is an effect component for uGUI element in Unity. Let's decorate your UI with effects! (github.com)](https://github.com/wangbenchong/UIEffect)
 
-截至目前 2024/8/7，原作者还在弄 4.0 的预览版（里面有些 TMPro 插件支持的代码还没写完，但也鸽了一年多了）可持续关注。
+- gittee 仓库备份：[UIEffect: 在 github 上看到一个日本人写的各种 ui 效果，我把它从 built-in 扩展到支持 urp，并在最新版 Unity6 上测试运行通过 (gitee.com)](https://gitee.com/wangbenchong/uieffect)
+
+
+原作者（还是推荐用原作者的版本）：[https://github.com/mob-sakai/UIEffect](https://github.com/mob-sakai/UIEffect)
 
 # ParticleEffectForUGUI
 

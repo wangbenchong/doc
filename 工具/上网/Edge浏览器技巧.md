@@ -9,8 +9,6 @@ graph LR
 
 [YouTube去广告](https://greasyfork.org/zh-CN/scripts/459541-youtube-adb)，[Github链接](https://github.com/iamfugui/youtube-adb)
 
-CSDN广告完全过滤 4.2.4(疑似失效，可使用下面的)
-
 [100%解锁CSDN文库vip文章阅读限制 2.2](https://github.com/Mrlimuyu/CSDN-VIP)
 
 [解除B站区域限制](https://greasyfork.org/zh-CN/scripts/25718-解除b站区域限制)，[GitHub链接](https://github.com/ipcjs/bilibili-helper/blob/user.js/packages/unblock-area-limit/README.md)
@@ -18,8 +16,6 @@ CSDN广告完全过滤 4.2.4(疑似失效，可使用下面的)
 B站字幕样式自定义 1.46
 
 懒人工具箱 6.9.1
-
-Github 增强-高速下载 2.5.30
 
 网易云音乐直接下载 4.1.5
 

@@ -2,7 +2,7 @@
 
 在Unity中，当你在编辑器运行时动态修改材质参数，这些修改默认会保留到材质球文件中。以下是几种防止这种情况的方法：
 
-## 1. 使用MaterialPropertyBlock
+## 使用MaterialPropertyBlock
 
 这是最推荐的方法，特别适用于需要频繁修改材质属性的情况：
 
@@ -27,7 +27,7 @@ void Start()
 }
 ```
 
-## 2. 运行时创建材质实例
+## 运行时创建材质实例
 
 ```c#
 private Material originalMaterial;
@@ -59,7 +59,7 @@ void OnDisable()
 }
 ```
 
-## 3. 使用脚本控制恢复
+## 使用脚本控制恢复
 
 ```c#
 private float originalValue;
@@ -80,7 +80,7 @@ void OnDisable()
 }
 ```
 
-## 4. 使用Editor脚本自动恢复
+## 使用Editor脚本自动恢复
 
 创建一个编辑器脚本，在退出播放模式时自动恢复所有材质：
 
@@ -432,11 +432,11 @@ void Start() {
    - UGUI 使用 Canvas 渲染系统，最终由 CanvasRenderer 处理
    - 材质属性修改通过 `CanvasRenderer` 的特定方法实现，而非 `MaterialPropertyBlock`
 2. **Graphic 类的工作方式**：
-   - 首次调用 `Graphic.material` 的方法修改变量会先判断，如果是默认材质会先创建材质实例之后再修改
+   - 首次调用 `Graphic.material` 的方法 (如SetColor) 修改变量会先判断，如果是默认材质会先创建材质实例之后再修改
 
 ## 替代方案
 
-### 1. 使用 Graphic 的默认方式（会创建材质实例）
+### 使用 Graphic 的默认方式（会创建材质实例）
 
 ```c#
 // 获取/创建材质实例
@@ -446,7 +446,7 @@ mat.SetColor("_Color", Color.red);//如果mat是默认材质，会隐式创建�
 
 ⚠️ **问题**：这会创建材质实例，增加内存开销
 
-### 2. 使用 CanvasRenderer.SetColor (仅限颜色)
+### 使用 CanvasRenderer.SetColor (仅限颜色)
 
 ```c#
 // 直接修改顶点颜色（最轻量级的方式）
@@ -463,7 +463,7 @@ graphic.canvasRenderer.SetColor(Color.red);
 - 只能修改颜色
 - 不影响其他材质属性
 
-### 3. 共享材质实例（优化方案）
+###  共享材质实例（优化方案）
 
 ```c#
 // 创建共享材质
@@ -483,7 +483,7 @@ void Start() {
 - 多个 UI 元素共享同一个材质实例
 - 减少 DrawCall
 
-### 4. UGUI 自定义 Shader + 参数传递
+### UGUI 自定义 Shader + 参数传递
 
 如果你使用自定义 Shader，可以通过以下方式传递参数：
 
@@ -496,6 +496,89 @@ Properties {
 // 在C#中修改
 graphic.material.SetColor("_MyColor", Color.blue);
 ```
+
+### UGUI 独有的继承 IMaterialModifier 接口
+
+UGUI源码中有这样一个接口：
+
+```csharp
+namespace UnityEngine.UI
+{
+    /// <summary>
+    /// Use this interface to modify a Material that renders a Graphic. The Material is modified before the it is passed to the CanvasRenderer.
+    /// </summary>
+    /// <remarks>
+    /// When a Graphic sets a material that is passed (in order) to any components on the GameObject that implement IMaterialModifier. This component can modify the material to be used for rendering.
+    /// </remarks>
+    public interface IMaterialModifier
+    {
+        /// <summary>
+        /// Perform material modification in this function.
+        /// </summary>
+        /// <param name="baseMaterial">The material that is to be modified</param>
+        /// <returns>The modified material.</returns>
+        Material GetModifiedMaterial(Material baseMaterial);
+    }
+}
+```
+
+我们可以写一个脚本继承这个 **IMaterialModifier** 接口，实现里面的 GetModifiedMaterial 方法：
+
+```csharp
+//以溶解（Dissolve）效果为例：
+public class DissolveMaterialEffect : 
+MonoBehaviour, //或者把MonoBehaviour 换成 UnityEngine.EventSystems.UIBehaviour，内置事件更丰富
+IMaterialModifier
+{
+    public Material GetModifiedMaterial(Material baseMaterial)//此时baseMaterial还是默认材质
+    {
+        /*
+        //对默认材质做处理，直接new或者自己设计对象池
+        var mat = new Material(baseMaterial)
+        {
+        	hideFlags = HideFlags.HideAndDontSave;
+        }
+        //-------替换Shader----------
+        //此时mat.shader.name为“UI/Default”
+        if (GraphicsSettings.defaultRenderPipeline == null) //BuiltIn渲染管线
+        {
+        	//替换成你写的 BuiltIn shader，比如你的shader名为 “Hidden/UI/Default (UIDissolve)”
+            mat.shader = Shader.Find($"Hidden/{mat.shader.name} (UIDissolve)");
+        }
+        else //SRP渲染管线
+        {
+        	//替换成你写的 urp shader，比如你的shader名为 “Hidden/SRP_UI/Default (UIDissolve)”
+            mat.shader = Shader.Find($"Hidden/SRP_{mat.shader.name} (UIDissolve)");
+        }
+        return mat;
+        */
+        return baseMaterial;//返回的是你指定的材质
+    }
+}
+```
+
+具体 Shader 的写法例如这样（使用_MainTex作为变量名，这个原理和 [定义MainTex变量](./Shader Graph示例汇总/Shader Graph示例汇总.md#定义MainTex变量) 是相通的）：
+
+```c
+Shader "Hidden/SRP_UI/Default (UIDissolve)"
+{
+	Properties
+	{
+         //[PerRendererData]修饰符允许你为每个使用该着色器的对象提供不同的值
+         //_MainTex 是固定名称，可以获取到 Image 的 Source 用图
+		[PerRendererData] _MainTex ("Main Texture", 2D) = "white" {}
+		_Color ("Tint", Color) = (1,1,1,1)
+        //....
+    }
+    //...
+}
+```
+
+**注意：**
+
+这种做法是连带材质球和shader都隐式地做了替换，shader要放在Resources目录下才能找到，并且凡是创建实例都可能会增加DrawCall的。和直接修改 graphic.material 性能上没啥区别。
+
+> 题外话：类似的接口还有 IMeshModifier，继承需要实现 `public virtual void ModifyMesh(VertexHelper vh)` 方法
 
 ## 性能对比
 
@@ -523,62 +606,142 @@ UGUI 的设计更倾向于静态 UI，频繁修改材质属性并不是它的强
 
 
 
-# 制作组件：UGUI防编辑器运行污染材质球
+# 最终，制作组件：防编辑器运行时污染材质球
 
-**UGUIMatFixInEditor.cs** 代码如下：
+**MatFixInEditor.cs** 代码如下：
 
 ```csharp
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-[RequireComponent(typeof(Graphic))]
-public class UGUIMatFixInEditor : MonoBehaviour
+
+public class MatFixInEditor : MonoBehaviour
 {
-    #if UNITY_EDITOR
-    private Material newMat = null;
-    private Material origMat = null;
-    private Graphic graphic;
-    /// <summary>
-    /// 仅编辑器模式会执行，有效防止编辑器运行时修改污染原始材质文件。
-    /// </summary>
-    void Awake()
+    public class MatFixData
     {
-        graphic = GetComponent<Graphic>();
-        if(Application.isPlaying && graphic.material != null && graphic.material != graphic.defaultMaterial)
-        {
-            origMat = graphic.material;
-            newMat = new Material(origMat);
-            newMat.name += " (Clone Editor Runtime Only)";
-            graphic.material = newMat;
-        }
+        public Material mat;
+        public int count = 0;
     }
-    /// <summary>
-    /// 仅编辑器模式会执行，编辑器运行时如果通过这个组件动态创建了材质，在组件销毁时要跟着销毁掉，防止内存越用越大
-    /// </summary>
-    void OnDestroy()
+    public static Dictionary<string, MatFixData> matDic = new Dictionary<string, MatFixData>();
+    public static string RegMaterial(Material matAsset)
     {
-        if(newMat != null)
+        if(matAsset == null) return string.Empty;
+        var path = AssetDatabase.GetAssetPath(matAsset);
+        if(path.StartsWith("Assets/"))
         {
-            if(graphic != null)
+            if(!matDic.ContainsKey(path))
             {
-                graphic.material = origMat;
-            }
-            // 安全销毁材质
-            if (Application.isPlaying)
-            {
-                Destroy(newMat);
-                newMat = null;
+                
+                var data = new MatFixData() { mat = new Material(matAsset) };
+                data.mat.name += " (Editor Runtime)";
+                data.count = 1;
+                matDic.Add(path, data);
             }
             else
             {
-                DestroyImmediate(newMat);
+                matDic[path].count++;
+            }
+            return path;
+        }
+        return string.Empty;
+    }
+    public static void UnRegMaterial(string path)
+    {
+        if(matDic.TryGetValue(path, out var matData))
+        {
+            matData.count--;
+            if(matData.count <= 0)
+            {
+                DestroyImmediate(matData.mat);
+                matDic.Remove(path);
             }
         }
     }
+
+    #if UNITY_EDITOR
+    private List<string> matPaths = new List<string>();
+    void Awake()
+    {
+        //处理 UGUI 材质球
+        var graphics = GetComponentsInChildren<Graphic>(true);
+        for(int i=0;graphics != null && i<graphics.Length;i++)
+        {
+            var graphic = graphics[i];
+            if(graphic.material != null && graphic.material != graphic.defaultMaterial)
+            {
+                var path = RegMaterial(graphic.material);
+                if(!string.IsNullOrEmpty(path))
+                {
+                    matPaths.Add(path);
+                    graphic.material = matDic[path].mat;
+                }
+            }
+        }
+        //处理 Renderer 材质球
+        var rds = GetComponentsInChildren<Renderer>(true);
+        for(int i=0;rds != null && i<rds.Length;i++)
+        {
+            var renderer = rds[i];
+            if(renderer == null) continue;
+            //var mats = renderer.materials;//这句话会导致材质球全部实例化,避免使用
+            var mats = renderer.sharedMaterials;
+            if(mats != null)
+            {
+                bool isChanged = false;
+                for(int k=0,len = mats.Length; k<len; k++)
+                {
+                    var mt = mats[k];
+                    if(mt == null) continue;
+                    var path = RegMaterial(mt);
+                    if(!string.IsNullOrEmpty(path))
+                    {
+                        matPaths.Add(path);
+                        mats[k] = matDic[path].mat;
+                        isChanged = true;
+                    }
+                }
+                if(isChanged)
+                {
+                    renderer.materials = mats;
+                }
+            }
+        }
+    }
+    void OnDestroy()
+    {
+        foreach(var path in matPaths)
+        {
+            UnRegMaterial(path);
+        }
+        matPaths.Clear();
+    }
+    void OnApplicationQuit()
+    {
+        //再整体清理一遍，防止编辑器清理不完全（正常是会清理的）导致内存溢出。
+        var itor = matDic.GetEnumerator();
+        while(itor.MoveNext())
+        {
+            DestroyImmediate(itor.Current.Value.mat);
+        }
+        matDic.Clear();
+    }
+
     [ContextMenu("功能介绍")]
     private void Describe()
     {
-        EditorUtility.DisplayDialog("UGUI Mat Fix In Editor介绍","在编辑器运行时，为了避免污染原始材质文件，本组件会自动克隆一份材质并使用。", "好的");
+        EditorUtility.DisplayDialog("Mat Fix In Editor介绍",
+@"功能：
+防止在编辑器运行时，原始材质文件受到污染。
+
+作用范围：
+UGUI元素和各种Renderer。
+
+原理：
+实例化材质（仅编辑器运行时），并且保持原本的复用性。
+
+使用建议：
+在代码中控制Renderer的材质球时推荐使用sharedMaterial而不是material。", "好的");
     }
     #endif
 }

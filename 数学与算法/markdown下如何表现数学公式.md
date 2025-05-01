@@ -260,7 +260,7 @@ Html的 svg 标签能够真正做到自由作图：
 
 
 
-## Mermaid绘图
+## Mermaid 绘图
 
 具体参见官网：[About Mermaid | Mermaid](https://mermaid.js.org/intro/)
 

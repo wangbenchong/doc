@@ -145,6 +145,8 @@ URP支持着色器的变体，可以使用#pragma multi_compile宏实现编译�
 | UNITY_SAMPLE_TEX2D_SAMPLER(name, samplername, uv) | SAMPLE_TEXTURE2D(textureName, samplerName, coord2)           |
 | UNITY_SAMPLE_TEX2DARRAY(name, uv)                 | SAMPLE_TEXTURE2D_ARRAY(textureName, samplerName, coord2, index) |
 | UNITY_SAMPLE_TEX2DARRAY_LOD(name, uv, lod)        | SAMPLE_TEXTURE2D_ARRAY_LOD(textureName, samplerName, coord2, index, lod) |
+|                                                   | SAMPLE_TEXTURE2D_X(textureName, samplerName, coord2)，酌情对应2D或ARRAY |
+|                                                   | SAMPLE_TEXTURE2D_X_LOD(textureName, samplerName, coord2, lod) |
 
 
 

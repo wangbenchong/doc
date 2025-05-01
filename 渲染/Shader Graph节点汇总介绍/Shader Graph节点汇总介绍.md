@@ -3125,6 +3125,8 @@ The `Saturation` node adjusts the amount of saturation in the input color by wha
 
 `Custom Function`（自定义函数）节点允许我们在节点内部编写自定义着色器代码。此处不深入展开（该节点可能是所有节点中最复杂且高度定制化的类型之一），但通过点击**Node Settings**（节点设置），我们可以定义任意类型的输入/输出接口列表，随后既能附加外部着色器代码文件，也能直接在设置窗口内编写代码。此类自定义代码需采用HLSL语言编写，并可通过指定文件中的特定函数名称来调用该节点的功能。
 
+详尽的中文介绍看这里：[自定义函数节点 | Shader Graph | 10.5.0](https://docs.unity3d.com/cn/Packages/com.unity.shadergraph@10.5/manual/Custom-Function-Node.html)
+
 ![Custom Function.](./img/custom-function.png)
 *A common operation with custom function nodes is to get information from lights in the scene.*
 *自定义函数节点的一个常见操作是从场景中的灯光获取信息。*
