@@ -618,6 +618,7 @@ using UnityEngine.UI;
 
 public class MatFixInEditor : MonoBehaviour
 {
+    #if UNITY_EDITOR
     public class MatFixData
     {
         public Material mat;
@@ -658,8 +659,7 @@ public class MatFixInEditor : MonoBehaviour
             }
         }
     }
-
-    #if UNITY_EDITOR
+    
     private List<string> matPaths = new List<string>();
     void Awake()
     {

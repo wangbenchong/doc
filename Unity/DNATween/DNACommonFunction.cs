@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;//[Conditional]需要
 using UnityEngine;
 
 public static class DNACommonFunction
 {
 	public static float minValue = 0.00001f;
     private static StringBuilder _customSB = new StringBuilder();
-    [Conditional("UNITY_EDITOR")]
     public static void LogEditor(string s)
     {
+        #if UNITY_EDITOR
         UnityEngine.Debug.Log(s);
+        #endif
     }
-    [Conditional("UNITY_EDITOR")]
     public static void LogWarningEditor(string s)
     {
+        #if UNITY_EDITOR
         UnityEngine.Debug.LogWarning(s);
+        #endif
     }
     public static void LogError(string s)
     {
         UnityEngine.Debug.LogError(s);
     }
-    [Conditional("UNITY_EDITOR")]
     public static void WarningDialog(string s)
     {
+        #if UNITY_EDITOR
         UnityEditor.EditorUtility.DisplayDialog("⚠️警告", s, "好的");
+        #else
+        UnityEngine.Debug.LogWarning(s);
+        #endif
     }
 
     public static bool IsApproximately(double a, double b)

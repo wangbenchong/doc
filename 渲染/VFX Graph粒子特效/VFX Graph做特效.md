@@ -27,6 +27,7 @@
 
 - 官方示例模板介绍：[VFX Graph Learning Templates | Tutorial](https://www.youtube.com/watch?v=DKVdg8DsIVY)
 - 视频已备份到网盘：[油管 Unity 官方教学](https://pan.baidu.com/s/1uHQO1zUSWdwCyRB_LYcFmg?pwd=at8k)
+- 示例场景的汉化补丁（放到场景根目录即可）：[VFX_Templates_ChinesePack.prefab](./VFX_Templates_ChinesePack.prefab)
 
 
 ## 视频字幕翻译（请结合视频阅读）
@@ -179,7 +180,7 @@
 
 ### 扩展资源
 
-- 官方文档：https://unity.com/vfx-graph
+- 官方文档：[What's new in version 17 / Unity 6 | Visual Effect Graph | 17.0.4](https://docs.unity3d.com/Packages/com.unity.visualeffectgraph@17.0/manual/whats-new-17.html)
 
   提示：所有学习模板持续更新，建议通过 Package Manager 定期检查版本更新。遇到技术问题可提交 Bug Reporter 并附加 VFX Graph 日志文件。
 
@@ -191,10 +192,72 @@
 
 视频已备份到网盘：[油管 Unity 官方教学](https://pan.baidu.com/s/1uHQO1zUSWdwCyRB_LYcFmg?pwd=at8k)
 
-效果如图：
+## 效果如图
 
  ![](./img/烟花效果.jpg)
 
-布置如下（还要开启 Bloom 后处理）：
+## 图布局如下
 
- ![](./img/烟花.jpg)
+注意：还要开启 Bloom 全局后处理 
+
+![](./img/烟花.jpg)
+
+# 蒙皮网格粒子效果
+
+参考自：[VFX 分解和溶解效果教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1s4BmY5Eeh)
+
+（非必需）ShaderGraph部分的进一步溶解效果：[3D模型版溶解（Alpha Clip版 ）](../Shader Graph示例汇总/Shader Graph示例汇总.md#3D模型版溶解（Alpha Clip版 ）)
+
+## 效果
+
+ ![](./img/蒙皮网格粒子效果.jpg)
+
+## 图布局
+
+注意：要**开启Mesh的读权限**（勾选read/write），否则粒子不会按网格分布来生成，只会从一个点生成。
+
+ ![](./img/蒙皮网格粒子基本结构.jpg)
+
+> 如果 Block ：`Set Position Mesh Skinned Mesh` 的 `Skinned Transform` 选 `Apply Local Root Transform` ，那么可以省略 Properties：`Transform` ，但效果经测试有偏差，不够精准。还是推荐使用 Properties定义 + VFX Property Binder组件（见后文）来做。
+>
+> 可以把图中上下文复制一份，形成新的Output，降一下颜色亮度透明度和速度来营造燃烧烟雾效果，控制一下渲染顺序（见后文）。
+>
+> 延迟与循环次数：可以选择在效果开始前加入延迟，选中Spawn（Content），将其Delay Mode设为Before Loop，然后设定一个数值即可。另外Loop Count可酌情由Infinite（无限）改为Constant（常数）并设为1，这样特效就会从持续特效变成单次特效。
+>
+> Update Particle：可以进一步添加湍流Block：Turbulence，可以增加粒子运动的变化。
+
+## Inspector设置
+
+### Component
+
+ ![](./img/蒙皮网格粒子Inspector.jpg)
+
+### Asset
+
+如果有多个Output可调整渲染顺序
+
+ ![](./img/蒙皮网格粒子Inspector2.jpg)
+
+
+
+# 溶解边缘燃烧粒子效果（高面数）
+
+参考教学：[unity溶解边缘发射粒子_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1DARYYHEc7)
+
+（必需）ShaderGraph部分的设置：[2&3D模型版溶解](../Shader Graph示例汇总/Shader Graph示例汇总.md#2&3D模型版溶解)
+
+Blender制作高面数平面：[制作均匀的细分平面](../../工具/Blender学习/Blender学习.md#制作均匀的细分平面)
+
+效果：
+
+ ![](./img/溶解边缘粒子效果.jpg)
+
+图布局：
+
+ ![](./img/溶解边缘粒子布局.jpg)
+
+> 注意模型开启读取权限
+>
+> 该粒子特效会自己创建Mesh使用指定shader（利用了Output Mesh上下文节点）
+>
+> 利用了湍流Attribute节点（Turbulence）来做扰动

@@ -56,12 +56,23 @@ C:\Users\用户名\AppData\Roaming\JetBrains\Rider2024.1\plugins
 
 ## VSCode
 
-*免费、最佳的 AI 工具试验田*
+*轻量但强大的 IDE。最佳的 AI 工具试验田。*
+
+### 联动Unity
+
+- Unity端安装Visual Studio Editor包
+- VSCode端安装 Unity 插件（会自动连带安装依赖插件`.NET Install Tool` 和 `C# Dev Kit`）
+- 通过Unity打开VSCode会让工程目录根目录自动生成 `.vscode` 目录
+- 如果VSCode资源管理器看不到 .vscode 目录、看到有（工作区）标记、C#代码查不到跨文件引用、代码提示下拉菜单缺少API等问题。请处理：
+  - 删除工作区配置文件（根目录扩展名 .code-workspace）。因为VSCode 会优先读取 `.code-workspace` 的设置，而非 `.vscode/settings.json`
+  - 如果不删除工作区配置文件，那需要知道怎么维护它，暂不赘述。
+- 调试：侧边栏调试面板，▶️Attach to Unity 中的 ▶️ 按钮（快捷键F5）。
+  - 这个配置具体在：.vscode 目录中的 launch.json 文件，如无法调试可尝试重新生成 .vscode。
 
 ### AI 插件
 
-- 主要负责自动代码补全：Comate、通义灵码
-- 仅负责根据询问来做代码产出或直接执行 windows 系统指令：DeepSeek，具体下文跳转：[VSCode 安装 DeepSeek](#VSCode安装DeepSeek)
+- 主要负责自动代码补全：Comate（内置zulu很好用）、通义灵码
+- Cline插件：具体下文跳转 [VSCode 安装 DeepSeek](#VSCode 安装 DeepSeek)
 
 > 参考文章：
 > [VScode+Cline+Deepseek 实现媲美 cursor 的代码自动生成](https://blog.51cto.com/u_14249042/13045983)
@@ -320,12 +331,13 @@ https://www.bilibili.com/video/BV1Pe4y1p77D
   >
   > 1. [VSCode 安装 DeepSeek](#VSCode 安装 DeepSeek)
   > 2. Unity包安装好以后（为了方便扩展功能，建议 [把包迁移到Packages目录](../Unity/将Package包迁移出Library目录.md)），菜单栏 Tools > MCP Unity > Server Window，窗口打开后复制里面的代码
-  > 3. 到VSCode里对Cline插件的AI说：帮我创建一个mcp服务器，配置如下：（粘贴代码）
-  > 4. AI会自动在 `c:\Users\用户名\AppData\Roaming\Code\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json` 中记录你之前粘贴的代码（整个过程会展示给你看，每一步都是经过你的同意才会执行）。这代表着Cline的MCP服务器已完成安装配置（查看已安装的MCP服务器可以在Cline右上角加号旁边的 MCP Servers 选项 -> Installed 分页下）。
-  > 5. 对AI说：在unity里打印以下日志：这条日志通过VScode调用MCP打印
-  > 6. 如果Unity的Console成功打印了这个日志，代表MCP功能已经走通了。
+  > 3. 插件中有个 VsCodeWorkspaceUtils 脚本，其中的 AddPackageCacheToWorkspace() 方法内容建议注释掉，不然强制生成VSCode工作区文件（.code-workspace扩展名）会破坏VSCode的C#支持，导致无法跨文件查找代码引用。
+  > 4. 到VSCode里对Cline插件的AI说：帮我创建一个mcp服务器，配置如下：（粘贴代码）
+  > 5. AI会自动在 `c:\Users\用户名\AppData\Roaming\Code\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json` 中记录你之前粘贴的代码（整个过程会展示给你看，每一步都是经过你的同意才会执行）。这代表着Cline的MCP服务器已完成安装配置（查看已安装的MCP服务器可以在Cline右上角加号旁边的 MCP Servers 选项 -> Installed 分页下）。
+  > 6. 对AI说：在unity里打印以下日志：这条日志通过VScode调用MCP打印
+  > 7. 如果Unity的Console成功打印了这个日志，代表MCP功能已经走通了。
   >
-  >
+  > 
 - 版本 3，Unity 包（支持 Claude Desktop）：[quazaai/UnityMCPIntegration](https://github.com/quazaai/UnityMCPIntegration)
 
   > 测试不通过：卡在建立server这一步，安装Untiy包之后尝试通过编辑器窗口直接启动服务器失败。

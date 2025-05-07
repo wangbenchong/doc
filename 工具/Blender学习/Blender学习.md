@@ -347,3 +347,20 @@ ARP是骨骼一条龙服务，下面这个视频给出了很规范的操作流�
 [懒人权重（Lazy Weight Tool 1.9.75）Blender中文版插件_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1dH4y1q7ve)
 [iBlender中文版插件Lazy Weight Tool教程Akane 的《重量绘画和穿衣懒人指南》Blender_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1t44y1f7Pg)
 [官网：Lazy Weight Tool - Blender Market](https://blendermarket.com/products/lazy-weight-tool)
+
+
+
+
+
+# 具体案例
+
+## 制作均匀的细分平面
+
+细分平面让所有子面都是正方形。操作过程：
+
+- 如果整体是正方形，直接添加 > 网格 > 平面，编辑边模式 > 全选 > 边 > 细分，重复执行即可。
+- 如果整体是长方形，比如横版 150：100（即3：2）为例：
+  - 添加  > 网格 > 栅格，左下角面板：X向细分150，Y向细分100，尺寸可设3m，旋转Y为180
+  - 物体属性面板，缩放X为3，Y为2
+  - 物体 > 应用 > 全部变换
+- 最终导出fbx给Unity：仅选网格，应用缩放FBX全部，-Y向前Z向上，应用单位，取消勾选动画

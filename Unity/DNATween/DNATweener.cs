@@ -160,24 +160,20 @@ public abstract class DNATweener : DNABaseMono
     /// </summary>
     
 
-    // void Update()
+    void Update()
+    {
+        if(updateType == UpdateType.Update || updateType == UpdateType.LateUpdate)
+            LogicUpdate(UpdateType.Update);
+    }
+    // void LateUpdate()
     // {
-    //     if(updateType == UpdateType.Update
+    //     if(updateType == UpdateType.LateUpdate
     //     #if UNITY_EDITOR
-    //     || !Application.isPlaying
+    //     && Application.isPlaying
     //     #endif
     //     )
-    //         LogicUpdate(UpdateType.Update);
+    //         LogicUpdate(UpdateType.LateUpdate);
     // }
-    void LateUpdate()
-    {
-        if(updateType == UpdateType.Update || updateType == UpdateType.LateUpdate
-        #if UNITY_EDITOR
-        && Application.isPlaying
-        #endif
-        )
-            LogicUpdate(UpdateType.LateUpdate);
-    }
     void FixedUpdate()
     {
         if(updateType == UpdateType.FixedUpdate
@@ -788,14 +784,14 @@ public abstract class DNATweener : DNABaseMono
         if (!IsEditorUpdate)
         {
             IsEditorUpdate = true;
-            EditorApplication.update += LateUpdate;
+            EditorApplication.update += Update;
         }
     }
 
     public void RemoveUpdateEditor()
     {
         IsEditorUpdate = false;
-        EditorApplication.update -= LateUpdate;
+        EditorApplication.update -= Update;
     }
 
     private static string _animCurveFolder = "";

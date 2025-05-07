@@ -18,6 +18,8 @@ DNATween 是抽离于原版 NGUITween，并进行了大幅的优化与改进。�
 - [DNATweenColor.cs](./DNATweenColor) 颜色渐变动画
 - [DNATweenFillAmount.cs](./DNATweenFillAmount.cs) UGUI 图片填充度渐变动画
 - [DNATweenFOV.cs](./DNATweenFOV.cs) 相机视角范围 FOV 渐变动画
+- [DNATweenMatFloat.cs](./DNATweenMatFloat.cs) 运行时控制物体实例化材质 float 属性值渐变
+- [DNATweenVfxFloat.cs](./DNATweenVfxFloat.cs) 控制VFX属性值渐变
 - [DNATweenNumber.cs](./DNATweenNumber.cs) UGUI 数字跑分动画
 - [DNATweenNumber_Float.cs](./DNATweenNumber_Float.cs) UGUI 数字跑分动画
 - [DNATweenOrthoSize.cs](./DNATweenOrthoSize.cs) 正交相机的视图范围渐变动画

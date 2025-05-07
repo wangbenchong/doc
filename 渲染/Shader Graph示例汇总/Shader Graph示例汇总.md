@@ -159,9 +159,33 @@ UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
 
 
 
-## 3D模型版溶解
+## 3D模型版溶解（Alpha Clip版 ）
 
+参考教学：[【Shader Graph 教程】【074】VFX 分解和溶解效果教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1s4BmY5Eeh)
 
+可进一步配合全身粒子效果：[蒙皮网格粒子效果](../VFX Graph粒子特效/VFX Graph做特效.md#蒙皮网格粒子效果)
+
+效果：
+
+ ![](./img/溶解Clip版效果.jpg)
+
+图布局：
+
+ ![](./img/溶解Clip版布局.jpg)
+
+## 2&3D模型版溶解
+
+参考教学：[unity溶解边缘发射粒子_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1DARYYHEc7)
+
+可进一步配合边缘粒子效果（最终由vfx来控制自身及ShaderGraph材质）：[蒙皮网格粒子效果](../VFX Graph粒子特效/VFX Graph做特效.md#蒙皮网格粒子效果)
+
+效果：
+
+ ![](./img/溶解23D效果.jpg)
+
+图布局：
+
+![](./img/溶解23D布局.jpg)
 
 # 毛玻璃UI底图
 
