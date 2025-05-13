@@ -54,6 +54,14 @@
 
 
 
+# 类似功能的第三方插件ASE
+
+全称：Amplify Shader Editor
+
+下载：见 [插件汇总](../../Unity/插件汇总.md#Amplify Shader Editor)
+
+系列教程：[Cz_wang的个人空间-Cz_wang个人主页-哔哩哔哩视频](https://space.bilibili.com/15396626)
+
 # UI效果注意事项
 
 ## 定义MainTex变量
@@ -187,6 +195,39 @@ UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
 
 ![](./img/溶解23D布局.jpg)
 
+## 水平定向溶解
+
+**效果**：
+
+ ![](./img/水平定向溶解效果.jpg)
+
+**图布局**：
+
+ ![](./img/水平定向溶解布局.jpg)
+
+**变量定义说明**：
+
+- CutEdge，类型Float，范围0到1，对应从头到脚的水平裁切
+- MeshSize，类型Float，对应模型的高度，以此来作为水平裁切的范围上限
+- WorldRootY，类型Float，从外界传入世界坐标Y值，以此来作为水平裁切的范围起点
+- BolderColor，类型Color，开启HDR，作为溶解边缘的颜色（配合Bloom后处理使用更佳）
+
+**注释事项**
+
+- 应当开启双面渲染，即 Render Face 设为 Both，这样在溶解过程中不会丢失里侧细节。
+
+**如果需要给边缘增加粒子效果，参见VFX篇**：
+
+[水平定向溶解边缘粒子效果](../VFX Graph粒子特效/VFX Graph做特效.md#水平定向溶解边缘粒子效果)
+
+**题外话**
+
+参考油管EricWang视频  [Unity VFX Graph：Model Edges Bursts](https://www.youtube.com/watch?v=xxLg8Xw7S-c)
+
+
+
+-----
+
 # 毛玻璃UI底图
 
 - 利用UGUI官方示例的 SceneColorBlurred 子图
@@ -249,4 +290,19 @@ else
 
  ![](./img/OutLineText.jpg)
 
-将 Border 拉满还能得到 块状描边 ，风格类似于《女神异闻录5》的文字。
+> 将 Border 拉满还能得到 块状描边 ，风格类似于《女神异闻录5》的文字。如果不需要这个效果就把Border范围改为0~0.85。
+>
+> 把第一个Step节点替换为 Smoothstep 可略微改善外轮廓锯齿。
+>
+> 如果把材质球TextColor调整为白色，通过Text的颜色来设置字色会导致色差（饱和度偏低），解决方法有二：
+>
+> 1. 设置Text颜色为白色，调整材质球TextColor颜色。此法较为影响材质球复用性。
+> 2. （推荐）取消勾选Canvas的 ”Vertex Color Always In Gamma Color Space”，不过还是会干扰描边颜色，更适用于描边为深色的情况（比如纯黑描边完全不受影响），浅色描边可考虑增加亮度（描边颜色是HDR模式，增大亮度到7可以几乎抵消Text颜色的干扰）。
+>
+> 局限性：
+>
+> - 仅适合粗体
+> - 以1080P游戏分辨率为参考，则字号不宜小于32。
+> - 不同字号需要适度调整描边范围，不能通用一个固定值。
+>
+> 经过以上调整，效果还可以，而且不增加面数和Overdraw。但整体效果依然略弱于TextMeshPro（毕竟没用有向距离场）。仅当无法接受TextMeshPro庞大的中文体量时推荐使用。

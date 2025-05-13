@@ -1,5 +1,18 @@
 
 
+# 油管/B站相关
+
+海量教程：
+
+油管EricWang：[Unity VFX Graph：Collision Edge Line(SDF)](https://www.youtube.com/@EricWang0110/videos?view=0&sort=dd&shelf_id=1)
+
+B站搬运：[漂游的秋叶视频专辑-漂游的秋叶视频合集-哔哩哔哩视频](https://space.bilibili.com/355702951/lists?sid=4568646&spm_id_from=333.788.0.0)
+
+# VFX常用操作
+
+1. 拖拽线+Alt 会生成Property。
+2. 双击节点标题头，可以最小化节点。
+
 # VFX 设置
 
 在 Edit > Preference > Visual Effect Graph 分页有以下设置：
@@ -240,15 +253,15 @@
 
 
 
-# 溶解边缘燃烧粒子效果（高面数）
+# 溶解边缘燃烧粒子效果
 
 参考教学：[unity溶解边缘发射粒子_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1DARYYHEc7)
 
 （必需）ShaderGraph部分的设置：[2&3D模型版溶解](../Shader Graph示例汇总/Shader Graph示例汇总.md#2&3D模型版溶解)
 
-Blender制作高面数平面：[制作均匀的细分平面](../../工具/Blender学习/Blender学习.md#制作均匀的细分平面)
+Blender制作高面数平面 (目前已不需要高面数计算点位)：[制作均匀的细分平面](../../工具/Blender学习/Blender学习.md#制作均匀的细分平面)
 
-效果：
+效果及面数（优化后）展示：
 
  ![](./img/溶解边缘粒子效果.jpg)
 
@@ -261,3 +274,36 @@ Blender制作高面数平面：[制作均匀的细分平面](../../工具/Blende
 > 该粒子特效会自己创建Mesh使用指定shader（利用了Output Mesh上下文节点）
 >
 > 利用了湍流Attribute节点（Turbulence）来做扰动
+
+# 水平定向溶解边缘粒子效果
+
+**效果**：
+
+ ![](./img/水平溶解边缘粒子效果.jpg)
+
+**图布局**：
+
+ ![](./img/水平溶解边缘粒子布局.jpg)
+
+**Property变量**：
+
+- Mesh，类型Mesh
+- Transform， 类型Transform
+- Force，类型Vector3
+- MaxY， 类型float，代表模型高度，默认2.6，范围0到10
+- DissolveAmount，类型float，范围0到1，从脚底到头顶
+- EdgeThin，类型float，范围0.01到0.2，代表水平裁切边缘厚度
+
+**ShaderGraph的部分参见**：
+
+[水平定向溶解](../Shader Graph示例汇总/Shader Graph示例汇总.md#水平定向溶解)
+
+**题外话**
+
+参考油管EricWang视频  [Unity VFX Graph：Model Edges Bursts](https://www.youtube.com/watch?v=xxLg8Xw7S-c)
+
+# 获取UI的Mesh来做UI粒子特效
+
+
+
+# 

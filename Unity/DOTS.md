@@ -110,3 +110,20 @@ Burst Compiler是一个高性能的编译器，它利用 LLVM（Low-Level Virtua
 - [在ECS系统中使用IJobChunk作业 - 技术专栏 - Unity官方开发者社区](https://developer.unity.cn/projects/5fd6d038edbc2a49b5e5d12d)
 
 总之，Unity DOTS是一个强大的工具集，通过ECS、Job System和Burst Compiler等组件，开发者可以创建高效、可扩展的应用程序，充分利用现代硬件的能力。
+
+
+
+# 社区和未来发展
+
+总体规划：[DOTS 开发状态和里程碑 + 面向所有人的 ECS（2024 年 9 月） - Unity Engine - Unity Discussions](https://discussions.unity.com/t/dots-development-status-and-milestones-ecs-for-all-september-2024/1519286)
+
+目前已经推出了基于ECS的
+
+- [角色控制Character Controller](https://discussions.unity.com/t/experimental-character-controller-package-now-available-formerly-known-as-rival/911268)（[官方文档](https://docs.unity3d.com/Packages/com.unity.charactercontroller@1.3/manual/get-started.html))
+- [载具系统Unity Vehicles experimental](https://discussions.unity.com/t/unity-vehicles-experimental-package-now-available/1636923)（[官方文档](https://docs.unity3d.com/Packages/com.unity.vehicles@0.1/manual/index.html))
+
+未来在Unity6即将推出支持:
+
+- ECS的新版动画系统
+
+终极目标是推出 ECS For All（可能晚于Unity6推出），让 gameobject 工作流也能支持ECS。

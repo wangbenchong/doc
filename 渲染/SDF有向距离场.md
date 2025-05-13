@@ -59,8 +59,7 @@
 1. **游戏中的字体渲染**
 
    - SDF字体只需单张纹理存储距离场，缩放任意大小仍保持锐利边缘。
-     ![SDF字体](https://developer.nvidia.com/sites/default/files/akamai/gameworks/images/signedDistanceFields_0.png)
-
+   
 2. **Shader中的程序化建模**
 
    - 通过SDF布尔运算生成复杂几何体（如科幻场景中的未来建筑）。
@@ -143,3 +142,16 @@ float SDFSubtract(float sdfA, float sdfB) {
 
 - **SDF Subtract = 形状A - 形状B**，即用`B`在`A`上“挖洞”。
 - 是SDF建模中基础的布尔运算之一，常用于程序化生成复杂几何体。
+
+
+
+# SDF图的生成
+
+## 2D纹理
+
+【距离场生成插件2D】 [距离场生成插件2D_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV19L4y1j7mb)
+
+## 3D纹理
+
+可使用VFX插件提供的工具来生成：SDF Bake Tool
+
