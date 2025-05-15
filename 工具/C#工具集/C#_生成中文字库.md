@@ -214,7 +214,7 @@ namespace ChineseCharManager
 字库其余常用字符：
 
 ```
-ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890,.，。;:；：'"‘“”’、/?？【】{}、\[]·~！@#￥%……&*（）——+`~!@#$%^&*()_+<>《》
+ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890,.，。;:；：'"‘“”’、/?？【】{}、\[]·~！@#￥%……&*（）-_=—+`~!@#$%^&*()<>《》
 ```
 
 # Unity TextMeshPro中使用字库

@@ -302,8 +302,182 @@ Blender制作高面数平面 (目前已不需要高面数计算点位)：[制作
 
 参考油管EricWang视频  [Unity VFX Graph：Model Edges Bursts](https://www.youtube.com/watch?v=xxLg8Xw7S-c)
 
+# 数值Debug调试
+
+有时想在运行过程中查看某个节点的输出数值，但无法直接看到，所以我设计了 **在游戏场景显示特效数字** 的子图（基于 Flipbook 效果），效果如下：
+
+ ![](./img/vfx调试节点效果.jpg)
+
+> 会在游戏场景显示白色的 “12”
+
+- Enable ：控制调式开关。
+- InputFloat：输入数字，支持显示十位、个位数字，正数为白色，负数为粉色。
+- Tex5x2：用于显示数字的贴图，默认尺寸 512*256，会按照 **5列2行** 来做切分，可自行切换样式。
+- YOffset：可以纵向偏移显示数字，防止文字被粒子效果本身遮挡。
+- Size：调整文字大小，区间0.03到3
+
+具体布局如下（也可以直接下载 [VfxDebug_Unity6000_0_47.unitypackage](VfxDebug_Unity6000_0_47.unitypackage) )：
+
+ ![](./img/vfx调试节点布局.jpg)
+
 # 获取UI的Mesh来做UI粒子特效
 
+ ![](./img/粒子附着UI效果.jpg)
 
+让粒子特效附着在UI上展示，其实和前文提到的方法是一样的，都是利用 SampleMesh 节点，难点就在于**Mesh怎么获取，以及三角面数量的计算**。
 
-# 
+Text组件（和Image、RawImage组件同理）无法直接拿到Mesh，但可以做派生类覆写OnPopulateMesh方法，构建一份Mesh副本给粒子系统使用。
+
+TextMeshPro 组件的Mesh可以直接通过公有属性拿到，但是它只会随文字增多重构Mesh，文字减少它通常是不做重构的（而是控制网格显隐），这是一种减少Mesh重构的优化。然而对于粒子系统，不能及时重构会影响三角面数量的实时获取，导致部分粒子不能附着于Mesh表面。解决方法：需要监听 TMPro_EventManager 的 TEXT_CHANGED_EVENT 事件，从C#端告知粒子系统端当前可见网格的粒子数。
+
+**以下是代码展示**：
+
+**TextParticle.cs**（类似的还可以派生Image、RawImage）:
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+[DisallowMultipleComponent]
+[RequireComponent(typeof(SyncUIMesh))]
+public class TextParticle : Text
+{
+    private SyncUIMesh _syncUIMesh;
+    public SyncUIMesh syncUIMesh
+    {
+        get
+        {
+            if (_syncUIMesh == null)
+            {
+                _syncUIMesh = GetComponent<SyncUIMesh>();
+            }
+            return _syncUIMesh;
+        }
+    }
+
+    protected override void OnPopulateMesh(VertexHelper vh)
+    {
+        base.OnPopulateMesh(vh);
+        syncUIMesh.RefreshMeshData(vh);
+    }
+}
+```
+
+**SyncUIMesh.cs **同步组件：
+
+```csharp
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.VFX;
+[DisallowMultipleComponent]
+public class SyncUIMesh : MonoBehaviour
+{
+    [Tooltip("粒子特效，建议做成子物体")]
+    public VisualEffect visualEffect;
+    [Tooltip("粒子密度")]
+    public float ParticleRate = 5;
+    int propertyID_Mesh = -1;
+    int propertyID_Rate = -1;
+    int propertyID_Triangle = -1;
+    private Mesh _cachedMesh;
+    public Mesh UIMesh => _cachedMesh;
+
+    /// <summary>
+    /// 拷贝源头Mesh数据到本地
+    /// <param name="vh"></param>
+    public void RefreshMeshData(VertexHelper vh)
+    {
+        if(_cachedMesh == null)
+        {
+            _cachedMesh = new Mesh();
+            _cachedMesh.name = "DynamicTextMesh";
+        }
+        vh.FillMesh(_cachedMesh);
+        ExcuteSync();
+    }
+
+    [ContextMenu("Sync OnStart")]
+    void Start()
+    {
+        OnStart_TextMeshPro();
+        ExcuteSync();
+    }
+    void OnDestroy()
+    {
+        if(_cachedMesh != null)
+        {
+            _cachedMesh.Clear();
+            DestroyImmediate(_cachedMesh);
+            _cachedMesh = null;
+        }
+        OnDestroy_TextMeshPro();
+    }
+
+    private void ExcuteSync()
+    {
+        if(UIMesh == null)return;
+
+        if(propertyID_Mesh == -1)
+        {
+            propertyID_Mesh = Shader.PropertyToID("UIMesh");
+        }
+        if(propertyID_Rate == -1)
+        {
+            propertyID_Rate = Shader.PropertyToID("UIRate");
+        }
+        
+        if(visualEffect != null)
+        {
+            visualEffect.SetMesh(propertyID_Mesh, UIMesh);
+            visualEffect.SetFloat(propertyID_Rate, ParticleRate);
+        }
+    }
+
+    #region TextMeshPro相关
+    private TextMeshProUGUI textMeshPro;
+    bool isRegTMPEvent = false;
+    private void OnStart_TextMeshPro()
+    {
+        textMeshPro = GetComponent<TextMeshProUGUI>();
+        if(textMeshPro != null)
+        {
+            _cachedMesh = textMeshPro.mesh;
+            TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(TextMeshProHandler);
+            TMPro_EventManager.TEXT_CHANGED_EVENT.Add(TextMeshProHandler);
+            isRegTMPEvent = true;
+        }
+    }
+    private void OnDestroy_TextMeshPro()
+    {
+        if(isRegTMPEvent)
+        {
+            TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(TextMeshProHandler);
+            isRegTMPEvent = false;
+        }
+    }
+    private void TextMeshProHandler(Object obj)
+    {
+        if(textMeshPro == null)return;
+        if(obj != textMeshPro)return;
+        ExcuteSync();
+        if(propertyID_Triangle == -1)
+        {
+            propertyID_Triangle = Shader.PropertyToID("UITriangle");
+        }
+        if(visualEffect != null)
+        {
+            visualEffect.SetFloat(propertyID_Triangle, textMeshPro.textInfo.characterCount * 2);
+        }
+    }
+    #endregion
+}
+```
+
+而**粒子系统**可以作为UI元素的子物体，Transform做一下Reset，布局如下：
+
+![](./img/粒子附着UI布局.jpg)
+
+- UIMesh 是获取到的网格，由 Csharp端传值。
+- UITriangle 仅控制TextMeshPro时需要使用，从Csharp端传值。
+- TextMeshPro 是个 bool 值，用来表示要走**TMP获取Mesh逻辑**还是**其他组件获取Mesh逻辑**。
+- 像以往那样，Square两个值（上图左下角）都是 0~1 的随机范围，不曾改变。

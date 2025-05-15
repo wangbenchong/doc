@@ -93,3 +93,5 @@
 >
 > - [Profiler 概述](https://docs.unity3d.com/Manual/Profiler.html) - 关于如何使用 Unity 内置 Profiler 的文档。
 > - [Unity 游戏性能分析的终极指南](https://unity.com/how-to/ultimate-guide-profiling-unity-games) - 描述如何分析应用程序的指南，包括最佳实践、推荐工作流程和建议。
+
+Memory Profiler使用时首先需要点击【Capture】抓取数据，扩展名snap的文件会存放在工程根目录MemoryCaptures文件夹。每次信息大概在400~500M之间。
